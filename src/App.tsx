@@ -56,7 +56,7 @@ export default function App() {
     // Projects setup
     try {
       const savedProjects = localStorage.getItem('devsnapz_projects');
-      if (savedProjects && !savedProjects.includes('commit-flow') && !savedProjects.includes('"fundingRaised":420') && !savedProjects.includes('words-museum')) {
+      if (savedProjects && savedProjects.includes('campus-ecosync') && !savedProjects.includes('commit-flow') && !savedProjects.includes('"fundingRaised":420') && !savedProjects.includes('words-museum')) {
         setProjects(JSON.parse(savedProjects));
       } else {
         setProjects(initialProjects);
