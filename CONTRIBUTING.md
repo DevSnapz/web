@@ -1,6 +1,6 @@
 # Contributing to DevSnapz
 
-Welcome to **DevSnapz — Student Innovation Hub**! We are thrilled that you want to contribute. DevSnapz is a free and open-source platform created to help student developers showcase projects, find co-builders, and bridge technical skill gaps.
+Welcome to **DevSnapz — Student Innovation Hub**! We are thrilled that you want to contribute. DevSnapz is an open-source platform created to help student developers showcase projects, find co-builders, and bridge technical skill gaps.
 
 Whether you are fixing a typo, adding a new feature, improving documentation, or designing components, all contributions are warmly welcomed!
 
@@ -61,7 +61,7 @@ git checkout -b fix/issue-description
 - **TypeScript:** Use strict types. Avoid `any` wherever possible. Define reusable interfaces in `src/types/`.
 - **Styling:** Use Tailwind CSS utility classes. Avoid inline style attributes. For theme-dependent colors, use CSS variables defined in `tailwind.config.cjs` (e.g., `text-g`, `text-ink0`, `bg-bg1`, `border-ink3`).
 - **Icons:** Use lightweight inline SVGs with appropriate `aria-hidden` or `aria-label` attributes.
-- **Zero-Budget:** Do not introduce dependencies that require paid API subscriptions or commercial licenses.
+- **Dependencies:** Prefer lightweight, open-source libraries and avoid unnecessary heavy frameworks.
 
 ### Commit Messages
 We follow conventional commit format:

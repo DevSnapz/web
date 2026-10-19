@@ -4,9 +4,8 @@
 [![Build: Vite](https://img.shields.io/badge/Built%20with-Vite-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Stack: React + TypeScript](https://img.shields.io/badge/Stack-React%20%7C%20TypeScript-blue?logo=react&logoColor=white)](https://reactjs.org/)
 [![Styling: Tailwind CSS](https://img.shields.io/badge/CSS-Tailwind%20CSS-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-[![Budget: ₹0](https://img.shields.io/badge/Budget-%E2%82%B90%20Zero%20Cost-1bce92)](#zero-budget-architecture)
 
-> A free and open-source platform that replaces scattered searching with an intelligent, explainable matching ecosystem for student creators, innovators, and collaborators.
+> An open-source platform that replaces scattered searching with an intelligent, explainable matching ecosystem for student creators, innovators, and collaborators.
 
 ---
 
@@ -45,20 +44,20 @@ Students building technical projects face a fragmented ecosystem:
 
 ---
 
-## 🏗️ Architecture & Zero-Budget Stack
+## 🏗️ Technology Architecture
 
-DevSnapz is engineered strictly under a **₹0 budget requirement**, leveraging industry-grade free and open-source tiers with zero credit card requirements:
+DevSnapz is engineered with a modern, high-performance, and lightweight architecture:
 
-| Component | Selected Technology | Free-Tier Guarantee |
+| Component | Selected Technology | Technical Highlights |
 | :--- | :--- | :--- |
-| **Frontend Framework** | React 18 + TypeScript + Vite | 100% Free & Open Source |
-| **Styling & Design** | Tailwind CSS 3.4 + CSS Variables | 100% Free & Open Source |
-| **Deployment / Hosting** | Cloudflare Pages / Netlify | Unlimited bandwidth / Free static hosting |
-| **Backend & Database** | Supabase (PostgreSQL) | 500 MB database, 50k MAU Auth, 0 cost |
-| **Vector Similarity** | Supabase `pgvector` | Native extension inside PostgreSQL |
-| **AI Requirement Inference** | Groq Cloud API (`llama-3.1-8b`) | Free tier (30 req/min, 14.4k req/day) |
-| **Offline Fallback** | PostgreSQL Full-Text Search (`tsvector`) | 100% Free native database search |
-| **CI / CD & Testing** | GitHub Actions & Vitest | Unlimited minutes for public open-source repos |
+| **Frontend Framework** | React 18 + TypeScript + Vite | Component-driven SPA with sub-second hot reload |
+| **Styling & Design** | Tailwind CSS 3.4 + CSS Variables | Theme-aware responsive UI with zero runtime overhead |
+| **Deployment / Hosting** | Cloudflare Pages / Netlify | Edge-optimized global CDN with automatic git CI/CD |
+| **Backend & Database** | Supabase (PostgreSQL) | Scalable relational database with Row Level Security (RLS) |
+| **Vector Similarity** | Supabase `pgvector` | Native cosine similarity search inside PostgreSQL |
+| **AI Requirement Inference** | Groq Cloud API (`llama-3.1-8b`) | Ultra-fast inference for automated skill extraction |
+| **Offline Fallback** | PostgreSQL Full-Text Search (`tsvector`) | Robust SQL-based tag and keyword matching |
+| **CI / CD & Testing** | GitHub Actions & Vitest | Automated testing, linting, and regression verification |
 
 ---
 
