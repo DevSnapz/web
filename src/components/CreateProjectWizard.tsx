@@ -7,12 +7,12 @@ interface CreateProjectWizardProps {
 }
 
 const gradientOptions = [
-  { label: 'Emerald Forest', value: 'from-emerald-600 to-teal-800' },
-  { label: 'Sunset Glow', value: 'from-amber-500 to-orange-700' },
-  { label: 'Midnight Ocean', value: 'from-blue-600 to-indigo-800' },
-  { label: 'Vibrant Galaxy', value: 'from-purple-600 to-pink-800' },
-  { label: 'Cyber Punk', value: 'from-rose-600 to-violet-800' },
-  { label: 'Dark Charcoal', value: 'from-zinc-700 to-black' },
+  { label: 'Indigo Galaxy', value: 'from-indigo-600 via-purple-600 to-pink-600' },
+  { label: 'Emerald Eco', value: 'from-emerald-600 via-teal-600 to-cyan-600' },
+  { label: 'Cyber Violet', value: 'from-blue-600 via-indigo-600 to-violet-700' },
+  { label: 'Sunset Coral', value: 'from-amber-500 via-rose-500 to-red-600' },
+  { label: 'Teal Forest', value: 'from-teal-600 via-emerald-600 to-green-700' },
+  { label: 'Midnight Slate', value: 'from-slate-700 via-zinc-800 to-neutral-900' },
 ];
 
 export default function CreateProjectWizard({ onClose, onSubmit }: CreateProjectWizardProps) {
@@ -22,9 +22,9 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
   const [title, setTitle] = useState('');
   const [pitch, setPitch] = useState('');
   const [description, setDescription] = useState('');
-  const [creatorName, setCreatorName] = useState('Local Developer');
-  const [creatorAvatar, setCreatorAvatar] = useState('https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150');
-  const [creatorGithub, setCreatorGithub] = useState('');
+  const [creatorName, setCreatorName] = useState('Frozen');
+  const [creatorAvatar, setCreatorAvatar] = useState('https://avatars.githubusercontent.com/u/174297688?s=96&v=4');
+  const [creatorGithub, setCreatorGithub] = useState('Frozen-47');
 
   // Step 2: Tech & Links
   const [techInput, setTechInput] = useState('');
@@ -35,7 +35,7 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
   // Step 3: Help Toggles
   const [helpNeeded, setHelpNeeded] = useState({
     sponsor: false,
-    collaborate: false,
+    collaborate: true,
     guide: false,
     contribute: false,
   });
@@ -111,7 +111,7 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
       creatorAvatar,
       creatorGithub: creatorGithub || undefined,
       bannerGradient,
-      techStack: techStack.length > 0 ? techStack : ['HTML', 'JavaScript'],
+      techStack: techStack.length > 0 ? techStack : ['React', 'TypeScript'],
       githubUrl: githubUrl || 'https://github.com',
       liveUrl: liveUrl || undefined,
       fundingGoal: helpNeeded.sponsor && fundingGoal ? parseFloat(fundingGoal) : undefined,
@@ -120,8 +120,8 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
       openRoles: helpNeeded.collaborate ? rolesList : [],
       sponsorshipTiers: helpNeeded.sponsor
         ? [
-            { id: 't-1', name: 'Micro Sponsor', amount: 5, benefits: 'Name in README' },
-            { id: 't-2', name: 'Premium Supporter', amount: 25, benefits: 'Featured spot in about dashboard' },
+            { id: 't-1', name: 'Student Coffee Sponsor', amount: 5, benefits: 'Name in README' },
+            { id: 't-2', name: 'Server Supporter', amount: 25, benefits: 'Featured spot in about dashboard' },
           ]
         : [],
       sponsorsList: [],
@@ -144,7 +144,7 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
 
   const nextStep = () => {
     if (step === 1 && (!title.trim() || !pitch.trim() || !description.trim())) {
-      alert('Please fill out all general details');
+      alert('Please fill out title, pitch, and description');
       return;
     }
     if (step === 2 && !techInput.trim()) {
@@ -159,38 +159,38 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto bg-black/70 backdrop-blur-md transition-all duration-300">
-      <div className="relative w-full max-w-2xl bg-bg1 border border-ink3 rounded-2xl shadow-2xl overflow-hidden flex flex-col my-8">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto bg-black/75 backdrop-blur-md transition-all duration-300">
+      <div className="relative w-full max-w-2xl bg-[#151B2D] border border-[#222F4C] rounded-2xl shadow-2xl overflow-hidden flex flex-col my-8">
         
         {/* Header */}
-        <div className="bg-bg0 px-6 py-4 border-b border-ink3 flex justify-between items-center">
+        <div className="bg-[#0B1020]/90 px-6 py-4 border-b border-[#222F4C] flex justify-between items-center">
           <div>
-            <h2 className="font-outfit font-extrabold text-lg text-ink0">Showcase Your Project</h2>
-            <p className="text-xs text-ink1 mt-0.5">Share your code, build teams, and collect feedback</p>
+            <h2 className="font-extrabold text-lg text-white">Publish Project Idea</h2>
+            <p className="text-xs text-slate-300 mt-0.5">Define your build, highlight skill gaps, and recruit teammates</p>
           </div>
           <button
             onClick={onClose}
-            className="text-ink2 hover:text-ink0 text-lg font-semibold w-8 h-8 rounded-full border border-ink3/40 hover:border-ink2 flex items-center justify-center transition-all duration-200"
+            className="text-slate-400 hover:text-white text-lg font-semibold w-8 h-8 rounded-xl border border-[#222F4C] hover:border-slate-500 flex items-center justify-center transition-all duration-200"
           >
             ×
           </button>
         </div>
 
         {/* Stepper progress bar */}
-        <div className="px-6 pt-4 bg-bg1/50 flex items-center justify-between text-[0.65rem] font-dmmono text-ink2 border-b border-ink3/30 pb-3">
+        <div className="px-6 py-3.5 bg-[#0B1020]/40 flex items-center justify-between text-xs font-mono text-slate-400 border-b border-[#222F4C]">
           <div className="flex items-center gap-2">
-            <span className={`w-5 h-5 rounded-full flex items-center justify-center font-bold border ${step >= 1 ? 'border-g text-g bg-g/5' : 'border-ink3 text-ink2'}`}>1</span>
-            <span className={step >= 1 ? 'text-ink0' : ''}>General Details</span>
+            <span className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[0.68rem] border ${step >= 1 ? 'border-[#635BFF] text-white bg-[#635BFF]' : 'border-[#222F4C] text-slate-500'}`}>1</span>
+            <span className={step >= 1 ? 'text-white font-medium' : ''}>Overview</span>
           </div>
-          <div className="flex-grow h-[1px] bg-ink3 mx-4" />
+          <div className="flex-grow h-[1px] bg-[#222F4C] mx-3" />
           <div className="flex items-center gap-2">
-            <span className={`w-5 h-5 rounded-full flex items-center justify-center font-bold border ${step >= 2 ? 'border-g text-g bg-g/5' : 'border-ink3 text-ink2'}`}>2</span>
-            <span className={step >= 2 ? 'text-ink0' : ''}>Tech & Assets</span>
+            <span className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[0.68rem] border ${step >= 2 ? 'border-[#635BFF] text-white bg-[#635BFF]' : 'border-[#222F4C] text-slate-500'}`}>2</span>
+            <span className={step >= 2 ? 'text-white font-medium' : ''}>Stack & Links</span>
           </div>
-          <div className="flex-grow h-[1px] bg-ink3 mx-4" />
+          <div className="flex-grow h-[1px] bg-[#222F4C] mx-3" />
           <div className="flex items-center gap-2">
-            <span className={`w-5 h-5 rounded-full flex items-center justify-center font-bold border ${step >= 3 ? 'border-g text-g bg-g/5' : 'border-ink3 text-ink2'}`}>3</span>
-            <span className={step >= 3 ? 'text-ink0' : ''}>Support Options</span>
+            <span className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[0.68rem] border ${step >= 3 ? 'border-[#635BFF] text-white bg-[#635BFF]' : 'border-[#222F4C] text-slate-500'}`}>3</span>
+            <span className={step >= 3 ? 'text-white font-medium' : ''}>Roles & Skill Gaps</span>
           </div>
         </div>
 
@@ -201,72 +201,63 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
           {step === 1 && (
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-dmmono uppercase text-ink1 mb-1">Project Title <span className="text-red-500">*</span></label>
+                <label className="block text-xs font-mono uppercase text-slate-400 mb-1">Project Title <span className="text-[#F9735B]">*</span></label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. EcoLedger"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full bg-bg2 border border-ink3 rounded-lg px-3 py-2 text-xs text-ink0 focus:outline-none focus:border-g focus:ring-1 focus:ring-g/30 transition-all"
+                  className="w-full bg-[#0B1020] border border-[#222F4C] rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-[#635BFF] transition-all"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-dmmono uppercase text-ink1 mb-1">One-sentence Pitch <span className="text-red-500">*</span></label>
+                <label className="block text-xs font-mono uppercase text-slate-400 mb-1">One-sentence Pitch <span className="text-[#F9735B]">*</span></label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Decentralized solar energy grid registry for small agricultural cooperatives."
+                  placeholder="e.g. Distributed solar telemetry network for campus dormitories."
                   value={pitch}
                   onChange={(e) => setPitch(e.target.value)}
-                  className="w-full bg-bg2 border border-ink3 rounded-lg px-3 py-2 text-xs text-ink0 focus:outline-none focus:border-g focus:ring-1 focus:ring-g/30 transition-all"
+                  className="w-full bg-[#0B1020] border border-[#222F4C] rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-[#635BFF] transition-all"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-dmmono uppercase text-ink1 mb-1">Detailed Description <span className="text-red-500">*</span></label>
+                <label className="block text-xs font-mono uppercase text-slate-400 mb-1">Detailed Description <span className="text-[#F9735B]">*</span></label>
                 <textarea
                   rows={4}
                   required
-                  placeholder="Provide details on project inspiration, architectural workflow, features, and future targets..."
+                  placeholder="Explain the problem statement, technical architecture, and development roadmap..."
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full bg-bg2 border border-ink3 rounded-lg px-3 py-2 text-xs text-ink0 focus:outline-none focus:border-g focus:ring-1 focus:ring-g/30 transition-all"
+                  className="w-full bg-[#0B1020] border border-[#222F4C] rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-[#635BFF] transition-all resize-none leading-relaxed"
                 />
               </div>
 
-              <div className="bg-bg0 border border-ink3 p-4 rounded-xl space-y-4">
-                <div className="text-[0.62rem] font-dmmono uppercase text-ink2">Creator Profile Information</div>
+              <div className="bg-[#0B1020]/70 border border-[#222F4C] p-4 rounded-xl space-y-4">
+                <div className="text-[0.65rem] font-mono uppercase text-slate-400 tracking-wider">Creator Information</div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[0.6rem] font-dmmono uppercase text-ink1 mb-1">Display Name</label>
+                    <label className="block text-[0.65rem] font-mono uppercase text-slate-400 mb-1">Display Name</label>
                     <input
                       type="text"
                       value={creatorName}
                       onChange={(e) => setCreatorName(e.target.value)}
-                      className="w-full bg-bg2 border border-ink3 rounded-lg px-3 py-1.5 text-xs text-ink0 focus:outline-none"
+                      className="w-full bg-[#151B2D] border border-[#222F4C] rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-[#635BFF]"
                     />
                   </div>
                   <div>
-                    <label className="block text-[0.6rem] font-dmmono uppercase text-ink1 mb-1">Avatar Link URL</label>
+                    <label className="block text-[0.65rem] font-mono uppercase text-slate-400 mb-1">Github Username</label>
                     <input
                       type="text"
-                      value={creatorAvatar}
-                      onChange={(e) => setCreatorAvatar(e.target.value)}
-                      className="w-full bg-bg2 border border-ink3 rounded-lg px-3 py-1.5 text-xs text-ink0 focus:outline-none"
+                      placeholder="e.g. Frozen-47"
+                      value={creatorGithub}
+                      onChange={(e) => setCreatorGithub(e.target.value)}
+                      className="w-full bg-[#151B2D] border border-[#222F4C] rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-[#635BFF]"
                     />
                   </div>
-                </div>
-                <div>
-                  <label className="block text-[0.6rem] font-dmmono uppercase text-ink1 mb-1">Github Username (Optional)</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. sanapatel"
-                    value={creatorGithub}
-                    onChange={(e) => setCreatorGithub(e.target.value)}
-                    className="w-full bg-bg2 border border-ink3 rounded-lg px-3 py-1.5 text-xs text-ink0 focus:outline-none"
-                  />
                 </div>
               </div>
             </div>
@@ -276,57 +267,57 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
           {step === 2 && (
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-dmmono uppercase text-ink1 mb-1">Tech Stack (comma separated) <span className="text-red-500">*</span></label>
+                <label className="block text-xs font-mono uppercase text-slate-400 mb-1">Technical Stack (comma separated) <span className="text-[#F9735B]">*</span></label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. React, TypeScript, Rust, SQLite, WebAssembly"
+                  placeholder="e.g. React, TypeScript, Python, PyTorch, Docker"
                   value={techInput}
                   onChange={(e) => setTechInput(e.target.value)}
-                  className="w-full bg-bg2 border border-ink3 rounded-lg px-3 py-2 text-xs text-ink0 focus:outline-none focus:border-g"
+                  className="w-full bg-[#0B1020] border border-[#222F4C] rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-[#635BFF]"
                 />
-                <span className="text-[0.62rem] text-ink2 mt-1 block font-dmmono">Separate entries with commas</span>
+                <span className="text-[0.65rem] text-slate-500 mt-1 block font-mono">Separate entries with commas</span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-dmmono uppercase text-ink1 mb-1">GitHub Code Repository URL</label>
+                  <label className="block text-xs font-mono uppercase text-slate-400 mb-1">GitHub Repository URL</label>
                   <input
-                    type="text"
+                    type="url"
                     placeholder="https://github.com/user/project"
                     value={githubUrl}
                     onChange={(e) => setGithubUrl(e.target.value)}
-                    className="w-full bg-bg2 border border-ink3 rounded-lg px-3 py-2 text-xs text-ink0 focus:outline-none focus:border-g"
+                    className="w-full bg-[#0B1020] border border-[#222F4C] rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-[#635BFF]"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-dmmono uppercase text-ink1 mb-1">Live Demo / App URL (Optional)</label>
+                  <label className="block text-xs font-mono uppercase text-slate-400 mb-1">Live Demo / App URL (Optional)</label>
                   <input
-                    type="text"
-                    placeholder="https://my-demo-app.vercel.app"
+                    type="url"
+                    placeholder="https://project.devsnapz.org"
                     value={liveUrl}
                     onChange={(e) => setLiveUrl(e.target.value)}
-                    className="w-full bg-bg2 border border-ink3 rounded-lg px-3 py-2 text-xs text-ink0 focus:outline-none focus:border-g"
+                    className="w-full bg-[#0B1020] border border-[#222F4C] rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-[#635BFF]"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-dmmono uppercase text-ink1 mb-2">Select Accent Banner Gradient</label>
+                <label className="block text-xs font-mono uppercase text-slate-400 mb-2">Accent Banner Gradient</label>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {gradientOptions.map((opt) => (
                     <button
                       key={opt.value}
                       type="button"
                       onClick={() => setBannerGradient(opt.value)}
-                      className={`text-left p-3.5 rounded-xl border flex flex-col justify-between transition-all ${
+                      className={`text-left p-3 rounded-xl border flex flex-col justify-between transition-all ${
                         bannerGradient === opt.value
-                          ? 'border-g bg-g/5 shadow-md shadow-g/10'
-                          : 'border-ink3 hover:border-ink2 bg-bg2'
+                          ? 'border-[#635BFF] bg-[#635BFF]/10 shadow-md shadow-[#635BFF]/10 ring-1 ring-[#635BFF]'
+                          : 'border-[#222F4C] hover:border-slate-500 bg-[#0B1020]/60'
                       }`}
                     >
-                      <span className="text-[0.65rem] font-semibold text-ink0 mb-2">{opt.label}</span>
-                      <div className={`w-full h-4 rounded bg-gradient-to-r ${opt.value}`} />
+                      <span className="text-xs font-medium text-white mb-2">{opt.label}</span>
+                      <div className={`w-full h-3 rounded-lg bg-gradient-to-r ${opt.value}`} />
                     </button>
                   ))}
                 </div>
@@ -336,10 +327,10 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
 
           {/* STEP 3: HELP OPTIONS */}
           {step === 3 && (
-            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
-              <div className="border-b border-ink3 pb-2.5">
-                <h3 className="text-xs font-semibold uppercase text-ink2 font-dmmono mb-1">Identify Support Requirements</h3>
-                <p className="text-[0.7rem] text-ink1">Toggle checkboxes to unlock detail cards for each area.</p>
+            <div className="space-y-6">
+              <div className="border-b border-[#222F4C] pb-2.5">
+                <h3 className="text-xs font-mono uppercase text-slate-400 tracking-wider mb-1">Identify Collaboration & Missing Skills</h3>
+                <p className="text-xs text-slate-300">Toggle categories to configure required team roles and tasks.</p>
               </div>
 
               {/* Toggles Panel */}
@@ -350,21 +341,21 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
                     collaborate: 'Collaborators',
                     sponsor: 'Sponsors',
                     guide: 'Mentorship',
-                    contribute: 'Contributors',
+                    contribute: 'Issues',
                   };
                   return (
                     <button
                       key={key}
                       type="button"
                       onClick={() => setHelpNeeded({ ...helpNeeded, [key]: !helpNeeded[key] })}
-                      className={`py-2 px-3 text-[0.68rem] font-semibold rounded-lg border font-dmmono flex items-center justify-center gap-1.5 transition-all ${
+                      className={`py-2 px-3 text-xs font-mono rounded-xl border flex items-center justify-center gap-1.5 transition-all ${
                         isActive
-                          ? 'bg-g border-g text-bg0 font-bold shadow-md shadow-g/10'
-                          : 'bg-bg2 border-ink3 text-ink1 hover:border-ink2'
+                          ? 'bg-[#635BFF] border-[#635BFF] text-white font-bold shadow-md shadow-[#635BFF]/20'
+                          : 'bg-[#0B1020]/60 border-[#222F4C] text-slate-400 hover:text-white hover:border-slate-500'
                       }`}
                     >
-                      <span className="text-xs">{isActive ? '✓' : '+'}</span>
-                      {labels[key]}
+                      <span>{isActive ? '✓' : '+'}</span>
+                      <span>{labels[key]}</span>
                     </button>
                   );
                 })}
@@ -375,9 +366,9 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
                 
                 {/* 1. Collaborate Sub-form */}
                 {helpNeeded.collaborate && (
-                  <div className="bg-bg2 border border-ink3 rounded-xl p-4 space-y-4">
-                    <div className="flex justify-between items-center text-xs border-b border-ink3 pb-2 font-dmmono font-semibold text-blue-400">
-                      <span>Collaboration Openings</span>
+                  <div className="bg-[#0B1020]/70 border border-[#222F4C] rounded-2xl p-4 sm:p-5 space-y-4">
+                    <div className="flex justify-between items-center text-xs border-b border-[#222F4C] pb-2 font-mono text-[#9D98FF]">
+                      <span className="font-semibold uppercase">Open Roles & Missing Skill Requirements</span>
                       <span>{rolesList.length} Role(s) Added</span>
                     </div>
 
@@ -385,20 +376,20 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
                     {rolesList.length > 0 && (
                       <div className="space-y-2">
                         {rolesList.map((role) => (
-                          <div key={role.id} className="bg-bg3 border border-ink3 p-2.5 rounded-lg flex justify-between items-start text-xs">
+                          <div key={role.id} className="bg-[#151B2D] border border-[#222F4C] p-3 rounded-xl flex justify-between items-start text-xs">
                             <div>
-                              <div className="font-bold text-ink0">{role.roleName}</div>
-                              {role.description && <p className="text-ink1 text-[0.7rem] mt-0.5">{role.description}</p>}
+                              <div className="font-bold text-white">{role.roleName}</div>
+                              {role.description && <p className="text-slate-300 text-xs mt-0.5">{role.description}</p>}
                               <div className="flex flex-wrap gap-1 mt-1.5">
                                 {role.skillsNeeded.map((s) => (
-                                  <span key={s} className="text-[0.58rem] bg-bg0 border border-ink3 px-1.5 rounded text-ink2">{s}</span>
+                                  <span key={s} className="text-[0.62rem] font-mono bg-[#635BFF]/15 border border-[#635BFF]/30 px-1.5 py-0.2 rounded text-[#9D98FF]">{s}</span>
                                 ))}
                               </div>
                             </div>
                             <button
                               type="button"
                               onClick={() => removeRole(role.id)}
-                              className="text-red-500 hover:text-red-400 font-bold ml-2 text-xs"
+                              className="text-rose-400 hover:text-rose-300 font-mono text-xs ml-2"
                             >
                               Remove
                             </button>
@@ -408,45 +399,45 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
                     )}
 
                     {/* Add role inputs */}
-                    <div className="bg-bg0 border border-ink3/60 p-3 rounded-lg space-y-3">
+                    <div className="bg-[#151B2D] border border-[#222F4C] p-3.5 rounded-xl space-y-3">
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
-                          <label className="block text-[0.6rem] font-dmmono uppercase text-ink1 mb-1">Role Title</label>
+                          <label className="block text-[0.65rem] font-mono uppercase text-slate-400 mb-1">Role Title</label>
                           <input
                             type="text"
-                            placeholder="e.g. Senior Frontend Dev"
+                            placeholder="e.g. Frontend Engineer"
                             value={newRoleName}
                             onChange={(e) => setNewRoleName(e.target.value)}
-                            className="w-full bg-bg3 border border-ink3 rounded px-2.5 py-1 text-xs text-ink0 focus:outline-none"
+                            className="w-full bg-[#0B1020] border border-[#222F4C] rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-[#635BFF]"
                           />
                         </div>
                         <div>
-                          <label className="block text-[0.6rem] font-dmmono uppercase text-ink1 mb-1">Skills needed (comma sep.)</label>
+                          <label className="block text-[0.65rem] font-mono uppercase text-slate-400 mb-1">Required Skills (comma separated)</label>
                           <input
                             type="text"
-                            placeholder="e.g. React, Tailwind"
+                            placeholder="e.g. React, Framer Motion"
                             value={newRoleSkills}
                             onChange={(e) => setNewRoleSkills(e.target.value)}
-                            className="w-full bg-bg3 border border-ink3 rounded px-2.5 py-1 text-xs text-ink0 focus:outline-none"
+                            className="w-full bg-[#0B1020] border border-[#222F4C] rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-[#635BFF]"
                           />
                         </div>
                       </div>
                       <div>
-                        <label className="block text-[0.6rem] font-dmmono uppercase text-ink1 mb-1">Brief description of duties</label>
+                        <label className="block text-[0.65rem] font-mono uppercase text-slate-400 mb-1">Description of duties</label>
                         <input
                           type="text"
-                          placeholder="e.g. Develop interactive charts dashboard"
+                          placeholder="e.g. Implement real-time canvas visualizer controls"
                           value={newRoleDesc}
                           onChange={(e) => setNewRoleDesc(e.target.value)}
-                          className="w-full bg-bg3 border border-ink3 rounded px-2.5 py-1 text-xs text-ink0 focus:outline-none"
+                          className="w-full bg-[#0B1020] border border-[#222F4C] rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-[#635BFF]"
                         />
                       </div>
                       <button
                         type="button"
                         onClick={addRole}
-                        className="bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs px-3 py-1.5 rounded active:scale-95 transition-all"
+                        className="bg-[#635BFF] hover:bg-[#5249e0] text-white font-medium text-xs px-3.5 py-1.5 rounded-lg active:scale-95 transition-all shadow-sm"
                       >
-                        + Add Role to Project
+                        + Add Role to Requirements
                       </button>
                     </div>
                   </div>
@@ -454,41 +445,40 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
 
                 {/* 2. Sponsor Sub-form */}
                 {helpNeeded.sponsor && (
-                  <div className="bg-bg2 border border-ink3 rounded-xl p-4 space-y-3">
-                    <div className="text-xs border-b border-ink3 pb-2 font-dmmono font-semibold text-yellow-400">
+                  <div className="bg-[#0B1020]/70 border border-[#222F4C] rounded-2xl p-4 space-y-3">
+                    <div className="text-xs border-b border-[#222F4C] pb-2 font-mono font-semibold text-amber-400">
                       Sponsorship Milestones
                     </div>
                     <div>
-                      <label className="block text-xs font-dmmono uppercase text-ink1 mb-1">Funding Goal Target Amount ($)</label>
+                      <label className="block text-xs font-mono uppercase text-slate-400 mb-1">Funding Goal Target Amount ($)</label>
                       <div className="relative max-w-[200px]">
-                        <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-xs text-ink2">$</span>
+                        <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-xs text-slate-400">$</span>
                         <input
                           type="number"
                           placeholder="e.g. 1000"
                           value={fundingGoal}
                           onChange={(e) => setFundingGoal(e.target.value)}
-                          className="w-full pl-7 pr-3 py-2 bg-bg3 border border-ink3 rounded-lg text-xs text-ink0 focus:outline-none focus:border-yellow-500"
+                          className="w-full pl-7 pr-3 py-1.5 bg-[#151B2D] border border-[#222F4C] rounded-xl text-xs text-white focus:outline-none focus:border-[#635BFF]"
                         />
                       </div>
-                      <span className="text-[0.62rem] text-ink2 mt-1 block font-dmmono">Calculates percentage targets for sandbox checkout tests.</span>
                     </div>
                   </div>
                 )}
 
                 {/* 3. Guidance Sub-form */}
                 {helpNeeded.guide && (
-                  <div className="bg-bg2 border border-ink3 rounded-xl p-4 space-y-3">
-                    <div className="text-xs border-b border-ink3 pb-2 font-dmmono font-semibold text-purple-400">
+                  <div className="bg-[#0B1020]/70 border border-[#222F4C] rounded-2xl p-4 space-y-3">
+                    <div className="text-xs border-b border-[#222F4C] pb-2 font-mono font-semibold text-purple-400">
                       Post an Initial Mentorship Topic
                     </div>
                     <div>
-                      <label className="block text-xs font-dmmono uppercase text-ink1 mb-1">What architectural topic or question do you need help with?</label>
+                      <label className="block text-xs font-mono uppercase text-slate-400 mb-1">What technical architecture question do you need guidance on?</label>
                       <input
                         type="text"
-                        placeholder="e.g. How should we set up our smart contracts for upgradeability?"
+                        placeholder="e.g. What is the optimal vector index configuration for client-side search?"
                         value={initialQuestion}
                         onChange={(e) => setInitialQuestion(e.target.value)}
-                        className="w-full bg-bg3 border border-ink3 rounded-lg px-3 py-2 text-xs text-ink0 focus:outline-none focus:border-purple-500"
+                        className="w-full bg-[#151B2D] border border-[#222F4C] rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-[#635BFF]"
                       />
                     </div>
                   </div>
@@ -496,9 +486,9 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
 
                 {/* 4. Contribute Sub-form */}
                 {helpNeeded.contribute && (
-                  <div className="bg-bg2 border border-ink3 rounded-xl p-4 space-y-4">
-                    <div className="flex justify-between items-center text-xs border-b border-ink3 pb-2 font-dmmono font-semibold text-emerald-400">
-                      <span>Contributors Issues Board</span>
+                  <div className="bg-[#0B1020]/70 border border-[#222F4C] rounded-2xl p-4 space-y-4">
+                    <div className="flex justify-between items-center text-xs border-b border-[#222F4C] pb-2 font-mono font-semibold text-emerald-400">
+                      <span>Starter Tasks & Issues</span>
                       <span>{issuesList.length} Issue(s) Added</span>
                     </div>
 
@@ -506,15 +496,15 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
                     {issuesList.length > 0 && (
                       <div className="space-y-2">
                         {issuesList.map((issue) => (
-                          <div key={issue.id} className="bg-bg3 border border-ink3 p-2.5 rounded-lg flex justify-between items-center text-xs">
+                          <div key={issue.id} className="bg-[#151B2D] border border-[#222F4C] p-2.5 rounded-xl flex justify-between items-center text-xs">
                             <div>
-                              <span className="font-bold text-ink0">{issue.title}</span>
-                              <span className="text-[0.58rem] ml-2 font-dmmono uppercase px-1.5 rounded bg-bg0 border border-ink3 text-ink2">{issue.difficulty}</span>
+                              <span className="font-bold text-white">{issue.title}</span>
+                              <span className="text-[0.62rem] ml-2 font-mono uppercase px-2 py-0.5 rounded-full bg-[#0B1020] border border-[#222F4C] text-slate-300">{issue.difficulty}</span>
                             </div>
                             <button
                               type="button"
                               onClick={() => removeIssue(issue.id)}
-                              className="text-red-500 hover:text-red-400 font-bold ml-2 text-xs"
+                              className="text-rose-400 hover:text-rose-300 font-mono text-xs ml-2"
                             >
                               Remove
                             </button>
@@ -524,23 +514,23 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
                     )}
 
                     {/* Add issue inputs */}
-                    <div className="bg-bg0 border border-ink3/60 p-3 rounded-lg flex flex-col sm:flex-row gap-3 items-end">
+                    <div className="bg-[#151B2D] border border-[#222F4C] p-3 rounded-xl flex flex-col sm:flex-row gap-3 items-end">
                       <div className="flex-grow">
-                        <label className="block text-[0.6rem] font-dmmono uppercase text-ink1 mb-1">Issue Title</label>
+                        <label className="block text-[0.65rem] font-mono uppercase text-slate-400 mb-1">Issue Title</label>
                         <input
                           type="text"
-                          placeholder="e.g. Fix README broken link references"
+                          placeholder="e.g. Add dark mode toggle in nav"
                           value={newIssueTitle}
                           onChange={(e) => setNewIssueTitle(e.target.value)}
-                          className="w-full bg-bg3 border border-ink3 rounded px-2.5 py-1 text-xs text-ink0 focus:outline-none"
+                          className="w-full bg-[#0B1020] border border-[#222F4C] rounded-lg px-2.5 py-1 text-xs text-white focus:outline-none focus:border-[#635BFF]"
                         />
                       </div>
                       <div>
-                        <label className="block text-[0.6rem] font-dmmono uppercase text-ink1 mb-1">Difficulty</label>
+                        <label className="block text-[0.65rem] font-mono uppercase text-slate-400 mb-1">Difficulty</label>
                         <select
                           value={newIssueDifficulty}
                           onChange={(e) => setNewIssueDifficulty(e.target.value as any)}
-                          className="bg-bg3 border border-ink3 rounded px-2 py-1 text-xs text-ink0 focus:outline-none min-w-[100px]"
+                          className="bg-[#0B1020] border border-[#222F4C] rounded-lg px-2 py-1 text-xs text-white focus:outline-none min-w-[100px]"
                         >
                           <option value="easy">Easy</option>
                           <option value="medium">Medium</option>
@@ -550,9 +540,9 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
                       <button
                         type="button"
                         onClick={addIssue}
-                        className="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs px-3.5 py-1.5 rounded active:scale-95 transition-all"
+                        className="bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-xs px-3.5 py-1.5 rounded-lg active:scale-95 transition-all shadow-sm"
                       >
-                        + Add Issue
+                        + Add Task
                       </button>
                     </div>
                   </div>
@@ -564,11 +554,11 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
         </div>
 
         {/* Wizard Nav Actions */}
-        <div className="p-4 bg-bg0 border-t border-ink3 flex justify-between items-center text-xs font-dmmono">
+        <div className="p-4 bg-[#0B1020]/90 border-t border-[#222F4C] flex justify-between items-center text-xs font-mono">
           <button
             type="button"
             onClick={step === 1 ? onClose : prevStep}
-            className="text-ink1 hover:text-ink0 border border-ink3 hover:border-ink2 rounded-lg px-4 py-2"
+            className="text-slate-400 hover:text-white border border-[#222F4C] hover:border-slate-500 rounded-xl px-4 py-2 transition-all"
           >
             {step === 1 ? 'Cancel' : '← Back'}
           </button>
@@ -576,9 +566,9 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
           <button
             type="button"
             onClick={step === 3 ? handleFinalSubmit : nextStep}
-            className="bg-g text-bg0 font-bold rounded-lg px-5 py-2 hover:shadow-[0_0_12px_rgba(27,206,146,0.3)] active:scale-95 transition-all"
+            className="bg-[#635BFF] hover:bg-[#5249e0] text-white font-semibold rounded-xl px-5 py-2 shadow-md shadow-[#635BFF]/25 active:scale-95 transition-all"
           >
-            {step === 3 ? 'Publish Showcase Project ➔' : 'Continue ➔'}
+            {step === 3 ? 'Publish Project Idea ➔' : 'Continue ➔'}
           </button>
         </div>
 
