@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
 
 interface NavProps {
@@ -12,66 +12,80 @@ export default function Nav({
   pendingNotifications,
 }: NavProps) {
   const [open, setOpen] = useState(false);
+  const location = useLocation();
+
+  const handleCommunityClick = (e: React.MouseEvent) => {
+    if (location.pathname === '/') {
+      e.preventDefault();
+      const el = document.getElementById('community');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
-    `text-xs font-sans px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
+    `text-xs font-sans px-3.5 py-2 rounded-lg transition-all flex items-center gap-1.5 ${
       isActive
-        ? 'text-ink0 bg-bg2 border border-ink3 font-semibold shadow-sm'
-        : 'text-ink1 hover:text-ink0 hover:bg-bg2/60 border border-transparent'
+        ? 'text-[#635BFF] bg-[#F3F1FF] border border-[#635BFF]/25 font-semibold shadow-xs'
+        : 'text-[#6B7280] hover:text-[#111827] hover:bg-[#F7F8FC] border border-transparent font-medium'
     }`;
 
   const mobileNavLinkClass = ({ isActive }: { isActive: boolean }) =>
     `rounded-xl border px-4 py-2.5 text-xs text-left font-sans flex items-center justify-between transition-all ${
       isActive
-        ? 'border-g/40 bg-g/10 text-g font-semibold shadow-sm'
-        : 'border-ink3/70 text-ink1 hover:text-ink0 hover:bg-bg2'
+        ? 'border-[#635BFF]/30 bg-[#F3F1FF] text-[#635BFF] font-semibold'
+        : 'border-[#E5E7EB] text-[#6B7280] hover:text-[#111827] hover:bg-[#F7F8FC]'
     }`;
 
   return (
-    <nav className="relative sticky top-0 z-50 bg-bg0/85 backdrop-blur-xl border-b border-ink3">
-      <div className="max-w-[1280px] mx-auto px-4 sm:px-8 py-2.5 sm:py-3 flex items-center justify-between gap-3 sm:gap-4">
+    <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-[#E5E7EB] h-[68px] sm:h-[72px] flex items-center transition-colors">
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-8 w-full flex items-center justify-between gap-4">
         
-        {/* Brand Logo */}
+        {/* Brand Lockup: DevSnapz. with coral-orange dot */}
         <Link
           to="/"
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="flex items-center gap-2.5 group outline-none cursor-pointer"
+          className="flex items-center gap-1.5 group outline-none cursor-pointer"
         >
-          <span className="font-outfit font-extrabold text-[1.15rem] tracking-tight text-ink0 transition-colors">
-            Dev<span className="text-g">Snapz</span>
-          </span>
-          <span className="hidden sm:inline-flex items-center text-[0.62rem] font-mono tracking-wider uppercase bg-g/10 text-g border border-g-dim px-2 py-0.5 rounded-full font-semibold">
-            Studio
+          <span className="font-sans font-extrabold text-[1.25rem] sm:text-[1.35rem] tracking-tight text-[#111827]">
+            DevSnapz<span className="text-[#F9735B]">.</span>
           </span>
         </Link>
 
-        {/* Desktop Menu */}
-        <div className="hidden md:flex items-center gap-2 sm:gap-3">
-          <NavLink to="/" end className={navLinkClass}>
-            Home
-          </NavLink>
-          
+        {/* Center Navigation Links */}
+        <div className="hidden md:flex items-center gap-1.5">
           <NavLink to="/explore" className={navLinkClass}>
-            Explore Projects
+            Explore
           </NavLink>
           
-          <NavLink to="/dashboard" className={navLinkClass}>
-            <span>Creator Hub</span>
+          <NavLink to="/explore" end className={navLinkClass}>
+            Projects
+          </NavLink>
+          
+          <Link
+            to="/#community"
+            onClick={handleCommunityClick}
+            className="text-xs font-sans font-medium px-3.5 py-2 rounded-lg text-[#6B7280] hover:text-[#111827] hover:bg-[#F7F8FC] transition-all"
+          >
+            Community
+          </Link>
+        </div>
+
+        {/* Far Right Actions: Profile / Sign In & Share Project CTA */}
+        <div className="hidden md:flex items-center gap-3">
+          <NavLink to="/dashboard" className={navLinkClass} title="Creator Workspace">
+            <span>Workspace</span>
             {pendingNotifications > 0 && (
-              <span className="w-2 h-2 rounded-full bg-gold animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-[#F9735B] animate-pulse" />
             )}
           </NavLink>
 
           <NavLink to="/profile" className={navLinkClass}>
-            My Profile
+            <span>Profile</span>
           </NavLink>
-        </div>
 
-        {/* Desktop Actions */}
-        <div className="hidden md:flex items-center gap-3">
           <button
             onClick={onOpenCreateWizard}
-            className="text-xs font-semibold font-sans text-white bg-g hover:bg-g-dim border border-g-dim rounded-lg px-3.5 py-1.5 shadow-sm transition-all active:scale-95 flex items-center gap-1.5"
+            className="text-xs font-semibold font-sans text-white bg-[#635BFF] hover:bg-[#5246C9] rounded-lg px-4 py-2 shadow-xs transition-all active:scale-95 flex items-center gap-1.5"
           >
             <span>+</span>
             <span>Share Project</span>
@@ -87,7 +101,7 @@ export default function Nav({
             aria-label={open ? 'Close menu' : 'Open menu'}
             aria-expanded={open}
             onClick={() => setOpen((value) => !value)}
-            className="inline-flex items-center justify-center h-9 w-9 rounded-lg text-ink1 hover:text-ink0 bg-bg2 border border-ink3"
+            className="inline-flex items-center justify-center h-9 w-9 rounded-lg text-[#6B7280] hover:text-[#111827] bg-[#F7F8FC] border border-[#E5E7EB]"
           >
             <span className="text-lg leading-none">{open ? '×' : '≡'}</span>
           </button>
@@ -97,11 +111,11 @@ export default function Nav({
 
       {/* Mobile Menu Dropdown */}
       <div
-        className={`absolute right-4 top-full z-40 mt-2 w-[min(280px,calc(100%-1.5rem))] overflow-hidden rounded-2xl border border-ink3 bg-bg1/95 backdrop-blur-xl shadow-2xl transition-all duration-200 md:hidden ${
+        className={`absolute right-4 top-full z-40 mt-2 w-[min(300px,calc(100%-2rem))] overflow-hidden rounded-2xl border border-[#E5E7EB] bg-white shadow-xl transition-all duration-200 md:hidden ${
           open ? 'opacity-100 scale-100 visible' : 'opacity-0 scale-95 invisible'
         }`}
       >
-        <div className="flex flex-col gap-2 p-3">
+        <div className="flex flex-col gap-2 p-3.5">
           <NavLink
             to="/"
             end
@@ -118,15 +132,26 @@ export default function Nav({
           >
             <span>Explore Projects</span>
           </NavLink>
-          
+
+          <Link
+            to="/#community"
+            onClick={(e) => {
+              setOpen(false);
+              handleCommunityClick(e);
+            }}
+            className="rounded-xl border border-[#E5E7EB] px-4 py-2.5 text-xs text-left font-sans text-[#6B7280] hover:text-[#111827] hover:bg-[#F7F8FC] transition-all"
+          >
+            <span>Community</span>
+          </Link>
+
           <NavLink
             to="/dashboard"
             onClick={() => setOpen(false)}
             className={mobileNavLinkClass}
           >
-            <span>Creator Hub</span>
+            <span>Workspace</span>
             {pendingNotifications > 0 && (
-              <span className="w-2 h-2 rounded-full bg-gold animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-[#F9735B] animate-pulse" />
             )}
           </NavLink>
 
@@ -135,7 +160,7 @@ export default function Nav({
             onClick={() => setOpen(false)}
             className={mobileNavLinkClass}
           >
-            <span>My Profile</span>
+            <span>Profile</span>
           </NavLink>
           
           <button
@@ -143,7 +168,7 @@ export default function Nav({
               setOpen(false);
               onOpenCreateWizard();
             }}
-            className="rounded-xl border border-g-dim bg-g px-4 py-2.5 text-xs font-bold text-center text-white shadow-sm mt-1"
+            className="rounded-xl bg-[#635BFF] hover:bg-[#5246C9] px-4 py-2.5 text-xs font-bold text-center text-white shadow-sm mt-1 transition-all"
           >
             + Share Project
           </button>
