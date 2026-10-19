@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Project, CollaboratorApplication } from '../types';
 
@@ -208,21 +208,28 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
     setTimeout(() => setCopiedLink(false), 2000);
   };
 
+  const tabButtonClass = (tab: 'overview' | 'recommendations' | 'collaborators') =>
+    `px-4 py-2 rounded-xl text-xs font-sans transition-all flex items-center gap-2 ${
+      activeTab === tab
+        ? 'bg-[#F3F1FF] text-[#635BFF] font-semibold border border-[#635BFF]/30 shadow-xs'
+        : 'text-[#6B7280] hover:text-[#111827] hover:bg-[#F7F8FC] border border-transparent font-medium'
+    }`;
+
   return (
-    <section id="student-profile" className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-10 relative z-10">
+    <section id="student-profile" className="max-w-[1280px] mx-auto px-4 sm:px-8 py-10 sm:py-14 relative z-10">
       
       {/* Profile Header Card */}
-      <div className="bg-[#151B2D]/90 border border-[#222F4C] rounded-2xl p-6 sm:p-8 mb-8 backdrop-blur-md shadow-xl">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-[#222F4C]">
+      <div className="bg-white border border-[#E5E7EB] rounded-2xl p-6 sm:p-8 mb-8 shadow-xs">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-[#E5E7EB]">
           <div className="flex items-start sm:items-center gap-5">
             <div className="relative">
               <img
                 src={profile.avatar}
                 alt={profile.name}
-                className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl ring-2 ring-[#635BFF]/40 object-cover shadow-lg shadow-[#635BFF]/10 bg-[#0B1020]"
+                className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl ring-2 ring-[#635BFF]/30 object-cover shadow-xs bg-[#F7F8FC]"
               />
               <span
-                className={`absolute -bottom-1.5 -right-1.5 w-5 h-5 rounded-full border-2 border-[#151B2D] flex items-center justify-center ${
+                className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white flex items-center justify-center ${
                   profile.availability.includes('Available') ? 'bg-emerald-500' : 'bg-amber-500'
                 }`}
                 title={profile.availability}
@@ -230,16 +237,16 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
             </div>
             <div>
               <div className="flex items-center gap-3 flex-wrap">
-                <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">{profile.name}</h1>
-                <span className="inline-flex items-center gap-1.5 text-xs font-mono px-3 py-1 rounded-full bg-[#635BFF]/15 text-[#9D98FF] border border-[#635BFF]/30">
-                  <span className="w-2 h-2 rounded-full bg-[#635BFF] animate-pulse" />
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-[#111827] tracking-tight">{profile.name}</h1>
+                <span className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold px-3 py-1 rounded-full bg-[#ECFDF5] text-[#17936C] border border-[#17936C]/25">
+                  <span className="w-2 h-2 rounded-full bg-[#17936C]" />
                   {profile.availability}
                 </span>
               </div>
-              <div className="text-xs font-mono text-slate-400 mt-1">
-                {profile.handle} · <span className="text-slate-300">{profile.institution}</span>
+              <div className="text-xs font-mono text-[#6B7280] mt-1">
+                {profile.handle} · <span className="text-[#111827] font-sans font-medium">{profile.institution}</span>
               </div>
-              <div className="text-xs text-slate-400 mt-0.5">
+              <div className="text-xs text-[#9CA3AF] mt-0.5">
                 {profile.department} · {profile.year}
               </div>
             </div>
@@ -252,7 +259,7 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
                 setEditForm(profile);
                 setIsEditing(true);
               }}
-              className="px-4 py-2 bg-[#0B1020]/80 hover:bg-[#0B1020] text-slate-200 border border-[#222F4C] hover:border-[#635BFF]/50 rounded-xl text-xs font-medium transition-all flex items-center gap-1.5 shadow-sm"
+              className="px-4 py-2 bg-[#F3F1FF] hover:bg-[#635BFF] text-[#635BFF] hover:text-white border border-[#635BFF]/25 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 shadow-xs"
             >
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -262,7 +269,7 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
 
             <button
               onClick={handleShareProfile}
-              className="px-3.5 py-2 bg-[#0B1020]/80 hover:bg-[#0B1020] text-slate-200 border border-[#222F4C] rounded-xl text-xs font-medium transition-all"
+              className="px-3.5 py-2 bg-white hover:bg-[#F7F8FC] text-[#111827] border border-[#E5E7EB] rounded-xl text-xs font-medium transition-all shadow-xs"
               title="Copy Profile URL"
             >
               {copiedLink ? 'Copied!' : 'Share Profile'}
@@ -270,7 +277,7 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
 
             <button
               onClick={onOpenCreateWizard}
-              className="px-4 py-2 bg-[#635BFF] hover:bg-[#5249e0] text-white rounded-xl text-xs font-semibold shadow-md shadow-[#635BFF]/25 transition-all flex items-center gap-1.5"
+              className="px-4 py-2 bg-[#635BFF] hover:bg-[#5246C9] text-white rounded-xl text-xs font-semibold shadow-xs transition-all flex items-center gap-1.5"
             >
               <svg className="w-3.5 h-3.5 stroke-[2.5]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                 <path d="M12 5v14M5 12h14" />
@@ -282,17 +289,17 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
 
         {/* Bio */}
         <div className="py-5">
-          <div className="text-[0.68rem] font-mono uppercase tracking-wider text-slate-400 mb-1.5">About Builder</div>
-          <p className="text-sm text-slate-300 leading-relaxed max-w-3xl">{profile.bio}</p>
+          <div className="text-[0.68rem] font-mono uppercase tracking-wider text-[#9CA3AF] font-semibold mb-1.5">About Builder</div>
+          <p className="text-sm text-[#4B5563] leading-relaxed max-w-3xl">{profile.bio}</p>
           
           {/* External links */}
-          <div className="flex items-center gap-4 mt-3 text-xs font-mono text-slate-400">
+          <div className="flex items-center gap-4 mt-3 text-xs font-mono text-[#6B7280]">
             {profile.github && (
               <a
                 href={profile.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-white flex items-center gap-1.5 transition-colors"
+                className="hover:text-[#111827] flex items-center gap-1.5 transition-colors"
               >
                 <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
                 GitHub Profile
@@ -303,7 +310,7 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
                 href={profile.portfolio}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-white flex items-center gap-1.5 transition-colors"
+                className="hover:text-[#111827] flex items-center gap-1.5 transition-colors"
               >
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -315,10 +322,10 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
         </div>
 
         {/* Skills & Learning Matrix */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-5 border-t border-[#222F4C]">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-5 border-t border-[#E5E7EB]">
           <div>
             <div className="flex items-center justify-between mb-2.5">
-              <span className="text-[0.68rem] font-mono uppercase tracking-wider text-slate-400">
+              <span className="text-[0.68rem] font-mono uppercase tracking-wider text-[#9CA3AF] font-semibold">
                 Known Competencies & Stack ({profile.skills.length})
               </span>
             </div>
@@ -326,7 +333,7 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
               {profile.skills.map((skill) => (
                 <span
                   key={skill}
-                  className="font-mono text-xs bg-[#635BFF]/15 text-[#9D98FF] border border-[#635BFF]/30 px-2.5 py-1 rounded-lg"
+                  className="font-mono text-xs bg-[#F3F1FF] text-[#635BFF] border border-[#635BFF]/20 px-2.5 py-1 rounded-lg font-medium"
                 >
                   {skill}
                 </span>
@@ -336,7 +343,7 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
 
           <div>
             <div className="flex items-center justify-between mb-2.5">
-              <span className="text-[0.68rem] font-mono uppercase tracking-wider text-slate-400">
+              <span className="text-[0.68rem] font-mono uppercase tracking-wider text-[#9CA3AF] font-semibold">
                 Currently Exploring / Learning Targets ({profile.learningInterests.length})
               </span>
             </div>
@@ -344,7 +351,7 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
               {profile.learningInterests.map((interest) => (
                 <span
                   key={interest}
-                  className="font-mono text-xs bg-[#0B1020]/70 text-slate-300 border border-[#222F4C] px-2.5 py-1 rounded-lg"
+                  className="font-mono text-xs bg-[#F7F8FC] text-[#4B5563] border border-[#E5E7EB] px-2.5 py-1 rounded-lg font-medium"
                 >
                   {interest}
                 </span>
@@ -355,42 +362,30 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
       </div>
 
       {/* Navigation Sub-Tabs */}
-      <div className="flex items-center gap-2 mb-8 border-b border-[#222F4C]/80 pb-3">
+      <div className="flex items-center gap-2 mb-8 border-b border-[#E5E7EB] pb-3 overflow-x-auto">
         <button
           onClick={() => setActiveTab('overview')}
-          className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
-            activeTab === 'overview'
-              ? 'bg-[#635BFF] text-white shadow-md shadow-[#635BFF]/25'
-              : 'text-slate-400 hover:text-white hover:bg-[#151B2D]'
-          }`}
+          className={tabButtonClass('overview')}
         >
           My Projects & Applications
         </button>
 
         <button
           onClick={() => setActiveTab('recommendations')}
-          className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 ${
-            activeTab === 'recommendations'
-              ? 'bg-[#635BFF] text-white shadow-md shadow-[#635BFF]/25'
-              : 'text-slate-400 hover:text-white hover:bg-[#151B2D]'
-          }`}
+          className={tabButtonClass('recommendations')}
         >
           <span>Recommended Roles</span>
-          <span className="px-1.5 py-0.2 rounded-full bg-[#F9735B] text-white text-[0.62rem]">
+          <span className="px-1.5 py-0.2 rounded-full bg-[#F9735B] text-white text-[0.62rem] font-bold">
             {recommendedRoles.length}
           </span>
         </button>
 
         <button
           onClick={() => setActiveTab('collaborators')}
-          className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 ${
-            activeTab === 'collaborators'
-              ? 'bg-[#635BFF] text-white shadow-md shadow-[#635BFF]/25'
-              : 'text-slate-400 hover:text-white hover:bg-[#151B2D]'
-          }`}
+          className={tabButtonClass('collaborators')}
         >
           <span>Peer Collaborator Discovery</span>
-          <span className="px-1.5 py-0.2 rounded-full bg-[#222F4C] text-slate-300 text-[0.62rem]">
+          <span className="px-1.5 py-0.2 rounded-full bg-[#F7F8FC] border border-[#E5E7EB] text-[#6B7280] text-[0.62rem] font-bold">
             {mockPeerCollaborators.length}
           </span>
         </button>
@@ -403,12 +398,12 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
           {/* Published Projects */}
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-bold text-white">Published Projects</h2>
-              <span className="text-xs font-mono text-slate-400">{userProjects.length} Active</span>
+              <h2 className="text-lg font-bold text-[#111827]">Published Projects</h2>
+              <span className="text-xs font-mono text-[#9CA3AF]">{userProjects.length} Active</span>
             </div>
 
             {userProjects.length === 0 ? (
-              <div className="bg-[#151B2D]/80 border border-[#222F4C] rounded-2xl p-8 text-center text-sm text-slate-400">
+              <div className="bg-white border border-[#E5E7EB] rounded-2xl p-8 text-center text-sm text-[#6B7280] shadow-xs">
                 No projects published yet. Click "Publish Project" to showcase your innovation!
               </div>
             ) : (
@@ -416,22 +411,25 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
                 {userProjects.map((p) => (
                   <div
                     key={p.id}
-                    className="bg-[#151B2D]/90 border border-[#222F4C] hover:border-[#635BFF]/40 rounded-2xl p-5 transition-all shadow-md"
+                    className="bg-white border border-[#E5E7EB] hover:border-[#635BFF]/30 rounded-2xl p-5 sm:p-6 transition-all shadow-xs"
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div>
-                        <Link
-                          to={`/projects/${p.id}`}
-                          className="font-bold text-lg text-white hover:text-[#635BFF] transition-colors"
-                        >
-                          {p.title}
-                        </Link>
-                        <p className="text-xs text-slate-300 mt-1 leading-relaxed">{p.pitch}</p>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xl">{p.icon || '🚀'}</span>
+                          <Link
+                            to={`/projects/${p.id}`}
+                            className="font-bold text-lg text-[#111827] hover:text-[#635BFF] transition-colors"
+                          >
+                            {p.title}
+                          </Link>
+                        </div>
+                        <p className="text-xs text-[#6B7280] mt-1.5 leading-relaxed">{p.pitch}</p>
                         <div className="flex flex-wrap gap-1.5 mt-3">
                           {p.techStack.map((tech) => (
                             <span
                               key={tech}
-                              className="text-[0.68rem] font-mono bg-[#0B1020]/60 text-slate-300 px-2 py-0.5 rounded border border-[#222F4C]"
+                              className="text-xs font-mono bg-[#F7F8FC] text-[#4B5563] px-2 py-0.5 rounded border border-[#E5E7EB]"
                             >
                               {tech}
                             </span>
@@ -440,7 +438,7 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
                       </div>
                       <Link
                         to={`/projects/${p.id}`}
-                        className="text-xs font-semibold text-[#635BFF] hover:text-[#817AFF] whitespace-nowrap pt-1 flex items-center gap-1"
+                        className="text-xs font-semibold text-[#635BFF] hover:text-[#5246C9] whitespace-nowrap pt-1 flex items-center gap-1"
                       >
                         Project Hub ➔
                       </Link>
@@ -454,34 +452,34 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
           {/* Outgoing Applications */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-bold text-white">My Applications</h2>
-              <span className="text-xs font-mono text-slate-400">{userApplications.length} Total</span>
+              <h2 className="text-lg font-bold text-[#111827]">My Applications</h2>
+              <span className="text-xs font-mono text-[#9CA3AF]">{userApplications.length} Total</span>
             </div>
 
-            <div className="bg-[#151B2D]/90 border border-[#222F4C] rounded-2xl p-5 space-y-3 shadow-md">
+            <div className="bg-white border border-[#E5E7EB] rounded-2xl p-5 space-y-3 shadow-xs">
               {userApplications.length === 0 ? (
-                <p className="text-xs text-slate-400 text-center py-4">
+                <p className="text-xs text-[#6B7280] text-center py-4">
                   No active applications. Explore projects in the directory to find open roles!
                 </p>
               ) : (
                 userApplications.map((app) => (
-                  <div key={app.id} className="p-3.5 bg-[#0B1020]/70 rounded-xl border border-[#222F4C]">
+                  <div key={app.id} className="p-3.5 bg-[#F7F8FC] rounded-xl border border-[#E5E7EB]">
                     <div className="flex items-center justify-between mb-1.5">
-                      <span className="font-semibold text-xs text-white truncate max-w-[160px]">{app.projectTitle}</span>
+                      <span className="font-semibold text-xs text-[#111827] truncate max-w-[160px]">{app.projectTitle}</span>
                       <span
-                        className={`text-[0.62rem] font-mono uppercase px-2 py-0.5 rounded-full ${
+                        className={`text-[0.62rem] font-sans uppercase font-bold px-2 py-0.5 rounded-full ${
                           app.status === 'approved'
-                            ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                            ? 'bg-[#ECFDF5] text-[#17936C] border border-[#17936C]/25'
                             : app.status === 'pending'
-                            ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
-                            : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
+                            ? 'bg-[#FFF5F3] text-[#F9735B] border border-[#F9735B]/25'
+                            : 'bg-[#F7F8FC] text-[#6B7280] border border-[#E5E7EB]'
                         }`}
                       >
                         {app.status}
                       </span>
                     </div>
-                    <div className="text-xs text-[#9D98FF] font-medium">{app.roleName}</div>
-                    <div className="text-[0.68rem] text-slate-400 mt-1">
+                    <div className="text-xs text-[#635BFF] font-semibold">{app.roleName}</div>
+                    <div className="text-[0.68rem] text-[#9CA3AF] mt-1">
                       Applied {new Date(app.appliedAt).toLocaleDateString()}
                     </div>
                   </div>
@@ -490,7 +488,7 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
 
               <Link
                 to="/explore"
-                className="block text-center text-xs font-medium text-[#635BFF] hover:text-[#817AFF] pt-3 border-t border-[#222F4C]/70"
+                className="block text-center text-xs font-semibold text-[#635BFF] hover:text-[#5246C9] pt-3 border-t border-[#E5E7EB]"
               >
                 Browse Open Roles in Directory ➔
               </Link>
@@ -502,16 +500,16 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
       {/* TAB CONTENT 2: EXPLAINABLE AI ROLE RECOMMENDATIONS */}
       {activeTab === 'recommendations' && (
         <div className="space-y-6">
-          <div className="bg-[#151B2D]/80 border border-[#222F4C] rounded-2xl p-5 backdrop-blur-md">
-            <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-lg bg-[#635BFF]/15 border border-[#635BFF]/30 flex items-center justify-center text-[#635BFF] flex-shrink-0 mt-0.5">
+          <div className="bg-white border border-[#E5E7EB] rounded-2xl p-5 sm:p-6 shadow-xs">
+            <div className="flex items-start gap-3.5">
+              <div className="w-9 h-9 rounded-xl bg-[#F3F1FF] border border-[#635BFF]/25 flex items-center justify-center text-[#635BFF] flex-shrink-0 mt-0.5">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </div>
               <div>
-                <h3 className="text-sm font-bold text-white">Explainable Skill Matching Engine</h3>
-                <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+                <h3 className="text-sm font-bold text-[#111827]">Explainable Skill Matching Engine</h3>
+                <p className="text-xs text-[#6B7280] mt-1 leading-relaxed">
                   These open positions directly match your known competencies. We calculate transparent skill alignment without opaque chatbots or arbitrary percentage scores.
                 </p>
               </div>
@@ -522,30 +520,30 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
             {recommendedRoles.map(({ project, role, matchingSkills, growthSkills }) => (
               <div
                 key={role.id}
-                className="bg-[#151B2D]/90 border border-[#222F4C] hover:border-[#635BFF]/50 rounded-2xl p-6 transition-all shadow-lg flex flex-col justify-between"
+                className="bg-white border border-[#E5E7EB] hover:border-[#635BFF]/30 rounded-2xl p-6 transition-all shadow-xs flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-2">
-                    <span className="text-xs font-mono text-slate-400 truncate">{project.title}</span>
-                    <span className="text-[0.62rem] font-mono px-2 py-0.5 rounded-full bg-[#635BFF]/15 text-[#9D98FF] border border-[#635BFF]/30">
+                    <span className="text-xs font-mono text-[#9CA3AF] truncate">{project.title}</span>
+                    <span className="text-[0.65rem] font-sans font-semibold px-2.5 py-0.5 rounded-full bg-[#F3F1FF] text-[#635BFF] border border-[#635BFF]/25">
                       High Skill Alignment
                     </span>
                   </div>
 
-                  <h3 className="text-base font-bold text-white mb-2">{role.roleName}</h3>
-                  <p className="text-xs text-slate-300 mb-4 line-clamp-2 leading-relaxed">{role.description}</p>
+                  <h3 className="text-base font-bold text-[#111827] mb-2">{role.roleName}</h3>
+                  <p className="text-xs text-[#6B7280] mb-4 line-clamp-2 leading-relaxed">{role.description}</p>
 
                   {/* Matching Rationale Box */}
-                  <div className="p-3 rounded-xl bg-[#0B1020]/70 border border-[#222F4C] mb-4 space-y-2">
+                  <div className="p-3.5 rounded-xl bg-[#F7F8FC] border border-[#E5E7EB] mb-4 space-y-2.5">
                     <div>
-                      <div className="text-[0.65rem] font-mono text-emerald-400 flex items-center gap-1 mb-1 font-semibold">
+                      <div className="text-[0.68rem] font-sans text-[#17936C] flex items-center gap-1 mb-1 font-bold">
                         <span>✓</span> MATCHING SKILLS ({matchingSkills.length})
                       </div>
                       <div className="flex flex-wrap gap-1">
                         {matchingSkills.map((s) => (
                           <span
                             key={s}
-                            className="text-[0.62rem] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/25 font-mono"
+                            className="text-xs px-2 py-0.5 rounded bg-[#ECFDF5] text-[#17936C] border border-[#17936C]/25 font-mono font-medium"
                           >
                             {s}
                           </span>
@@ -555,14 +553,14 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
 
                     {growthSkills.length > 0 && (
                       <div>
-                        <div className="text-[0.65rem] font-mono text-[#F9735B] flex items-center gap-1 mb-1 font-semibold">
+                        <div className="text-[0.68rem] font-sans text-[#F9735B] flex items-center gap-1 mb-1 font-bold">
                           <span>★</span> GROWTH OPPORTUNITY ({growthSkills.length})
                         </div>
                         <div className="flex flex-wrap gap-1">
                           {growthSkills.map((s) => (
                             <span
                               key={s}
-                              className="text-[0.62rem] px-2 py-0.5 rounded bg-[#F9735B]/10 text-coral-300 border border-[#F9735B]/25 font-mono text-orange-300"
+                              className="text-xs px-2 py-0.5 rounded bg-[#FFF5F3] text-[#F9735B] border border-[#F9735B]/25 font-mono font-medium"
                             >
                               Learn {s}
                             </span>
@@ -573,13 +571,13 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
                   </div>
                 </div>
 
-                <div className="pt-3 border-t border-[#222F4C]/70 flex items-center justify-between">
-                  <div className="text-[0.68rem] text-slate-400">
-                    Lead: <span className="text-slate-300 font-medium">@{project.creatorGithub || project.creatorName}</span>
+                <div className="pt-3 border-t border-[#E5E7EB] flex items-center justify-between">
+                  <div className="text-xs text-[#6B7280]">
+                    Lead: <span className="text-[#111827] font-semibold">@{project.creatorGithub || project.creatorName}</span>
                   </div>
                   <Link
                     to={`/projects/${project.id}`}
-                    className="text-xs font-semibold text-[#635BFF] hover:text-[#817AFF] flex items-center gap-1"
+                    className="text-xs font-semibold text-[#635BFF] hover:text-[#5246C9] flex items-center gap-1"
                   >
                     View in Project Hub ➔
                   </Link>
@@ -593,9 +591,9 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
       {/* TAB CONTENT 3: COLLABORATOR DISCOVERY */}
       {activeTab === 'collaborators' && (
         <div className="space-y-6">
-          <div className="bg-[#151B2D]/80 border border-[#222F4C] rounded-2xl p-5 backdrop-blur-md">
-            <h3 className="text-sm font-bold text-white">Suggested Peer Builders</h3>
-            <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+          <div className="bg-white border border-[#E5E7EB] rounded-2xl p-5 sm:p-6 shadow-xs">
+            <h3 className="text-sm font-bold text-[#111827]">Suggested Peer Builders</h3>
+            <p className="text-xs text-[#6B7280] mt-1 leading-relaxed">
               Connect with fellow student engineers whose expertise complements your own for hackathon squads, research papers, and open-source initiatives.
             </p>
           </div>
@@ -604,38 +602,38 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
             {mockPeerCollaborators.map((collab) => (
               <div
                 key={collab.id}
-                className="bg-[#151B2D]/90 border border-[#222F4C] hover:border-[#635BFF]/50 rounded-2xl p-5 transition-all shadow-md flex flex-col justify-between"
+                className="bg-white border border-[#E5E7EB] hover:border-[#635BFF]/30 rounded-2xl p-5 sm:p-6 transition-all shadow-xs flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center gap-3.5 mb-4">
                     <img
                       src={collab.avatar}
                       alt={collab.name}
-                      className="w-12 h-12 rounded-xl object-cover ring-2 ring-[#222F4C] bg-[#0B1020]"
+                      className="w-12 h-12 rounded-xl object-cover ring-2 ring-[#E5E7EB] bg-[#F7F8FC]"
                     />
                     <div>
-                      <h4 className="text-sm font-bold text-white">{collab.name}</h4>
-                      <div className="text-[0.68rem] font-mono text-slate-400">{collab.handle}</div>
-                      <div className="text-[0.65rem] text-[#9D98FF] font-medium">{collab.institution}</div>
+                      <h4 className="text-sm font-bold text-[#111827]">{collab.name}</h4>
+                      <div className="text-xs font-mono text-[#6B7280]">{collab.handle}</div>
+                      <div className="text-xs text-[#635BFF] font-semibold">{collab.institution}</div>
                     </div>
                   </div>
 
                   {/* Recommendation Rationale */}
-                  <div className="p-3 rounded-xl bg-[#0B1020]/60 border border-[#222F4C] mb-4">
-                    <div className="text-[0.62rem] font-mono uppercase tracking-wider text-[#F9735B] font-semibold mb-1">
+                  <div className="p-3.5 rounded-xl bg-[#F7F8FC] border border-[#E5E7EB] mb-4">
+                    <div className="text-[0.65rem] font-mono uppercase tracking-wider text-[#F9735B] font-bold mb-1">
                       Why Recommended
                     </div>
-                    <p className="text-xs text-slate-300 leading-relaxed">{collab.recommendationReason}</p>
+                    <p className="text-xs text-[#4B5563] leading-relaxed">{collab.recommendationReason}</p>
                   </div>
 
                   {/* Tech stack */}
                   <div className="mb-4">
-                    <div className="text-[0.65rem] font-mono text-slate-400 mb-1.5 uppercase">Primary Skills</div>
+                    <div className="text-[0.65rem] font-mono text-[#9CA3AF] mb-1.5 uppercase font-semibold">Primary Skills</div>
                     <div className="flex flex-wrap gap-1">
                       {collab.primarySkills.map((skill) => (
                         <span
                           key={skill}
-                          className="text-[0.65rem] font-mono px-2 py-0.5 rounded bg-[#0B1020] border border-[#222F4C] text-slate-300"
+                          className="text-xs font-mono px-2 py-0.5 rounded bg-[#F7F8FC] border border-[#E5E7EB] text-[#4B5563]"
                         >
                           {skill}
                         </span>
@@ -644,13 +642,13 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
                   </div>
                 </div>
 
-                <div className="pt-3 border-t border-[#222F4C]/70 flex items-center justify-between">
-                  <span className="text-[0.65rem] font-mono text-emerald-400">{collab.availability}</span>
+                <div className="pt-3 border-t border-[#E5E7EB] flex items-center justify-between">
+                  <span className="text-xs font-sans font-semibold text-[#17936C]">{collab.availability}</span>
                   <a
                     href={collab.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-xs font-semibold text-[#635BFF] hover:text-[#817AFF]"
+                    className="text-xs font-semibold text-[#635BFF] hover:text-[#5246C9]"
                   >
                     View Work ➔
                   </a>
@@ -663,16 +661,16 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
 
       {/* EDIT PROFILE MODAL */}
       {isEditing && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fade-in">
-          <div className="bg-[#151B2D] border border-[#222F4C] rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 sm:p-8 shadow-2xl">
-            <div className="flex items-center justify-between pb-4 border-b border-[#222F4C] mb-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-fade-in">
+          <div className="bg-white border border-[#E5E7EB] rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 sm:p-8 shadow-xl">
+            <div className="flex items-center justify-between pb-4 border-b border-[#E5E7EB] mb-6">
               <div>
-                <h3 className="text-lg font-bold text-white">Edit Student Profile</h3>
-                <p className="text-xs text-slate-400 mt-0.5">Update your builder info and skill matrix</p>
+                <h3 className="text-lg font-bold text-[#111827]">Edit Student Profile</h3>
+                <p className="text-xs text-[#6B7280] mt-0.5">Update your builder info and skill matrix</p>
               </div>
               <button
                 onClick={() => setIsEditing(false)}
-                className="text-slate-400 hover:text-white transition-colors"
+                className="text-[#9CA3AF] hover:text-[#111827] text-2xl font-bold w-8 h-8 rounded-lg flex items-center justify-center hover:bg-[#F7F8FC] transition-colors"
               >
                 ✕
               </button>
@@ -681,32 +679,32 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
             <form onSubmit={handleSaveProfile} className="space-y-5">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-mono text-slate-300 mb-1.5">Full Name</label>
+                  <label className="block text-xs font-mono text-[#6B7280] mb-1.5 font-semibold">Full Name</label>
                   <input
                     type="text"
                     value={editForm.name}
                     onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
-                    className="w-full px-3 py-2 bg-[#0B1020] border border-[#222F4C] rounded-xl text-sm text-white focus:outline-none focus:border-[#635BFF]"
+                    className="w-full px-3.5 py-2.5 bg-[#F7F8FC] border border-[#E5E7EB] rounded-xl text-xs text-[#111827] focus:outline-none focus:border-[#635BFF] focus:ring-2 focus:ring-[#635BFF]/20"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-mono text-slate-300 mb-1.5">University / Institution</label>
+                  <label className="block text-xs font-mono text-[#6B7280] mb-1.5 font-semibold">University / Institution</label>
                   <input
                     type="text"
                     value={editForm.institution}
                     onChange={(e) => setEditForm({ ...editForm, institution: e.target.value })}
-                    className="w-full px-3 py-2 bg-[#0B1020] border border-[#222F4C] rounded-xl text-sm text-white focus:outline-none focus:border-[#635BFF]"
+                    className="w-full px-3.5 py-2.5 bg-[#F7F8FC] border border-[#E5E7EB] rounded-xl text-xs text-[#111827] focus:outline-none focus:border-[#635BFF] focus:ring-2 focus:ring-[#635BFF]/20"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-mono text-slate-300 mb-1.5">Availability Status</label>
+                <label className="block text-xs font-mono text-[#6B7280] mb-1.5 font-semibold">Availability Status</label>
                 <select
                   value={editForm.availability}
                   onChange={(e) => setEditForm({ ...editForm, availability: e.target.value as StudentProfile['availability'] })}
-                  className="w-full px-3 py-2 bg-[#0B1020] border border-[#222F4C] rounded-xl text-sm text-white focus:outline-none focus:border-[#635BFF]"
+                  className="w-full px-3.5 py-2.5 bg-[#F7F8FC] border border-[#E5E7EB] rounded-xl text-xs text-[#111827] focus:outline-none focus:border-[#635BFF] focus:ring-2 focus:ring-[#635BFF]/20"
                 >
                   <option value="Available for Hackathons & Projects">Available for Hackathons & Projects</option>
                   <option value="Busy / Focused on Exams">Busy / Focused on Exams</option>
@@ -715,18 +713,18 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
               </div>
 
               <div>
-                <label className="block text-xs font-mono text-slate-300 mb-1.5">Bio</label>
+                <label className="block text-xs font-mono text-[#6B7280] mb-1.5 font-semibold">Bio</label>
                 <textarea
                   rows={3}
                   value={editForm.bio}
                   onChange={(e) => setEditForm({ ...editForm, bio: e.target.value })}
-                  className="w-full px-3 py-2 bg-[#0B1020] border border-[#222F4C] rounded-xl text-sm text-white focus:outline-none focus:border-[#635BFF] resize-none"
+                  className="w-full px-3.5 py-2.5 bg-[#F7F8FC] border border-[#E5E7EB] rounded-xl text-xs text-[#111827] focus:outline-none focus:border-[#635BFF] focus:ring-2 focus:ring-[#635BFF]/20 resize-none"
                 />
               </div>
 
               {/* Known Skills Management */}
               <div>
-                <label className="block text-xs font-mono text-slate-300 mb-1.5">Known Competencies</label>
+                <label className="block text-xs font-mono text-[#6B7280] mb-1.5 font-semibold">Known Competencies</label>
                 <div className="flex gap-2 mb-2">
                   <input
                     type="text"
@@ -739,27 +737,27 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
                         handleAddSkill();
                       }
                     }}
-                    className="flex-grow px-3 py-1.5 bg-[#0B1020] border border-[#222F4C] rounded-xl text-xs text-white focus:outline-none focus:border-[#635BFF]"
+                    className="flex-grow px-3.5 py-2 bg-[#F7F8FC] border border-[#E5E7EB] rounded-xl text-xs text-[#111827] focus:outline-none focus:border-[#635BFF]"
                   />
                   <button
                     type="button"
                     onClick={handleAddSkill}
-                    className="px-3 py-1.5 bg-[#635BFF] text-white text-xs font-medium rounded-xl hover:bg-[#5249e0]"
+                    className="px-3.5 py-2 bg-[#635BFF] text-white text-xs font-semibold rounded-xl hover:bg-[#5246C9] shadow-xs"
                   >
                     Add
                   </button>
                 </div>
-                <div className="flex flex-wrap gap-1.5 max-h-28 overflow-y-auto p-1 bg-[#0B1020]/50 rounded-xl border border-[#222F4C]/60">
+                <div className="flex flex-wrap gap-1.5 max-h-28 overflow-y-auto p-2 bg-[#F7F8FC] rounded-xl border border-[#E5E7EB]">
                   {editForm.skills.map((skill) => (
                     <span
                       key={skill}
-                      className="inline-flex items-center gap-1.5 text-xs font-mono bg-[#635BFF]/15 text-[#9D98FF] border border-[#635BFF]/30 px-2.5 py-0.5 rounded-lg"
+                      className="inline-flex items-center gap-1.5 text-xs font-mono bg-[#F3F1FF] text-[#635BFF] border border-[#635BFF]/25 px-2.5 py-1 rounded-lg"
                     >
                       {skill}
                       <button
                         type="button"
                         onClick={() => handleRemoveSkill(skill)}
-                        className="text-slate-400 hover:text-white ml-1"
+                        className="text-[#9CA3AF] hover:text-[#111827] ml-1 font-bold"
                       >
                         ×
                       </button>
@@ -770,7 +768,7 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
 
               {/* Learning Interests Management */}
               <div>
-                <label className="block text-xs font-mono text-slate-300 mb-1.5">Learning Targets</label>
+                <label className="block text-xs font-mono text-[#6B7280] mb-1.5 font-semibold">Learning Targets</label>
                 <div className="flex gap-2 mb-2">
                   <input
                     type="text"
@@ -783,27 +781,27 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
                         handleAddInterest();
                       }
                     }}
-                    className="flex-grow px-3 py-1.5 bg-[#0B1020] border border-[#222F4C] rounded-xl text-xs text-white focus:outline-none focus:border-[#635BFF]"
+                    className="flex-grow px-3.5 py-2 bg-[#F7F8FC] border border-[#E5E7EB] rounded-xl text-xs text-[#111827] focus:outline-none focus:border-[#635BFF]"
                   />
                   <button
                     type="button"
                     onClick={handleAddInterest}
-                    className="px-3 py-1.5 bg-[#635BFF] text-white text-xs font-medium rounded-xl hover:bg-[#5249e0]"
+                    className="px-3.5 py-2 bg-[#635BFF] text-white text-xs font-semibold rounded-xl hover:bg-[#5246C9] shadow-xs"
                   >
                     Add
                   </button>
                 </div>
-                <div className="flex flex-wrap gap-1.5 max-h-28 overflow-y-auto p-1 bg-[#0B1020]/50 rounded-xl border border-[#222F4C]/60">
+                <div className="flex flex-wrap gap-1.5 max-h-28 overflow-y-auto p-2 bg-[#F7F8FC] rounded-xl border border-[#E5E7EB]">
                   {editForm.learningInterests.map((interest) => (
                     <span
                       key={interest}
-                      className="inline-flex items-center gap-1.5 text-xs font-mono bg-[#0B1020] text-slate-300 border border-[#222F4C] px-2.5 py-0.5 rounded-lg"
+                      className="inline-flex items-center gap-1.5 text-xs font-mono bg-white text-[#4B5563] border border-[#E5E7EB] px-2.5 py-1 rounded-lg"
                     >
                       {interest}
                       <button
                         type="button"
                         onClick={() => handleRemoveInterest(interest)}
-                        className="text-slate-400 hover:text-white ml-1"
+                        className="text-[#9CA3AF] hover:text-[#111827] ml-1 font-bold"
                       >
                         ×
                       </button>
@@ -815,37 +813,37 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
               {/* Links */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-mono text-slate-300 mb-1.5">GitHub URL</label>
+                  <label className="block text-xs font-mono text-[#6B7280] mb-1.5 font-semibold">GitHub URL</label>
                   <input
                     type="url"
                     value={editForm.github}
                     onChange={(e) => setEditForm({ ...editForm, github: e.target.value })}
-                    className="w-full px-3 py-2 bg-[#0B1020] border border-[#222F4C] rounded-xl text-sm text-white focus:outline-none focus:border-[#635BFF]"
+                    className="w-full px-3.5 py-2.5 bg-[#F7F8FC] border border-[#E5E7EB] rounded-xl text-xs text-[#111827] focus:outline-none focus:border-[#635BFF]"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-mono text-slate-300 mb-1.5">Portfolio / Website</label>
+                  <label className="block text-xs font-mono text-[#6B7280] mb-1.5 font-semibold">Portfolio / Website</label>
                   <input
                     type="url"
                     value={editForm.portfolio}
                     onChange={(e) => setEditForm({ ...editForm, portfolio: e.target.value })}
-                    className="w-full px-3 py-2 bg-[#0B1020] border border-[#222F4C] rounded-xl text-sm text-white focus:outline-none focus:border-[#635BFF]"
+                    className="w-full px-3.5 py-2.5 bg-[#F7F8FC] border border-[#E5E7EB] rounded-xl text-xs text-[#111827] focus:outline-none focus:border-[#635BFF]"
                   />
                 </div>
               </div>
 
               {/* Actions */}
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#222F4C]">
+              <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#E5E7EB]">
                 <button
                   type="button"
                   onClick={() => setIsEditing(false)}
-                  className="px-4 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-white transition-colors"
+                  className="px-4 py-2 rounded-xl text-xs font-sans text-[#6B7280] hover:text-[#111827] hover:bg-[#F7F8FC] transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-[#635BFF] hover:bg-[#5249e0] text-white text-xs font-semibold rounded-xl shadow-md shadow-[#635BFF]/25 transition-all"
+                  className="px-5 py-2.5 bg-[#635BFF] hover:bg-[#5246C9] text-white text-xs font-semibold rounded-xl shadow-xs transition-all"
                 >
                   Save Profile
                 </button>
