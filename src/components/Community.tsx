@@ -1,24 +1,24 @@
 import React from 'react'
 
-const people = ['Developers','Designers','AI Engineers','Open-Source Contributors']
+const people = ['Student Innovators','Frontend Builders','AI & Backend Devs','Open-Source Mentors']
 
 const iconForPerson = (person: string) => {
   switch (person) {
-    case 'Developers':
+    case 'Student Innovators':
       return (
         <>
           <path d="M7 5l-4 7.5L7 20" />
           <path d="M17 5l4 7.5L17 20" />
         </>
       )
-    case 'Designers':
+    case 'Frontend Builders':
       return (
         <>
           <path d="M7 20h4l9-9-4-4-9 9v4z" />
           <path d="M14 6l4 4" />
         </>
       )
-    case 'AI Engineers':
+    case 'AI & Backend Devs':
       return (
         <>
           <circle cx="12" cy="12" r="3" />
@@ -32,7 +32,7 @@ const iconForPerson = (person: string) => {
           <path d="M15.5 15.5L18 18" />
         </>
       )
-    case 'Open-Source Contributors':
+    case 'Open-Source Mentors':
       return (
         <>
           <path d="M6 3a3 3 0 1 0 0 6" />
@@ -49,10 +49,10 @@ const iconForPerson = (person: string) => {
 export default function Community(){
   return (
     <section id="community" className="max-w-[1100px] mx-auto px-4 sm:px-8 py-12">
-      <div className="font-dmmono text-xs uppercase tracking-wider text-ink2 mb-6 anim">Join the network</div>
+      <div className="font-dmmono text-xs uppercase tracking-wider text-ink2 mb-6 anim">Student network</div>
       <div className="flex items-end justify-between flex-wrap gap-4">
-        <h2 className="font-outfit font-extrabold text-[clamp(1.8rem,3vw,2.6rem)] anim">Who builds<br/>here.</h2>
-        <p className="text-ink1 text-sm anim text-left sm:text-right">All backgrounds welcome. If you ship things and love craft, this is your corner.</p>
+        <h2 className="font-outfit font-extrabold text-[clamp(1.8rem,3vw,2.6rem)] anim">Who collaborates<br/>here.</h2>
+        <p className="text-ink1 text-sm anim text-left sm:text-right">Open to student creators across all campuses and disciplines. Whether you are pitching an idea, filling a skill gap, or mentoring peers, this is your hub.</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 bg-bg3 rounded-xl overflow-hidden mt-8">

@@ -1,21 +1,21 @@
 import React from 'react'
 
 const rows = [
-  { cat: 'Frontend', tags: ['React','Next.js','Tailwind','HTML/CSS'] },
-  { cat: 'Backend', tags: ['Node.js','Express','REST APIs'] },
-  { cat: 'Languages', tags: ['TypeScript','Python','JavaScript','C++'] },
-  { cat: 'Database', tags: ['MongoDB','PostgreSQL','Firebase'] },
-  { cat: 'DevOps', tags: ['Docker','GitHub Actions','Vercel','AWS'] }
+  { cat: 'Frontend', tags: ['React','Next.js','Tailwind CSS','Vue','HTML/CSS'] },
+  { cat: 'Backend & APIs', tags: ['Node.js','Express','FastAPI','REST','GraphQL'] },
+  { cat: 'Languages', tags: ['TypeScript','Python','JavaScript','C++','Rust'] },
+  { cat: 'Data & Search', tags: ['PostgreSQL','pgvector','Supabase','MongoDB','Redis'] },
+  { cat: 'AI & Cloud', tags: ['Groq','LLMs','Docker','GitHub Actions','Vercel'] }
 ]
 
 export default function Stack() {
   return (
     <section id="stack" className="max-w-[1100px] mx-auto px-4 sm:px-8 py-12">
-      <div className="font-dmmono text-xs uppercase tracking-wider text-ink2 mb-6 anim">Architecture stack</div>
+      <div className="font-dmmono text-xs uppercase tracking-wider text-ink2 mb-6 anim">Innovation stack</div>
       <div className="grid md:grid-cols-3 gap-6">
         <div className="anim">
-          <h2 className="font-outfit font-extrabold text-[clamp(1.8rem,3vw,2.6rem)] mb-4">The tools<br/>we trust.</h2>
-          <p className="text-ink1">Carefully chosen. Continuously refined. Every entry in our stack earns its place through real production use.</p>
+          <h2 className="font-outfit font-extrabold text-[clamp(1.8rem,3vw,2.6rem)] mb-4">Technologies<br/>students ship.</h2>
+          <p className="text-ink1">From hackathon prototypes to production platforms. DevSnapz supports projects built with the modern student developer stack.</p>
         </div>
 
         <div className="md:col-span-2 flex flex-col gap-3">

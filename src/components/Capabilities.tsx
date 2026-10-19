@@ -1,19 +1,19 @@
 import React from 'react'
 
 const items = [
-  { num: '01', name: 'AI Applications', desc: 'LLM-powered products, intelligent pipelines, and tools that learn from context.' },
-  { num: '02', name: 'Full-Stack Web', desc: 'End-to-end systems from pixel-perfect UIs to resilient backend architectures.' },
-  { num: '03', name: 'System Design', desc: 'Distributed architectures built to handle complexity, failure, and scale.' },
-  { num: '04', name: 'DevTools & CLIs', desc: 'Scripts, automations, and developer utilities that eliminate repetitive work.' }
+  { num: '01', name: 'Project Showcase', desc: 'Publish active student builds, prototypes, and hackathon ideas with clear goals and open roles.' },
+  { num: '02', name: 'Skill-Gap Analysis', desc: 'Automatically analyze project requirements and highlight missing competencies needed to complete the build.' },
+  { num: '03', name: 'Peer Matchmaking', desc: 'Connect with student collaborators based on verified technical skills, campus affinity, and availability.' },
+  { num: '04', name: 'Explainable Guidance', desc: 'Receive transparent rationales for teammate suggestions alongside targeted learning resources to level up.' }
 ]
 
 export default function Capabilities() {
   return (
     <section id="capabilities" className="max-w-[1100px] mx-auto px-4 sm:px-8 py-12">
-      <div className="font-dmmono text-xs uppercase tracking-wider text-ink2 mb-6 anim">Core capabilities</div>
+      <div className="font-dmmono text-xs uppercase tracking-wider text-ink2 mb-6 anim">Platform capabilities</div>
       <div className="flex items-end justify-between flex-wrap gap-4">
-        <h2 className="font-outfit font-extrabold text-[clamp(1.8rem,3vw,2.6rem)] leading-tight anim">What we<br/>build.</h2>
-        <p className="text-ink1 max-w-[520px] text-sm anim text-left sm:text-right">Four distinct disciplines. One unified vision of technology that actually moves the needle.</p>
+        <h2 className="font-outfit font-extrabold text-[clamp(1.8rem,3vw,2.6rem)] leading-tight anim">How students<br/>build here.</h2>
+        <p className="text-ink1 max-w-[520px] text-sm anim text-left sm:text-right">Four core pillars bridging student ideas, missing skills, and peer collaborator matching.</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 bg-bg3 rounded-xl overflow-hidden mt-8">
