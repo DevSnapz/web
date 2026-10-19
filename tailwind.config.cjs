@@ -18,9 +18,11 @@ module.exports = {
         gold: 'var(--gold)'
       },
       fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'],
         outfit: ['Outfit', 'sans-serif'],
-        dmsans: ['DM Sans', 'sans-serif'],
-        dmmono: ['DM Mono', 'monospace']
+        dmsans: ['Inter', 'DM Sans', 'sans-serif'],
+        dmmono: ['JetBrains Mono', 'DM Mono', 'monospace']
       }
     },
   },
