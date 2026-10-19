@@ -159,38 +159,38 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto bg-black/75 backdrop-blur-md transition-all duration-300">
-      <div className="relative w-full max-w-2xl bg-[#151B2D] border border-[#222F4C] rounded-2xl shadow-2xl overflow-hidden flex flex-col my-8">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto bg-black/40 backdrop-blur-xs transition-all duration-300">
+      <div className="relative w-full max-w-2xl bg-white border border-[#E5E7EB] rounded-2xl shadow-xl overflow-hidden flex flex-col my-8">
         
         {/* Header */}
-        <div className="bg-[#0B1020]/90 px-6 py-4 border-b border-[#222F4C] flex justify-between items-center">
+        <div className="bg-white px-6 py-4 border-b border-[#E5E7EB] flex justify-between items-center">
           <div>
-            <h2 className="font-extrabold text-lg text-white">Publish Project Idea</h2>
-            <p className="text-xs text-slate-300 mt-0.5">Define your build, highlight skill gaps, and recruit teammates</p>
+            <h2 className="font-extrabold text-lg text-[#111827]">Publish Project Idea</h2>
+            <p className="text-xs text-[#6B7280] mt-0.5">Define your build, highlight skill gaps, and recruit teammates</p>
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white text-lg font-semibold w-8 h-8 rounded-xl border border-[#222F4C] hover:border-slate-500 flex items-center justify-center transition-all duration-200"
+            className="text-[#9CA3AF] hover:text-[#111827] text-lg font-semibold w-8 h-8 rounded-xl border border-[#E5E7EB] hover:border-[#635BFF]/30 hover:bg-[#F7F8FC] flex items-center justify-center transition-all duration-200"
           >
             ×
           </button>
         </div>
 
         {/* Stepper progress bar */}
-        <div className="px-6 py-3.5 bg-[#0B1020]/40 flex items-center justify-between text-xs font-mono text-slate-400 border-b border-[#222F4C]">
+        <div className="px-6 py-3.5 bg-[#F7F8FC] flex items-center justify-between text-xs font-sans text-[#6B7280] border-b border-[#E5E7EB]">
           <div className="flex items-center gap-2">
-            <span className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[0.68rem] border ${step >= 1 ? 'border-[#635BFF] text-white bg-[#635BFF]' : 'border-[#222F4C] text-slate-500'}`}>1</span>
-            <span className={step >= 1 ? 'text-white font-medium' : ''}>Overview</span>
+            <span className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[0.68rem] border ${step >= 1 ? 'border-[#635BFF] text-white bg-[#635BFF]' : 'border-[#E5E7EB] text-[#9CA3AF] bg-white'}`}>1</span>
+            <span className={step >= 1 ? 'text-[#111827] font-semibold' : ''}>Overview</span>
           </div>
-          <div className="flex-grow h-[1px] bg-[#222F4C] mx-3" />
+          <div className="flex-grow h-[1px] bg-[#E5E7EB] mx-3" />
           <div className="flex items-center gap-2">
-            <span className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[0.68rem] border ${step >= 2 ? 'border-[#635BFF] text-white bg-[#635BFF]' : 'border-[#222F4C] text-slate-500'}`}>2</span>
-            <span className={step >= 2 ? 'text-white font-medium' : ''}>Stack & Links</span>
+            <span className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[0.68rem] border ${step >= 2 ? 'border-[#635BFF] text-white bg-[#635BFF]' : 'border-[#E5E7EB] text-[#9CA3AF] bg-white'}`}>2</span>
+            <span className={step >= 2 ? 'text-[#111827] font-semibold' : ''}>Stack & Links</span>
           </div>
-          <div className="flex-grow h-[1px] bg-[#222F4C] mx-3" />
+          <div className="flex-grow h-[1px] bg-[#E5E7EB] mx-3" />
           <div className="flex items-center gap-2">
-            <span className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[0.68rem] border ${step >= 3 ? 'border-[#635BFF] text-white bg-[#635BFF]' : 'border-[#222F4C] text-slate-500'}`}>3</span>
-            <span className={step >= 3 ? 'text-white font-medium' : ''}>Roles & Skill Gaps</span>
+            <span className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[0.68rem] border ${step >= 3 ? 'border-[#635BFF] text-white bg-[#635BFF]' : 'border-[#E5E7EB] text-[#9CA3AF] bg-white'}`}>3</span>
+            <span className={step >= 3 ? 'text-[#111827] font-semibold' : ''}>Roles & Skill Gaps</span>
           </div>
         </div>
 
@@ -201,61 +201,61 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
           {step === 1 && (
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-mono uppercase text-slate-400 mb-1">Project Title <span className="text-[#F9735B]">*</span></label>
+                <label className="block text-xs font-mono uppercase text-[#6B7280] mb-1 font-semibold">Project Title <span className="text-[#F9735B]">*</span></label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. EcoLedger"
+                  placeholder="e.g. Campus Recycling App"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full bg-[#0B1020] border border-[#222F4C] rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-[#635BFF] transition-all"
+                  className="w-full bg-[#F7F8FC] border border-[#E5E7EB] rounded-xl px-3.5 py-2.5 text-xs text-[#111827] focus:outline-none focus:border-[#635BFF] focus:ring-2 focus:ring-[#635BFF]/20 transition-all"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-mono uppercase text-slate-400 mb-1">One-sentence Pitch <span className="text-[#F9735B]">*</span></label>
+                <label className="block text-xs font-mono uppercase text-[#6B7280] mb-1 font-semibold">One-sentence Pitch <span className="text-[#F9735B]">*</span></label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Distributed solar telemetry network for campus dormitories."
+                  placeholder="e.g. Build a smarter recycling experience for college campuses."
                   value={pitch}
                   onChange={(e) => setPitch(e.target.value)}
-                  className="w-full bg-[#0B1020] border border-[#222F4C] rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-[#635BFF] transition-all"
+                  className="w-full bg-[#F7F8FC] border border-[#E5E7EB] rounded-xl px-3.5 py-2.5 text-xs text-[#111827] focus:outline-none focus:border-[#635BFF] focus:ring-2 focus:ring-[#635BFF]/20 transition-all"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-mono uppercase text-slate-400 mb-1">Detailed Description <span className="text-[#F9735B]">*</span></label>
+                <label className="block text-xs font-mono uppercase text-[#6B7280] mb-1 font-semibold">Detailed Description <span className="text-[#F9735B]">*</span></label>
                 <textarea
                   rows={4}
                   required
                   placeholder="Explain the problem statement, technical architecture, and development roadmap..."
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full bg-[#0B1020] border border-[#222F4C] rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-[#635BFF] transition-all resize-none leading-relaxed"
+                  className="w-full bg-[#F7F8FC] border border-[#E5E7EB] rounded-xl px-3.5 py-2.5 text-xs text-[#111827] focus:outline-none focus:border-[#635BFF] focus:ring-2 focus:ring-[#635BFF]/20 transition-all resize-none leading-relaxed"
                 />
               </div>
 
-              <div className="bg-[#0B1020]/70 border border-[#222F4C] p-4 rounded-xl space-y-4">
-                <div className="text-[0.65rem] font-mono uppercase text-slate-400 tracking-wider">Creator Information</div>
+              <div className="bg-[#F7F8FC] border border-[#E5E7EB] p-4 rounded-xl space-y-4">
+                <div className="text-[0.68rem] font-mono uppercase text-[#9CA3AF] tracking-wider font-semibold">Creator Information</div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[0.65rem] font-mono uppercase text-slate-400 mb-1">Display Name</label>
+                    <label className="block text-xs font-mono uppercase text-[#6B7280] mb-1 font-semibold">Display Name</label>
                     <input
                       type="text"
                       value={creatorName}
                       onChange={(e) => setCreatorName(e.target.value)}
-                      className="w-full bg-[#151B2D] border border-[#222F4C] rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-[#635BFF]"
+                      className="w-full bg-white border border-[#E5E7EB] rounded-xl px-3 py-2 text-xs text-[#111827] focus:outline-none focus:border-[#635BFF]"
                     />
                   </div>
                   <div>
-                    <label className="block text-[0.65rem] font-mono uppercase text-slate-400 mb-1">Github Username</label>
+                    <label className="block text-xs font-mono uppercase text-[#6B7280] mb-1 font-semibold">Github Username</label>
                     <input
                       type="text"
                       placeholder="e.g. Frozen-47"
                       value={creatorGithub}
                       onChange={(e) => setCreatorGithub(e.target.value)}
-                      className="w-full bg-[#151B2D] border border-[#222F4C] rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-[#635BFF]"
+                      className="w-full bg-white border border-[#E5E7EB] rounded-xl px-3 py-2 text-xs text-[#111827] focus:outline-none focus:border-[#635BFF]"
                     />
                   </div>
                 </div>
@@ -267,43 +267,43 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
           {step === 2 && (
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-mono uppercase text-slate-400 mb-1">Technical Stack (comma separated) <span className="text-[#F9735B]">*</span></label>
+                <label className="block text-xs font-mono uppercase text-[#6B7280] mb-1 font-semibold">Technical Stack (comma separated) <span className="text-[#F9735B]">*</span></label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. React, TypeScript, Python, PyTorch, Docker"
+                  placeholder="e.g. React, PostgreSQL, Tailwind CSS"
                   value={techInput}
                   onChange={(e) => setTechInput(e.target.value)}
-                  className="w-full bg-[#0B1020] border border-[#222F4C] rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-[#635BFF]"
+                  className="w-full bg-[#F7F8FC] border border-[#E5E7EB] rounded-xl px-3.5 py-2.5 text-xs text-[#111827] focus:outline-none focus:border-[#635BFF]"
                 />
-                <span className="text-[0.65rem] text-slate-500 mt-1 block font-mono">Separate entries with commas</span>
+                <span className="text-[0.68rem] text-[#9CA3AF] mt-1 block font-mono">Separate entries with commas</span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-mono uppercase text-slate-400 mb-1">GitHub Repository URL</label>
+                  <label className="block text-xs font-mono uppercase text-[#6B7280] mb-1 font-semibold">GitHub Repository URL</label>
                   <input
                     type="url"
-                    placeholder="https://github.com/user/project"
+                    placeholder="https://github.com/DevSnapz/example"
                     value={githubUrl}
                     onChange={(e) => setGithubUrl(e.target.value)}
-                    className="w-full bg-[#0B1020] border border-[#222F4C] rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-[#635BFF]"
+                    className="w-full bg-[#F7F8FC] border border-[#E5E7EB] rounded-xl px-3.5 py-2.5 text-xs text-[#111827] focus:outline-none focus:border-[#635BFF]"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-mono uppercase text-slate-400 mb-1">Live Demo / App URL (Optional)</label>
+                  <label className="block text-xs font-mono uppercase text-[#6B7280] mb-1 font-semibold">Live Demo / App URL (Optional)</label>
                   <input
                     type="url"
-                    placeholder="https://project.devsnapz.org"
+                    placeholder="https://example.devsnapz.org"
                     value={liveUrl}
                     onChange={(e) => setLiveUrl(e.target.value)}
-                    className="w-full bg-[#0B1020] border border-[#222F4C] rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-[#635BFF]"
+                    className="w-full bg-[#F7F8FC] border border-[#E5E7EB] rounded-xl px-3.5 py-2.5 text-xs text-[#111827] focus:outline-none focus:border-[#635BFF]"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-mono uppercase text-slate-400 mb-2">Accent Banner Gradient</label>
+                <label className="block text-xs font-mono uppercase text-[#6B7280] mb-2 font-semibold">Accent Banner Gradient</label>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {gradientOptions.map((opt) => (
                     <button
@@ -312,11 +312,11 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
                       onClick={() => setBannerGradient(opt.value)}
                       className={`text-left p-3 rounded-xl border flex flex-col justify-between transition-all ${
                         bannerGradient === opt.value
-                          ? 'border-[#635BFF] bg-[#635BFF]/10 shadow-md shadow-[#635BFF]/10 ring-1 ring-[#635BFF]'
-                          : 'border-[#222F4C] hover:border-slate-500 bg-[#0B1020]/60'
+                          ? 'border-[#635BFF] bg-[#F3F1FF]/50 shadow-xs ring-1 ring-[#635BFF]'
+                          : 'border-[#E5E7EB] hover:border-[#635BFF]/30 bg-white'
                       }`}
                     >
-                      <span className="text-xs font-medium text-white mb-2">{opt.label}</span>
+                      <span className="text-xs font-semibold text-[#111827] mb-2">{opt.label}</span>
                       <div className={`w-full h-3 rounded-lg bg-gradient-to-r ${opt.value}`} />
                     </button>
                   ))}
@@ -328,9 +328,9 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
           {/* STEP 3: HELP OPTIONS */}
           {step === 3 && (
             <div className="space-y-6">
-              <div className="border-b border-[#222F4C] pb-2.5">
-                <h3 className="text-xs font-mono uppercase text-slate-400 tracking-wider mb-1">Identify Collaboration & Missing Skills</h3>
-                <p className="text-xs text-slate-300">Toggle categories to configure required team roles and tasks.</p>
+              <div className="border-b border-[#E5E7EB] pb-2.5">
+                <h3 className="text-xs font-mono uppercase text-[#6B7280] tracking-wider mb-1 font-semibold">Identify Collaboration & Missing Skills</h3>
+                <p className="text-xs text-[#6B7280]">Toggle categories to configure required team roles and tasks.</p>
               </div>
 
               {/* Toggles Panel */}
@@ -348,10 +348,10 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
                       key={key}
                       type="button"
                       onClick={() => setHelpNeeded({ ...helpNeeded, [key]: !helpNeeded[key] })}
-                      className={`py-2 px-3 text-xs font-mono rounded-xl border flex items-center justify-center gap-1.5 transition-all ${
+                      className={`py-2 px-3 text-xs font-sans rounded-xl border flex items-center justify-center gap-1.5 transition-all ${
                         isActive
-                          ? 'bg-[#635BFF] border-[#635BFF] text-white font-bold shadow-md shadow-[#635BFF]/20'
-                          : 'bg-[#0B1020]/60 border-[#222F4C] text-slate-400 hover:text-white hover:border-slate-500'
+                          ? 'bg-[#F3F1FF] border-[#635BFF] text-[#635BFF] font-semibold shadow-xs'
+                          : 'bg-white border-[#E5E7EB] text-[#6B7280] hover:text-[#111827] hover:bg-[#F7F8FC]'
                       }`}
                     >
                       <span>{isActive ? '✓' : '+'}</span>
@@ -366,30 +366,30 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
                 
                 {/* 1. Collaborate Sub-form */}
                 {helpNeeded.collaborate && (
-                  <div className="bg-[#0B1020]/70 border border-[#222F4C] rounded-2xl p-4 sm:p-5 space-y-4">
-                    <div className="flex justify-between items-center text-xs border-b border-[#222F4C] pb-2 font-mono text-[#9D98FF]">
+                  <div className="bg-[#F7F8FC] border border-[#E5E7EB] rounded-2xl p-4 sm:p-5 space-y-4">
+                    <div className="flex justify-between items-center text-xs border-b border-[#E5E7EB] pb-2 font-mono text-[#635BFF]">
                       <span className="font-semibold uppercase">Open Roles & Missing Skill Requirements</span>
-                      <span>{rolesList.length} Role(s) Added</span>
+                      <span className="font-sans font-semibold">{rolesList.length} Role(s) Added</span>
                     </div>
 
                     {/* Roles Added List */}
                     {rolesList.length > 0 && (
                       <div className="space-y-2">
                         {rolesList.map((role) => (
-                          <div key={role.id} className="bg-[#151B2D] border border-[#222F4C] p-3 rounded-xl flex justify-between items-start text-xs">
+                          <div key={role.id} className="bg-white border border-[#E5E7EB] p-3 rounded-xl flex justify-between items-start text-xs shadow-xs">
                             <div>
-                              <div className="font-bold text-white">{role.roleName}</div>
-                              {role.description && <p className="text-slate-300 text-xs mt-0.5">{role.description}</p>}
+                              <div className="font-bold text-[#111827]">{role.roleName}</div>
+                              {role.description && <p className="text-[#6B7280] text-xs mt-0.5">{role.description}</p>}
                               <div className="flex flex-wrap gap-1 mt-1.5">
                                 {role.skillsNeeded.map((s) => (
-                                  <span key={s} className="text-[0.62rem] font-mono bg-[#635BFF]/15 border border-[#635BFF]/30 px-1.5 py-0.2 rounded text-[#9D98FF]">{s}</span>
+                                  <span key={s} className="text-xs font-mono bg-[#F3F1FF] border border-[#635BFF]/25 px-1.5 py-0.2 rounded text-[#635BFF]">{s}</span>
                                 ))}
                               </div>
                             </div>
                             <button
                               type="button"
                               onClick={() => removeRole(role.id)}
-                              className="text-rose-400 hover:text-rose-300 font-mono text-xs ml-2"
+                              className="text-rose-500 hover:text-rose-600 font-sans text-xs ml-2 font-semibold"
                             >
                               Remove
                             </button>
@@ -399,43 +399,43 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
                     )}
 
                     {/* Add role inputs */}
-                    <div className="bg-[#151B2D] border border-[#222F4C] p-3.5 rounded-xl space-y-3">
+                    <div className="bg-white border border-[#E5E7EB] p-3.5 rounded-xl space-y-3 shadow-xs">
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
-                          <label className="block text-[0.65rem] font-mono uppercase text-slate-400 mb-1">Role Title</label>
+                          <label className="block text-xs font-mono uppercase text-[#6B7280] mb-1 font-semibold">Role Title</label>
                           <input
                             type="text"
-                            placeholder="e.g. Frontend Engineer"
+                            placeholder="e.g. Frontend Developer"
                             value={newRoleName}
                             onChange={(e) => setNewRoleName(e.target.value)}
-                            className="w-full bg-[#0B1020] border border-[#222F4C] rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-[#635BFF]"
+                            className="w-full bg-[#F7F8FC] border border-[#E5E7EB] rounded-lg px-2.5 py-1.5 text-xs text-[#111827] focus:outline-none focus:border-[#635BFF]"
                           />
                         </div>
                         <div>
-                          <label className="block text-[0.65rem] font-mono uppercase text-slate-400 mb-1">Required Skills (comma separated)</label>
+                          <label className="block text-xs font-mono uppercase text-[#6B7280] mb-1 font-semibold">Required Skills (comma separated)</label>
                           <input
                             type="text"
-                            placeholder="e.g. React, Framer Motion"
+                            placeholder="e.g. React, TypeScript"
                             value={newRoleSkills}
                             onChange={(e) => setNewRoleSkills(e.target.value)}
-                            className="w-full bg-[#0B1020] border border-[#222F4C] rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-[#635BFF]"
+                            className="w-full bg-[#F7F8FC] border border-[#E5E7EB] rounded-lg px-2.5 py-1.5 text-xs text-[#111827] focus:outline-none focus:border-[#635BFF]"
                           />
                         </div>
                       </div>
                       <div>
-                        <label className="block text-[0.65rem] font-mono uppercase text-slate-400 mb-1">Description of duties</label>
+                        <label className="block text-xs font-mono uppercase text-[#6B7280] mb-1 font-semibold">Description of duties</label>
                         <input
                           type="text"
-                          placeholder="e.g. Implement real-time canvas visualizer controls"
+                          placeholder="e.g. Help build out reactive client views and filters"
                           value={newRoleDesc}
                           onChange={(e) => setNewRoleDesc(e.target.value)}
-                          className="w-full bg-[#0B1020] border border-[#222F4C] rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-[#635BFF]"
+                          className="w-full bg-[#F7F8FC] border border-[#E5E7EB] rounded-lg px-2.5 py-1.5 text-xs text-[#111827] focus:outline-none focus:border-[#635BFF]"
                         />
                       </div>
                       <button
                         type="button"
                         onClick={addRole}
-                        className="bg-[#635BFF] hover:bg-[#5249e0] text-white font-medium text-xs px-3.5 py-1.5 rounded-lg active:scale-95 transition-all shadow-sm"
+                        className="bg-[#635BFF] hover:bg-[#5246C9] text-white font-semibold text-xs px-3.5 py-1.5 rounded-lg active:scale-95 transition-all shadow-xs"
                       >
                         + Add Role to Requirements
                       </button>
@@ -445,20 +445,20 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
 
                 {/* 2. Sponsor Sub-form */}
                 {helpNeeded.sponsor && (
-                  <div className="bg-[#0B1020]/70 border border-[#222F4C] rounded-2xl p-4 space-y-3">
-                    <div className="text-xs border-b border-[#222F4C] pb-2 font-mono font-semibold text-amber-400">
+                  <div className="bg-[#F7F8FC] border border-[#E5E7EB] rounded-2xl p-4 space-y-3">
+                    <div className="text-xs border-b border-[#E5E7EB] pb-2 font-mono font-semibold text-[#111827]">
                       Sponsorship Milestones
                     </div>
                     <div>
-                      <label className="block text-xs font-mono uppercase text-slate-400 mb-1">Funding Goal Target Amount ($)</label>
+                      <label className="block text-xs font-mono uppercase text-[#6B7280] mb-1 font-semibold">Funding Goal Target Amount ($)</label>
                       <div className="relative max-w-[200px]">
-                        <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-xs text-slate-400">$</span>
+                        <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-xs text-[#9CA3AF]">$</span>
                         <input
                           type="number"
                           placeholder="e.g. 1000"
                           value={fundingGoal}
                           onChange={(e) => setFundingGoal(e.target.value)}
-                          className="w-full pl-7 pr-3 py-1.5 bg-[#151B2D] border border-[#222F4C] rounded-xl text-xs text-white focus:outline-none focus:border-[#635BFF]"
+                          className="w-full pl-7 pr-3 py-1.5 bg-white border border-[#E5E7EB] rounded-xl text-xs text-[#111827] focus:outline-none focus:border-[#635BFF]"
                         />
                       </div>
                     </div>
@@ -467,18 +467,18 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
 
                 {/* 3. Guidance Sub-form */}
                 {helpNeeded.guide && (
-                  <div className="bg-[#0B1020]/70 border border-[#222F4C] rounded-2xl p-4 space-y-3">
-                    <div className="text-xs border-b border-[#222F4C] pb-2 font-mono font-semibold text-purple-400">
+                  <div className="bg-[#F7F8FC] border border-[#E5E7EB] rounded-2xl p-4 space-y-3">
+                    <div className="text-xs border-b border-[#E5E7EB] pb-2 font-mono font-semibold text-[#635BFF]">
                       Post an Initial Mentorship Topic
                     </div>
                     <div>
-                      <label className="block text-xs font-mono uppercase text-slate-400 mb-1">What technical architecture question do you need guidance on?</label>
+                      <label className="block text-xs font-mono uppercase text-[#6B7280] mb-1 font-semibold">What technical architecture question do you need guidance on?</label>
                       <input
                         type="text"
-                        placeholder="e.g. What is the optimal vector index configuration for client-side search?"
+                        placeholder="e.g. What is the optimal database schema for campus recycling routes?"
                         value={initialQuestion}
                         onChange={(e) => setInitialQuestion(e.target.value)}
-                        className="w-full bg-[#151B2D] border border-[#222F4C] rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-[#635BFF]"
+                        className="w-full bg-white border border-[#E5E7EB] rounded-xl px-3 py-1.5 text-xs text-[#111827] focus:outline-none focus:border-[#635BFF]"
                       />
                     </div>
                   </div>
@@ -486,25 +486,25 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
 
                 {/* 4. Contribute Sub-form */}
                 {helpNeeded.contribute && (
-                  <div className="bg-[#0B1020]/70 border border-[#222F4C] rounded-2xl p-4 space-y-4">
-                    <div className="flex justify-between items-center text-xs border-b border-[#222F4C] pb-2 font-mono font-semibold text-emerald-400">
+                  <div className="bg-[#F7F8FC] border border-[#E5E7EB] rounded-2xl p-4 space-y-4">
+                    <div className="flex justify-between items-center text-xs border-b border-[#E5E7EB] pb-2 font-mono font-semibold text-[#17936C]">
                       <span>Starter Tasks & Issues</span>
-                      <span>{issuesList.length} Issue(s) Added</span>
+                      <span className="font-sans font-semibold">{issuesList.length} Issue(s) Added</span>
                     </div>
 
                     {/* Issues Added List */}
                     {issuesList.length > 0 && (
                       <div className="space-y-2">
                         {issuesList.map((issue) => (
-                          <div key={issue.id} className="bg-[#151B2D] border border-[#222F4C] p-2.5 rounded-xl flex justify-between items-center text-xs">
+                          <div key={issue.id} className="bg-white border border-[#E5E7EB] p-2.5 rounded-xl flex justify-between items-center text-xs shadow-xs">
                             <div>
-                              <span className="font-bold text-white">{issue.title}</span>
-                              <span className="text-[0.62rem] ml-2 font-mono uppercase px-2 py-0.5 rounded-full bg-[#0B1020] border border-[#222F4C] text-slate-300">{issue.difficulty}</span>
+                              <span className="font-bold text-[#111827]">{issue.title}</span>
+                              <span className="text-[0.62rem] ml-2 font-mono uppercase px-2 py-0.5 rounded-full bg-[#F7F8FC] border border-[#E5E7EB] text-[#6B7280] font-semibold">{issue.difficulty}</span>
                             </div>
                             <button
                               type="button"
                               onClick={() => removeIssue(issue.id)}
-                              className="text-rose-400 hover:text-rose-300 font-mono text-xs ml-2"
+                              className="text-rose-500 hover:text-rose-600 font-sans text-xs ml-2 font-semibold"
                             >
                               Remove
                             </button>
@@ -514,23 +514,23 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
                     )}
 
                     {/* Add issue inputs */}
-                    <div className="bg-[#151B2D] border border-[#222F4C] p-3 rounded-xl flex flex-col sm:flex-row gap-3 items-end">
+                    <div className="bg-white border border-[#E5E7EB] p-3 rounded-xl flex flex-col sm:flex-row gap-3 items-end shadow-xs">
                       <div className="flex-grow">
-                        <label className="block text-[0.65rem] font-mono uppercase text-slate-400 mb-1">Issue Title</label>
+                        <label className="block text-xs font-mono uppercase text-[#6B7280] mb-1 font-semibold">Issue Title</label>
                         <input
                           type="text"
                           placeholder="e.g. Add dark mode toggle in nav"
                           value={newIssueTitle}
                           onChange={(e) => setNewIssueTitle(e.target.value)}
-                          className="w-full bg-[#0B1020] border border-[#222F4C] rounded-lg px-2.5 py-1 text-xs text-white focus:outline-none focus:border-[#635BFF]"
+                          className="w-full bg-[#F7F8FC] border border-[#E5E7EB] rounded-lg px-2.5 py-1 text-xs text-[#111827] focus:outline-none focus:border-[#635BFF]"
                         />
                       </div>
                       <div>
-                        <label className="block text-[0.65rem] font-mono uppercase text-slate-400 mb-1">Difficulty</label>
+                        <label className="block text-xs font-mono uppercase text-[#6B7280] mb-1 font-semibold">Difficulty</label>
                         <select
                           value={newIssueDifficulty}
                           onChange={(e) => setNewIssueDifficulty(e.target.value as any)}
-                          className="bg-[#0B1020] border border-[#222F4C] rounded-lg px-2 py-1 text-xs text-white focus:outline-none min-w-[100px]"
+                          className="bg-[#F7F8FC] border border-[#E5E7EB] rounded-lg px-2 py-1 text-xs text-[#111827] focus:outline-none min-w-[100px]"
                         >
                           <option value="easy">Easy</option>
                           <option value="medium">Medium</option>
@@ -540,7 +540,7 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
                       <button
                         type="button"
                         onClick={addIssue}
-                        className="bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-xs px-3.5 py-1.5 rounded-lg active:scale-95 transition-all shadow-sm"
+                        className="bg-[#17936C] hover:bg-[#137a59] text-white font-semibold text-xs px-3.5 py-1.5 rounded-lg active:scale-95 transition-all shadow-xs"
                       >
                         + Add Task
                       </button>
@@ -554,11 +554,11 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
         </div>
 
         {/* Wizard Nav Actions */}
-        <div className="p-4 bg-[#0B1020]/90 border-t border-[#222F4C] flex justify-between items-center text-xs font-mono">
+        <div className="p-4 bg-white border-t border-[#E5E7EB] flex justify-between items-center text-xs font-sans">
           <button
             type="button"
             onClick={step === 1 ? onClose : prevStep}
-            className="text-slate-400 hover:text-white border border-[#222F4C] hover:border-slate-500 rounded-xl px-4 py-2 transition-all"
+            className="text-[#6B7280] hover:text-[#111827] border border-[#E5E7EB] hover:bg-[#F7F8FC] rounded-xl px-4 py-2 transition-all font-medium"
           >
             {step === 1 ? 'Cancel' : '← Back'}
           </button>
@@ -566,7 +566,7 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
           <button
             type="button"
             onClick={step === 3 ? handleFinalSubmit : nextStep}
-            className="bg-[#635BFF] hover:bg-[#5249e0] text-white font-semibold rounded-xl px-5 py-2 shadow-md shadow-[#635BFF]/25 active:scale-95 transition-all"
+            className="bg-[#635BFF] hover:bg-[#5246C9] text-white font-semibold rounded-xl px-5 py-2 shadow-xs active:scale-95 transition-all"
           >
             {step === 3 ? 'Publish Project Idea ➔' : 'Continue ➔'}
           </button>
