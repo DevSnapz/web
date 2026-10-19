@@ -47,8 +47,9 @@
     --border-g: 1px solid var(--color-brand-primary);
   }
 
-  /* Future Dark Mode Support */
+  /* Full Dark Theme Support */
   .dark {
+    color-scheme: dark;
     --color-bg-main: #0B1020;
     --color-bg-card: #151B2D;
     --color-bg-elevated: #1E263C;
@@ -107,6 +108,74 @@
   }
   body::-webkit-scrollbar-thumb:hover {
     background: rgba(99, 91, 255, 0.6);
+  }
+
+  /* Seamless Dark Mode Surface & Text Overrides */
+  .dark nav {
+    background-color: rgba(21, 27, 45, 0.95) !important;
+    border-color: #222F4C !important;
+  }
+  .dark footer {
+    background-color: #151B2D !important;
+    border-color: #222F4C !important;
+  }
+  .dark .bg-white,
+  .dark .bg-white\/95,
+  .dark .bg-white\/90 {
+    background-color: #151B2D !important;
+  }
+  .dark .bg-\[\#F7F8FC\] {
+    background-color: #0B1020 !important;
+  }
+  .dark .hover\:bg-\[\#F7F8FC\]:hover {
+    background-color: #1E263C !important;
+  }
+  .dark .hover\:bg-white:hover {
+    background-color: #151B2D !important;
+  }
+  .dark .text-\[\#111827\] {
+    color: #F9FAFB !important;
+  }
+  .dark .hover\:text-\[\#111827\]:hover {
+    color: #FFFFFF !important;
+  }
+  .dark .text-\[\#6B7280\] {
+    color: #A1A1AA !important;
+  }
+  .dark .text-\[\#4B5563\] {
+    color: #D1D5DB !important;
+  }
+  .dark .text-\[\#9CA3AF\] {
+    color: #71717A !important;
+  }
+  .dark .border-\[\#E5E7EB\] {
+    border-color: #222F4C !important;
+  }
+  .dark .border-\[\#E5E7EB\]\/60 {
+    border-color: rgba(34, 47, 76, 0.6) !important;
+  }
+  .dark .border-b-\[\#E5E7EB\] {
+    border-bottom-color: #222F4C !important;
+  }
+  .dark .border-t-\[\#E5E7EB\] {
+    border-top-color: #222F4C !important;
+  }
+  .dark .bg-\[\#F3F1FF\] {
+    background-color: rgba(99, 91, 255, 0.15) !important;
+  }
+  .dark .hover\:bg-\[\#F3F1FF\]:hover {
+    background-color: rgba(99, 91, 255, 0.22) !important;
+  }
+  .dark input,
+  .dark textarea,
+  .dark select {
+    background-color: #0B1020 !important;
+    border-color: #222F4C !important;
+    color: #F9FAFB !important;
+  }
+  .dark input::placeholder,
+  .dark textarea::placeholder {
+    color: #71717A !important;
   }
 
   .manifesto-hl {
