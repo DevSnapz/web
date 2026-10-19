@@ -67,6 +67,8 @@ export interface Project {
   creatorAvatar: string;
   creatorGithub?: string;
   bannerGradient: string; // CSS gradient class or string
+  icon?: string;
+  category?: 'Web Development' | 'AI / ML' | 'Open Source' | 'Mobile' | 'Other';
   techStack: string[];
   githubUrl: string;
   liveUrl?: string;
