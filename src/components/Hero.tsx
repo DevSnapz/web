@@ -8,11 +8,11 @@ export default function Hero() {
           <span className="w-2 h-2 rounded-full bg-g animate-pulse" /> Open to contributors
         </div>
         <h1 className="font-outfit font-extrabold text-[clamp(2.8rem,5vw,4.2rem)] leading-[0.95] mb-6">
-          Code.<br />
-          <span className="text-transparent" style={{ WebkitTextStroke: '1px #1bce92' }}>Connect</span>.<br />
-          <span className="text-gold">Evolve.</span>
+          Show.<br />
+          <span className="text-transparent" style={{ WebkitTextStroke: '1px #1bce92' }}>Collaborate</span>.<br />
+          <span className="text-gold">Grow.</span>
         </h1>
-        <p className="text-ink1 max-w-[420px] mb-6">A developer-first org building AI applications, full-stack systems, and intelligent digital experiences that think, scale, and endure.</p>
+        <p className="text-ink1 max-w-[420px] mb-6">An interactive platform for developers to showcase active creations, recruit co-builders, seek code guidance, and collect milestone sponsorships.</p>
         <div className="flex gap-3 flex-wrap">
           <a className="font-dmmono text-sm border border-ink3 text-ink1 px-4 py-2 rounded-md" href="https://github.com/DevSnapz" target="_blank" rel="noopener noreferrer">GitHub</a>
           <a className="font-dmmono text-sm border border-ink3 text-ink1 px-4 py-2 rounded-md" href="https://discord.gg/HKtj4rxZEF" target="_blank" rel="noopener noreferrer">Discord</a>
@@ -28,7 +28,7 @@ export default function Hero() {
         </div>
         <div className="p-4 font-dmmono text-[0.78rem] leading-7">
           <div><span className="text-g">❯</span> <span className="text-ink0">whoami</span></div>
-          <div className="text-ink1">→ <span className="text-g-text">DevSnapz</span> — developer-first org</div>
+          <div className="text-ink1">→ <span className="text-g-text">DevSnapz</span> — project showcase hub</div>
           <div className="mt-2"><span className="text-g">❯</span> <span className="text-ink0">ls projects/</span></div>
           <div className="text-ink1">  <span className="text-g-text">aiverse/</span>    full-stack/    devtools/</div>
           <div className="mt-2"><span className="text-g">❯</span> <span className="text-ink0">cat mission.txt</span></div>
