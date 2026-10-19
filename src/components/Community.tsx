@@ -48,7 +48,7 @@ const iconForPerson = (person: string) => {
 
 export default function Community(){
   return (
-    <section id="community" className="max-w-[1100px] mx-auto px-4 sm:px-8 py-12">
+    <section id="community" className="max-w-[1280px] mx-auto px-4 sm:px-8 py-16">
       <div className="font-dmmono text-xs uppercase tracking-wider text-ink2 mb-6 anim">Student network</div>
       <div className="flex items-end justify-between flex-wrap gap-4">
         <h2 className="font-outfit font-extrabold text-[clamp(1.8rem,3vw,2.6rem)] anim">Who collaborates<br/>here.</h2>
