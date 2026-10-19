@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
+import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import Nav from './components/Nav';
-import Hero from './components/Hero';
-import Capabilities from './components/Capabilities';
-import Stack from './components/Stack';
-import Ecosystem from './components/Ecosystem';
-import Community from './components/Community';
 import Footer from './components/Footer';
 
-// Platform components
-import ShowcaseFeed from './components/ShowcaseFeed';
-import ProjectDetailModal from './components/ProjectDetailModal';
+// Page components
+import HomePage from './pages/HomePage';
+import ExplorePage from './pages/ExplorePage';
+import ProjectDetailPage from './pages/ProjectDetailPage';
+import DashboardPage from './pages/DashboardPage';
+import ProfilePage from './pages/ProfilePage';
+
+// Modals
 import CreateProjectWizard from './components/CreateProjectWizard';
-import CreatorDashboard from './components/CreatorDashboard';
 
 // Data & Types
 import { initialProjects } from './data/initialData';
-import { Project, CollaboratorApplication, GuidanceReply, GuidanceTopic } from './types';
+import { Project, CollaboratorApplication, GuidanceTopic } from './types';
 
 // Mock initial applications to seed the dashboard
 const initialAppsSeed: CollaboratorApplication[] = [
@@ -34,11 +34,8 @@ const initialAppsSeed: CollaboratorApplication[] = [
 ];
 
 export default function App() {
-  // Route/View State
-  const [currentView, setCurrentView] = useState<'landing' | 'explore' | 'dashboard'>('landing');
-
+  const navigate = useNavigate();
   const [showCreateWizard, setShowCreateWizard] = useState(false);
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   // Core Platform States
   const [projects, setProjects] = useState<Project[]>([]);
@@ -100,7 +97,7 @@ export default function App() {
     const updated = [newProject, ...projects];
     saveProjectsToStorage(updated);
     setShowCreateWizard(false);
-    setCurrentView('explore');
+    navigate(`/projects/${newProject.id}`);
   };
 
   // Callback: Submit collaborator application
@@ -150,17 +147,6 @@ export default function App() {
         return p;
       });
       saveProjectsToStorage(updatedProjects);
-      
-      // Update modal display if currently viewing it
-      if (selectedProject && selectedProject.id === targetApp.projectId) {
-        setSelectedProject((prev) => {
-          if (!prev || !prev.openRoles) return prev;
-          const updatedRoles = prev.openRoles.map((r) =>
-            r.roleName === targetApp.roleName ? { ...r, status: 'filled' as const } : r
-          );
-          return { ...prev, openRoles: updatedRoles };
-        });
-      }
     }
   };
 
@@ -202,28 +188,6 @@ export default function App() {
     });
 
     saveProjectsToStorage(updatedProjects);
-
-    // Update modal display if viewing
-    if (selectedProject && selectedProject.id === sponsorship.projectId) {
-      setSelectedProject((prev) => {
-        if (!prev) return prev;
-        const sponsorsList = prev.sponsorsList || [];
-        return {
-          ...prev,
-          fundingRaised: (prev.fundingRaised || 0) + sponsorship.amount,
-          sponsorsList: [
-            {
-              name: sponsorship.sponsorName,
-              avatar: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(sponsorship.sponsorName)}`,
-              amount: sponsorship.amount,
-              message: sponsorship.message || undefined,
-              sponsoredAt: new Date().toISOString(),
-            },
-            ...sponsorsList,
-          ],
-        };
-      });
-    }
   };
 
   // Callback: Ask new guidance question
@@ -244,27 +208,6 @@ export default function App() {
     });
 
     saveProjectsToStorage(updatedProjects);
-
-    // Update modal details
-    if (selectedProject && selectedProject.id === projectId) {
-      setSelectedProject((prev) => {
-        if (!prev) return prev;
-        const topics = prev.guidanceTopics || [];
-        return {
-          ...prev,
-          guidanceTopics: [
-            {
-              id: `g-${Date.now()}`,
-              question,
-              askedBy: 'Anonymous Dev',
-              askedAt: new Date().toISOString(),
-              replies: [],
-            },
-            ...topics,
-          ],
-        };
-      });
-    }
   };
 
   // Callback: Post answer reply to guidance topic
@@ -291,36 +234,9 @@ export default function App() {
     });
 
     saveProjectsToStorage(updatedProjects);
-
-    // Update modal details
-    if (selectedProject && selectedProject.id === projectId && selectedProject.guidanceTopics) {
-      setSelectedProject((prev) => {
-        if (!prev || !prev.guidanceTopics) return prev;
-        const updatedTopics = prev.guidanceTopics.map((topic) => {
-          if (topic.id === topicId) {
-            const replies = topic.replies || [];
-            return {
-              ...topic,
-              replies: [
-                ...replies,
-                {
-                  id: `r-${Date.now()}`,
-                  repliedBy: isCreatorResponse ? prev.creatorName : 'Technical Guide',
-                  replyText,
-                  repliedAt: new Date().toISOString(),
-                  isCreator: isCreatorResponse,
-                },
-              ],
-            };
-          }
-          return topic;
-        });
-        return { ...prev, guidanceTopics: updatedTopics };
-      });
-    }
   };
 
-  // Callback: Claim recommended issue (developer claims an issue)
+  // Callback: Claim recommended issue
   const handleClaimIssue = (projectId: string, issueId: string) => {
     const updatedProjects = projects.map((p) => {
       if (p.id === projectId && p.contributeIssues) {
@@ -333,20 +249,9 @@ export default function App() {
     });
 
     saveProjectsToStorage(updatedProjects);
-
-    // Update modal details
-    if (selectedProject && selectedProject.id === projectId && selectedProject.contributeIssues) {
-      setSelectedProject((prev) => {
-        if (!prev || !prev.contributeIssues) return prev;
-        const updatedIssues = prev.contributeIssues.map((issue) =>
-          issue.id === issueId ? { ...issue, status: 'claimed' as const } : issue
-        );
-        return { ...prev, contributeIssues: updatedIssues };
-      });
-    }
   };
 
-  // Callback: Close issue (creator marks issue as merged/resolved)
+  // Callback: Close issue
   const handleCloseIssue = (projectId: string, issueId: string) => {
     const updatedProjects = projects.map((p) => {
       if (p.id === projectId && p.contributeIssues) {
@@ -371,62 +276,60 @@ export default function App() {
 
       {/* Navigation bar */}
       <Nav
-        currentView={currentView}
-        setCurrentView={setCurrentView}
         onOpenCreateWizard={() => setShowCreateWizard(true)}
         pendingNotifications={pendingAppsCount}
       />
 
       <main className="flex-grow pt-4">
-        {/* Dynamic Route Rendering */}
-        {currentView === 'landing' && (
-          <>
-            <Hero />
-            <Capabilities />
-            <Stack />
-            <Ecosystem />
-            
-            <section className="manifesto">
-              <div className="max-w-[1100px] mx-auto px-4 sm:px-8 py-16 text-center border-t border-ink3">
-                <h2 className="manifesto-hl mx-auto">
-                  "Every idea is a node. <span className="text-g">DevSnapz</span> connects them into something <em className="text-gold">real</em>."
-                </h2>
-                <p className="manifesto-body mx-auto mt-4">
-                  A local-first developer ecosystem built to bypass traditional networking bottlenecks and connect code directly with community support.
-                </p>
-                <div className="mt-8 flex justify-center gap-4">
-                  <button
-                    onClick={() => setCurrentView('explore')}
-                    className="bg-g text-bg0 font-semibold px-6 py-3 rounded-lg hover:shadow-[0_0_20px_rgba(27,206,146,0.3)] active:scale-95 transition-all text-xs font-dmmono"
-                  >
-                    Enter Showcase Feed ➔
-                  </button>
-                </div>
-              </div>
-            </section>
-
-            <Community />
-          </>
-        )}
-
-        {currentView === 'explore' && (
-          <ShowcaseFeed
-            projects={projects}
-            onSelectProject={(p) => setSelectedProject(p)}
-            onOpenCreateWizard={() => setShowCreateWizard(true)}
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route
+            path="/explore"
+            element={
+              <ExplorePage
+                projects={projects}
+                onOpenCreateWizard={() => setShowCreateWizard(true)}
+              />
+            }
           />
-        )}
-
-        {currentView === 'dashboard' && (
-          <CreatorDashboard
-            projects={projects}
-            applications={applications}
-            onApproveApplication={handleApproveApplication}
-            onDeclineApplication={handleDeclineApplication}
-            onReplyToGuidance={(pId, tId, rTxt, isC) => handleReplyToGuidance(pId, tId, rTxt, isC)}
-            onCloseIssue={handleCloseIssue}
+          <Route
+            path="/projects/:id"
+            element={
+              <ProjectDetailPage
+                projects={projects}
+                onApplyToCollaborate={handleApplyToCollaborate}
+                onSponsorProject={handleSponsorProject}
+                onAddGuidanceTopic={handleAddGuidanceTopic}
+                onReplyToGuidance={(pId, tId, rTxt) => handleReplyToGuidance(pId, tId, rTxt, false)}
+                onClaimIssue={handleClaimIssue}
+              />
+            }
           />
-        )}
+          <Route
+            path="/dashboard"
+            element={
+              <DashboardPage
+                projects={projects}
+                applications={applications}
+                onApproveApplication={handleApproveApplication}
+                onDeclineApplication={handleDeclineApplication}
+                onReplyToGuidance={(pId, tId, rTxt, isC) => handleReplyToGuidance(pId, tId, rTxt, isC)}
+                onCloseIssue={handleCloseIssue}
+              />
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProfilePage
+                projects={projects}
+                applications={applications}
+                onOpenCreateWizard={() => setShowCreateWizard(true)}
+              />
+            }
+          />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
       </main>
 
       <Footer />
@@ -436,19 +339,6 @@ export default function App() {
         <CreateProjectWizard
           onClose={() => setShowCreateWizard(false)}
           onSubmit={handleAddProject}
-        />
-      )}
-
-      {/* Project details card overlay */}
-      {selectedProject && (
-        <ProjectDetailModal
-          project={selectedProject}
-          onClose={() => setSelectedProject(null)}
-          onApplyToCollaborate={handleApplyToCollaborate}
-          onSponsorProject={handleSponsorProject}
-          onAddGuidanceTopic={handleAddGuidanceTopic}
-          onReplyToGuidance={(pId, tId, rTxt) => handleReplyToGuidance(pId, tId, rTxt, false)}
-          onClaimIssue={handleClaimIssue}
         />
       )}
     </div>

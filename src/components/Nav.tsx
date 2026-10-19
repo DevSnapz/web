@@ -1,71 +1,61 @@
 import React, { useState } from 'react';
+import { Link, NavLink } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
 
 interface NavProps {
-  currentView: 'landing' | 'explore' | 'dashboard';
-  setCurrentView: (view: 'landing' | 'explore' | 'dashboard') => void;
   onOpenCreateWizard: () => void;
   pendingNotifications: number;
 }
 
 export default function Nav({
-  currentView,
-  setCurrentView,
   onOpenCreateWizard,
   pendingNotifications,
 }: NavProps) {
   const [open, setOpen] = useState(false);
 
-  const handleNavClick = (view: 'landing' | 'explore' | 'dashboard') => {
-    setCurrentView(view);
-    setOpen(false);
-    // Scroll to top of the page when changing view
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  const navLinkClass = ({ isActive }: { isActive: boolean }) =>
+    `text-xs font-semibold font-dmmono transition-colors ${
+      isActive ? 'text-g' : 'text-ink1 hover:text-ink0'
+    }`;
+
+  const mobileNavLinkClass = ({ isActive }: { isActive: boolean }) =>
+    `rounded-lg border px-4 py-2.5 text-xs text-left font-dmmono block ${
+      isActive ? 'border-g bg-g/5 text-g' : 'border-ink3 text-ink1 hover:text-ink0 hover:bg-bg2'
+    }`;
 
   return (
     <nav className="relative sticky top-0 z-50 bg-bg0/80 backdrop-blur-md border-b border-ink3">
       <div className="max-w-[1100px] mx-auto px-4 sm:px-8 py-2 sm:py-3.5 flex items-center justify-between gap-3 sm:gap-4">
         
         {/* Brand Logo */}
-        <button
-          onClick={() => handleNavClick('landing')}
+        <Link
+          to="/"
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           className="font-outfit font-extrabold text-[1.1rem] text-ink0 leading-tight bg-transparent border-none outline-none cursor-pointer"
         >
           Dev<span className="text-g">Snapz</span>
-        </button>
+        </Link>
 
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-5 sm:gap-6">
-          <button
-            onClick={() => handleNavClick('landing')}
-            className={`text-xs font-semibold font-dmmono transition-colors ${
-              currentView === 'landing' ? 'text-g' : 'text-ink1 hover:text-ink0'
-            }`}
-          >
+          <NavLink to="/" end className={navLinkClass}>
             Home
-          </button>
+          </NavLink>
           
-          <button
-            onClick={() => handleNavClick('explore')}
-            className={`text-xs font-semibold font-dmmono transition-colors ${
-              currentView === 'explore' ? 'text-g' : 'text-ink1 hover:text-ink0'
-            }`}
-          >
+          <NavLink to="/explore" className={navLinkClass}>
             Explore Projects
-          </button>
+          </NavLink>
           
-          <button
-            onClick={() => handleNavClick('dashboard')}
-            className={`text-xs font-semibold font-dmmono transition-colors flex items-center gap-1.5 ${
-              currentView === 'dashboard' ? 'text-g' : 'text-ink1 hover:text-ink0'
-            }`}
-          >
+          <NavLink to="/dashboard" className={({ isActive }) => `${navLinkClass({ isActive })} flex items-center gap-1.5`}>
             Creator Hub
             {pendingNotifications > 0 && (
               <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
             )}
-          </button>
+          </NavLink>
+
+          <NavLink to="/profile" className={navLinkClass}>
+            My Profile
+          </NavLink>
 
           <button
             onClick={onOpenCreateWizard}
@@ -99,35 +89,45 @@ export default function Nav({
         }`}
       >
         <div className="flex flex-col gap-2 p-3">
-          <button
-            onClick={() => handleNavClick('landing')}
-            className={`rounded-lg border px-4 py-2.5 text-xs text-left font-dmmono ${
-              currentView === 'landing' ? 'border-g bg-g/5 text-g' : 'border-ink3 text-ink1 hover:text-ink0 hover:bg-bg2'
-            }`}
+          <NavLink
+            to="/"
+            end
+            onClick={() => setOpen(false)}
+            className={mobileNavLinkClass}
           >
             Home
-          </button>
+          </NavLink>
           
-          <button
-            onClick={() => handleNavClick('explore')}
-            className={`rounded-lg border px-4 py-2.5 text-xs text-left font-dmmono ${
-              currentView === 'explore' ? 'border-g bg-g/5 text-g' : 'border-ink3 text-ink1 hover:text-ink0 hover:bg-bg2'
-            }`}
+          <NavLink
+            to="/explore"
+            onClick={() => setOpen(false)}
+            className={mobileNavLinkClass}
           >
             Explore Projects
-          </button>
+          </NavLink>
           
-          <button
-            onClick={() => handleNavClick('dashboard')}
-            className={`rounded-lg border px-4 py-2.5 text-xs text-left font-dmmono flex items-center justify-between ${
-              currentView === 'dashboard' ? 'border-g bg-g/5 text-g' : 'border-ink3 text-ink1 hover:text-ink0 hover:bg-bg2'
-            }`}
+          <NavLink
+            to="/dashboard"
+            onClick={() => setOpen(false)}
+            className={({ isActive }) =>
+              `rounded-lg border px-4 py-2.5 text-xs text-left font-dmmono flex items-center justify-between ${
+                isActive ? 'border-g bg-g/5 text-g' : 'border-ink3 text-ink1 hover:text-ink0 hover:bg-bg2'
+              }`
+            }
           >
-            Creator Hub
+            <span>Creator Hub</span>
             {pendingNotifications > 0 && (
               <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
             )}
-          </button>
+          </NavLink>
+
+          <NavLink
+            to="/profile"
+            onClick={() => setOpen(false)}
+            className={mobileNavLinkClass}
+          >
+            My Profile
+          </NavLink>
           
           <button
             onClick={() => {
