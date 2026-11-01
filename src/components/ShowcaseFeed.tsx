@@ -77,26 +77,26 @@ export default function ShowcaseFeed({
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#111827] tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#111827] dark:text-[#f0f6fc] tracking-tight">
             Explore projects
           </h1>
-          <p className="text-[#6B7280] text-sm sm:text-base mt-1.5">
+          <p className="text-[#6B7280] dark:text-[#9198a1] text-sm sm:text-base mt-1.5">
             Discover ideas worth building and teams looking for contributors.
           </p>
         </div>
 
         <button
           onClick={onOpenCreateWizard}
-          className="self-start sm:self-auto font-sans text-xs font-semibold bg-[#635BFF] hover:bg-[#5246C9] text-white px-4 py-2.5 rounded-xl shadow-xs transition-all active:scale-95 flex items-center gap-1.5"
+          className="self-start sm:self-auto font-sans text-xs font-semibold bg-[#635BFF] hover:bg-[#5246C9] dark:bg-[#1f6feb] dark:hover:bg-[#2a7aef] text-white px-4 py-2.5 rounded-xl shadow-xs transition-all active:scale-95 flex items-center gap-1.5 cursor-pointer"
         >
           <span>+</span>
           <span>Publish Project</span>
         </button>
       </div>
 
-      {/* Large White Search Bar */}
+      {/* Large Search Bar */}
       <div className="relative">
-        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#9CA3AF]">
+        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#9CA3AF] dark:text-[#656c76]">
           <svg className="h-4.5 w-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <circle cx="11" cy="11" r="8" strokeWidth="2" />
             <line x1="21" y1="21" x2="16.65" y2="16.65" strokeWidth="2" />
@@ -107,12 +107,12 @@ export default function ShowcaseFeed({
           placeholder="Search projects, skills, or topics..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full pl-11 pr-10 py-3.5 bg-white border border-[#E5E7EB] rounded-xl text-sm text-[#111827] placeholder-[#9CA3AF] shadow-xs focus:outline-none focus:ring-2 focus:ring-[#635BFF]/25 focus:border-[#635BFF] transition-all font-sans"
+          className="w-full pl-11 pr-10 py-3.5 bg-white dark:bg-[#010409] border border-[#E5E7EB] dark:border-[#3d444d] rounded-xl text-sm text-[#111827] dark:text-[#f0f6fc] placeholder-[#9CA3AF] dark:placeholder-[#656c76] shadow-xs focus:outline-none focus:ring-2 focus:ring-[#635BFF]/25 dark:focus:ring-[#58a6ff]/30 focus:border-[#635BFF] dark:focus:border-[#58a6ff] transition-all font-sans"
         />
         {searchQuery && (
           <button
             onClick={() => setSearchQuery('')}
-            className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[#9CA3AF] hover:text-[#111827]"
+            className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[#9CA3AF] hover:text-[#111827] dark:text-[#656c76] dark:hover:text-[#f0f6fc]"
             title="Clear search"
           >
             ✕
@@ -130,8 +130,8 @@ export default function ShowcaseFeed({
               onClick={() => setSelectedFilter(opt)}
               className={`px-4 py-1.5 rounded-full text-xs font-sans whitespace-nowrap transition-all border ${
                 isSelected
-                  ? 'bg-[#F3F1FF] border-[#635BFF] text-[#635BFF] font-semibold shadow-xs'
-                  : 'bg-white border-[#E5E7EB] text-[#6B7280] hover:text-[#111827] hover:bg-[#F7F8FC]'
+                  ? 'bg-[#F3F1FF] border-[#635BFF] text-[#635BFF] font-semibold shadow-xs dark:bg-[rgba(56,139,253,0.15)] dark:border-[#1f6feb] dark:text-[#58a6ff]'
+                  : 'bg-white border-[#E5E7EB] text-[#6B7280] hover:text-[#111827] hover:bg-[#F7F8FC] dark:bg-[#151b23] dark:border-[#3d444d] dark:text-[#9198a1] dark:hover:text-[#f0f6fc] dark:hover:bg-[#1c2128]'
               }`}
             >
               {opt}
@@ -142,19 +142,19 @@ export default function ShowcaseFeed({
 
       {/* Project Cards Grid */}
       {filteredProjects.length === 0 ? (
-        <div className="bg-white border border-[#E5E7EB] rounded-2xl p-12 text-center max-w-md mx-auto shadow-sm my-8">
-          <div className="w-12 h-12 rounded-xl bg-[#F3F1FF] text-[#635BFF] flex items-center justify-center mx-auto mb-3 text-lg font-bold">
+        <div className="bg-white dark:bg-[#151b23] border border-[#E5E7EB] dark:border-[#3d444d] rounded-2xl p-12 text-center max-w-md mx-auto shadow-sm my-8">
+          <div className="w-12 h-12 rounded-xl bg-[#F3F1FF] text-[#635BFF] dark:bg-[rgba(56,139,253,0.15)] dark:text-[#58a6ff] flex items-center justify-center mx-auto mb-3 text-lg font-bold">
             🔍
           </div>
-          <h3 className="font-bold text-base text-[#111827] mb-1">No projects found</h3>
-          <p className="text-xs text-[#6B7280] mb-5 leading-relaxed">
+          <h3 className="font-bold text-base text-[#111827] dark:text-[#f0f6fc] mb-1">No projects found</h3>
+          <p className="text-xs text-[#6B7280] dark:text-[#9198a1] mb-5 leading-relaxed">
             {searchQuery
               ? `No projects matched "${searchQuery}". Try adjusting your keywords or clearing filters.`
               : 'No projects match this filter selection.'}
           </p>
           <button
             onClick={resetFilters}
-            className="px-4 py-2 bg-[#635BFF] hover:bg-[#5246C9] text-white rounded-xl text-xs font-semibold shadow-xs transition-all"
+            className="px-4 py-2 bg-[#635BFF] hover:bg-[#5246C9] dark:bg-[#1f6feb] dark:hover:bg-[#2a7aef] text-white rounded-xl text-xs font-semibold shadow-xs transition-all"
           >
             Clear all filters
           </button>
@@ -170,26 +170,28 @@ export default function ShowcaseFeed({
               <div
                 key={project.id}
                 onClick={() => onSelectProject(project)}
-                className="bg-white border border-[#E5E7EB] rounded-2xl p-6 shadow-xs hover:shadow-md hover:border-[#635BFF]/40 transition-all duration-200 flex flex-col justify-between cursor-pointer group"
+                className="bg-white dark:bg-[#151b23] border border-[#E5E7EB] dark:border-[#3d444d] rounded-2xl p-6 shadow-xs hover:shadow-md hover:border-[#635BFF]/40 dark:hover:border-[#1f6feb] transition-all duration-200 flex flex-col justify-between cursor-pointer group"
               >
                 <div>
                   {/* Top Icon & Status Row */}
                   <div className="flex items-center justify-between mb-4">
-                    <div className="w-10 h-10 rounded-xl bg-[#F3F1FF] text-[#635BFF] flex items-center justify-center text-lg font-bold">
+                    <div className="w-10 h-10 rounded-xl bg-[#F3F1FF] text-[#635BFF] dark:bg-[rgba(56,139,253,0.15)] dark:text-[#58a6ff] flex items-center justify-center text-lg font-bold">
                       {icon}
                     </div>
-                    <span className="text-xs font-medium text-[#17936C] bg-[#ECFDF5] border border-[#17936C]/20 px-2.5 py-0.5 rounded-full">
-                      Open to join
+                    {/* Tritanopia Status: Coral for Open to join */}
+                    <span className="text-xs font-medium text-[#17936C] bg-[#ECFDF5] border border-[#17936C]/20 dark:text-[#ff7b72] dark:bg-[rgba(248,81,73,0.15)] dark:border-[rgba(248,81,73,0.4)] px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#17936C] dark:bg-[#ff7b72]" />
+                      <span>Open to join</span>
                     </span>
                   </div>
 
                   {/* Project Title */}
-                  <h3 className="font-bold text-base text-[#111827] group-hover:text-[#635BFF] transition-colors mb-1.5">
+                  <h3 className="font-bold text-base text-[#111827] dark:text-[#f0f6fc] group-hover:text-[#635BFF] dark:group-hover:text-[#58a6ff] transition-colors mb-1.5">
                     {project.title}
                   </h3>
 
                   {/* Short Description */}
-                  <p className="text-xs text-[#6B7280] leading-relaxed min-h-[36px] line-clamp-2">
+                  <p className="text-xs text-[#6B7280] dark:text-[#9198a1] leading-relaxed min-h-[36px] line-clamp-2">
                     {project.pitch}
                   </p>
 
@@ -198,7 +200,7 @@ export default function ShowcaseFeed({
                     {project.techStack.map((tag) => (
                       <span
                         key={tag}
-                        className="text-[0.7rem] font-mono bg-[#F3F1FF] text-[#635BFF] border border-[#635BFF]/20 px-2 py-0.5 rounded-md"
+                        className="text-[0.7rem] font-mono bg-[#F3F1FF] text-[#635BFF] border border-[#635BFF]/20 dark:bg-[rgba(56,139,253,0.15)] dark:text-[#79c0ff] dark:border-[rgba(56,139,253,0.3)] px-2 py-0.5 rounded-md"
                       >
                         {tag}
                       </span>
@@ -207,11 +209,11 @@ export default function ShowcaseFeed({
                 </div>
 
                 {/* Divider & Footer: Needed Role + View Project Link */}
-                <div className="pt-3.5 border-t border-[#E5E7EB] flex items-center justify-between text-xs mt-auto">
-                  <span className="text-[#111827] font-medium truncate max-w-[190px]">
-                    Looking for: <span className="text-[#6B7280]">{primaryRole}</span>
+                <div className="pt-3.5 border-t border-[#E5E7EB] dark:border-[#3d444d] flex items-center justify-between text-xs mt-auto">
+                  <span className="text-[#111827] dark:text-[#f0f6fc] font-medium truncate max-w-[190px]">
+                    Looking for: <span className="text-[#6B7280] dark:text-[#9198a1]">{primaryRole}</span>
                   </span>
-                  <span className="font-semibold text-[#635BFF] group-hover:text-[#5246C9] flex items-center gap-0.5 whitespace-nowrap">
+                  <span className="font-semibold text-[#635BFF] dark:text-[#58a6ff] group-hover:text-[#5246C9] dark:group-hover:text-[#79c0ff] flex items-center gap-0.5 whitespace-nowrap">
                     View project ↗
                   </span>
                 </div>

@@ -86,13 +86,13 @@ export default function HomePage() {
       {/* SECTION A — WHAT YOU CAN DO */}
       <section className="max-w-[1280px] mx-auto px-4 sm:px-8">
         <div className="text-center max-w-xl mx-auto mb-12 space-y-2">
-          <div className="text-xs font-mono uppercase tracking-wider text-[#635BFF] font-semibold">
+          <div className="text-xs font-mono uppercase tracking-wider text-[#635BFF] dark:text-[#58a6ff] font-semibold">
             Platform Capabilities
           </div>
-          <h2 className="text-2xl sm:text-3xl font-bold text-[#111827]">
+          <h2 className="text-2xl sm:text-3xl font-bold text-[#111827] dark:text-[#f0f6fc]">
             What you can do on DevSnapz
           </h2>
-          <p className="text-sm text-[#6B7280]">
+          <p className="text-sm text-[#6B7280] dark:text-[#9198a1]">
             Everything you need to turn student innovation ideas into active collaborative builds.
           </p>
         </div>
@@ -101,16 +101,16 @@ export default function HomePage() {
           {features.map((feat) => (
             <div
               key={feat.title}
-              className="bg-white border border-[#E5E7EB] rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-[#635BFF]/30 transition-all duration-200 flex flex-col justify-between"
+              className="bg-white dark:bg-[#151b23] border border-[#E5E7EB] dark:border-[#3d444d] rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-[#635BFF]/30 dark:hover:border-[#1f6feb] transition-all duration-200 flex flex-col justify-between"
             >
               <div>
-                <div className="w-11 h-11 rounded-xl bg-[#F3F1FF] text-[#635BFF] flex items-center justify-center text-xl mb-4">
+                <div className="w-11 h-11 rounded-xl bg-[#F3F1FF] text-[#635BFF] dark:bg-[rgba(56,139,253,0.15)] dark:text-[#58a6ff] flex items-center justify-center text-xl mb-4">
                   {feat.icon}
                 </div>
-                <h3 className="text-base font-bold text-[#111827] mb-2">
+                <h3 className="text-base font-bold text-[#111827] dark:text-[#f0f6fc] mb-2">
                   {feat.title}
                 </h3>
-                <p className="text-xs text-[#6B7280] leading-relaxed">
+                <p className="text-xs text-[#6B7280] dark:text-[#9198a1] leading-relaxed">
                   {feat.desc}
                 </p>
               </div>
@@ -121,21 +121,21 @@ export default function HomePage() {
 
       {/* SECTION B — FEATURED PROJECTS */}
       <section className="max-w-[1280px] mx-auto px-4 sm:px-8">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10 pb-4 border-b border-[#E5E7EB]">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10 pb-4 border-b border-[#E5E7EB] dark:border-[#3d444d]">
           <div>
-            <div className="text-xs font-mono uppercase tracking-wider text-[#635BFF] font-semibold mb-1">
+            <div className="text-xs font-mono uppercase tracking-wider text-[#635BFF] dark:text-[#58a6ff] font-semibold mb-1">
               Active Builds
             </div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#111827]">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#111827] dark:text-[#f0f6fc]">
               Featured projects
             </h2>
-            <p className="text-sm text-[#6B7280] mt-1">
+            <p className="text-sm text-[#6B7280] dark:text-[#9198a1] mt-1">
               Explore teams currently assembling talent and contributors.
             </p>
           </div>
           <Link
             to="/explore"
-            className="text-xs font-semibold text-[#635BFF] hover:text-[#5246C9] flex items-center gap-1 font-sans self-start sm:self-auto"
+            className="text-xs font-semibold text-[#635BFF] hover:text-[#5246C9] dark:text-[#58a6ff] dark:hover:text-[#79c0ff] flex items-center gap-1 font-sans self-start sm:self-auto"
           >
             <span>View all projects</span>
             <span>→</span>
@@ -146,22 +146,24 @@ export default function HomePage() {
           {featuredProjects.map((p) => (
             <div
               key={p.id}
-              className="bg-white border border-[#E5E7EB] rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-[#635BFF]/40 transition-all duration-200 flex flex-col justify-between"
+              className="bg-white dark:bg-[#151b23] border border-[#E5E7EB] dark:border-[#3d444d] rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-[#635BFF]/40 dark:hover:border-[#1f6feb] transition-all duration-200 flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#F3F1FF] flex items-center justify-center text-lg">
+                  <div className="w-10 h-10 rounded-xl bg-[#F3F1FF] dark:bg-[rgba(56,139,253,0.15)] flex items-center justify-center text-lg">
                     {p.icon}
                   </div>
-                  <span className="text-xs font-medium text-[#17936C] bg-[#ECFDF5] border border-[#17936C]/20 px-2.5 py-0.5 rounded-full">
-                    {p.status}
+                  {/* Tritanopia Coral status */}
+                  <span className="text-xs font-medium text-[#17936C] bg-[#ECFDF5] border border-[#17936C]/20 dark:text-[#ff7b72] dark:bg-[rgba(248,81,73,0.15)] dark:border-[rgba(248,81,73,0.4)] px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#17936C] dark:bg-[#ff7b72]" />
+                    <span>{p.status}</span>
                   </span>
                 </div>
 
-                <h3 className="font-bold text-base text-[#111827] mb-1">
+                <h3 className="font-bold text-base text-[#111827] dark:text-[#f0f6fc] mb-1">
                   {p.title}
                 </h3>
-                <p className="text-xs text-[#6B7280] leading-relaxed min-h-[36px]">
+                <p className="text-xs text-[#6B7280] dark:text-[#9198a1] leading-relaxed min-h-[36px]">
                   {p.description}
                 </p>
 
@@ -169,7 +171,7 @@ export default function HomePage() {
                   {p.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="text-[0.7rem] font-mono bg-[#F3F1FF] text-[#635BFF] border border-[#635BFF]/20 px-2 py-0.5 rounded-md"
+                      className="text-[0.7rem] font-mono bg-[#F3F1FF] text-[#635BFF] border border-[#635BFF]/20 dark:bg-[rgba(56,139,253,0.15)] dark:text-[#79c0ff] dark:border-[rgba(56,139,253,0.3)] px-2 py-0.5 rounded-md"
                     >
                       {tag}
                     </span>
@@ -177,13 +179,13 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="pt-3.5 border-t border-[#E5E7EB] flex items-center justify-between text-xs">
-                <span className="text-[#111827] font-medium">
-                  Looking for: <span className="text-[#6B7280]">{p.role}</span>
+              <div className="pt-3.5 border-t border-[#E5E7EB] dark:border-[#3d444d] flex items-center justify-between text-xs">
+                <span className="text-[#111827] dark:text-[#f0f6fc] font-medium">
+                  Looking for: <span className="text-[#6B7280] dark:text-[#9198a1]">{p.role}</span>
                 </span>
                 <Link
                   to="/explore"
-                  className="font-semibold text-[#635BFF] hover:text-[#5246C9] flex items-center gap-0.5"
+                  className="font-semibold text-[#635BFF] hover:text-[#5246C9] dark:text-[#58a6ff] dark:hover:text-[#79c0ff] flex items-center gap-0.5"
                 >
                   View project ↗
                 </Link>
@@ -195,15 +197,15 @@ export default function HomePage() {
 
       {/* SECTION C — HOW DEVSNAPZ WORKS */}
       <section id="how-it-works" className="max-w-[1280px] mx-auto px-4 sm:px-8 py-6">
-        <div className="bg-white border border-[#E5E7EB] rounded-3xl p-8 sm:p-12 shadow-sm">
+        <div className="bg-white dark:bg-[#151b23] border border-[#E5E7EB] dark:border-[#3d444d] rounded-3xl p-8 sm:p-12 shadow-sm">
           <div className="text-center max-w-xl mx-auto mb-12 space-y-2">
-            <div className="text-xs font-mono uppercase tracking-wider text-[#635BFF] font-semibold">
+            <div className="text-xs font-mono uppercase tracking-wider text-[#635BFF] dark:text-[#58a6ff] font-semibold">
               Simple 3-Step Process
             </div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#111827]">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#111827] dark:text-[#f0f6fc]">
               How DevSnapz works
             </h2>
-            <p className="text-sm text-[#6B7280]">
+            <p className="text-sm text-[#6B7280] dark:text-[#9198a1]">
               From your initial idea to finding the right co-builders and shipping together.
             </p>
           </div>
@@ -211,13 +213,13 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
             {steps.map((st) => (
               <div key={st.num} className="flex flex-col space-y-3">
-                <div className="w-10 h-10 rounded-xl bg-[#F3F1FF] text-[#635BFF] font-mono font-bold text-sm flex items-center justify-center">
+                <div className="w-10 h-10 rounded-xl bg-[#F3F1FF] text-[#635BFF] dark:bg-[rgba(56,139,253,0.15)] dark:text-[#58a6ff] font-mono font-bold text-sm flex items-center justify-center">
                   {st.num}
                 </div>
-                <h3 className="font-bold text-base text-[#111827]">
+                <h3 className="font-bold text-base text-[#111827] dark:text-[#f0f6fc]">
                   {st.title}
                 </h3>
-                <p className="text-xs text-[#6B7280] leading-relaxed">
+                <p className="text-xs text-[#6B7280] dark:text-[#9198a1] leading-relaxed">
                   {st.desc}
                 </p>
               </div>
@@ -228,22 +230,22 @@ export default function HomePage() {
 
       {/* SECTION D — INTELLIGENT MATCHING */}
       <section className="max-w-[1280px] mx-auto px-4 sm:px-8">
-        <div className="grid md:grid-cols-12 gap-8 lg:gap-12 items-center bg-[#F3F1FF]/60 border border-[#635BFF]/20 rounded-3xl p-8 sm:p-12">
+        <div className="grid md:grid-cols-12 gap-8 lg:gap-12 items-center bg-[#F3F1FF]/60 dark:bg-[#151b23] border border-[#635BFF]/20 dark:border-[#3d444d] rounded-3xl p-8 sm:p-12">
           
           <div className="md:col-span-6 space-y-4">
-            <div className="text-xs font-mono uppercase tracking-wider text-[#635BFF] font-semibold">
+            <div className="text-xs font-mono uppercase tracking-wider text-[#635BFF] dark:text-[#58a6ff] font-semibold">
               Skill Alignment
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#111827] leading-tight">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#111827] dark:text-[#f0f6fc] leading-tight">
               Find the right people for your next big idea.
             </h2>
-            <p className="text-sm text-[#4B5563] leading-relaxed">
+            <p className="text-sm text-[#4B5563] dark:text-[#c9d1d9] leading-relaxed">
               DevSnapz helps identify project skill gaps and recommends collaborators whose skills match what your team needs.
             </p>
             <div className="pt-2">
               <Link
                 to="/explore"
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#635BFF] hover:bg-[#5246C9] text-white rounded-xl text-xs font-semibold shadow-xs transition-all"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#635BFF] hover:bg-[#5246C9] dark:bg-[#1f6feb] dark:hover:bg-[#2a7aef] text-white rounded-xl text-xs font-semibold shadow-xs transition-all"
               >
                 <span>Browse Matching Roles</span>
                 <span>→</span>
@@ -253,34 +255,42 @@ export default function HomePage() {
 
           {/* Visual Matching Representation */}
           <div className="md:col-span-6">
-            <div className="bg-white border border-[#E5E7EB] rounded-2xl p-6 shadow-md space-y-4">
-              <div className="flex items-center justify-between pb-3 border-b border-[#E5E7EB]">
+            <div className="bg-white dark:bg-[#0d1117] border border-[#E5E7EB] dark:border-[#3d444d] rounded-2xl p-6 shadow-md space-y-4">
+              <div className="flex items-center justify-between pb-3 border-b border-[#E5E7EB] dark:border-[#3d444d]">
                 <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#17936C]" />
-                  <span className="text-xs font-mono font-semibold text-[#111827]">Skill Gap Alignment</span>
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#17936C] dark:bg-[#79c0ff]" />
+                  <span className="text-xs font-mono font-semibold text-[#111827] dark:text-[#f0f6fc]">Skill Gap Alignment</span>
                 </div>
-                <span className="text-[0.68rem] font-mono text-[#635BFF] bg-[#F3F1FF] px-2.5 py-0.5 rounded-full font-medium">
+                <span className="text-[0.68rem] font-mono text-[#635BFF] dark:text-[#58a6ff] bg-[#F3F1FF] dark:bg-[rgba(56,139,253,0.15)] px-2.5 py-0.5 rounded-full font-medium">
                   Explainable
                 </span>
               </div>
 
               <div className="grid grid-cols-2 gap-3 text-xs">
-                <div className="p-3 rounded-xl bg-[#F7F8FC] border border-[#E5E7EB]">
-                  <div className="text-[0.65rem] font-mono uppercase text-[#9CA3AF] mb-1 font-semibold">Project Needs</div>
-                  <div className="font-bold text-[#111827]">PostgreSQL Architect</div>
-                  <div className="text-[0.68rem] text-[#6B7280] mt-0.5">Campus Recycling App</div>
+                {/* Project Needs: Tritanopia Coral */}
+                <div className="p-3 rounded-xl bg-[#F7F8FC] dark:bg-[#151b23] border border-[#E5E7EB] dark:border-[#3d444d]">
+                  <div className="text-[0.65rem] font-mono uppercase text-[#9CA3AF] dark:text-[#656c76] mb-1 font-semibold">Project Needs</div>
+                  <div className="font-bold text-[#111827] dark:text-[#ff7b72] flex items-center gap-1">
+                    <span>⚡</span>
+                    <span>PostgreSQL Architect</span>
+                  </div>
+                  <div className="text-[0.68rem] text-[#6B7280] dark:text-[#9198a1] mt-0.5">Campus Recycling App</div>
                 </div>
 
-                <div className="p-3 rounded-xl bg-[#F7F8FC] border border-[#E5E7EB]">
-                  <div className="text-[0.65rem] font-mono uppercase text-[#9CA3AF] mb-1 font-semibold">Collaborator</div>
-                  <div className="font-bold text-[#111827]">Alex M.</div>
-                  <div className="text-[0.68rem] text-[#17936C] mt-0.5">Verified PostgreSQL Skill</div>
+                {/* Collaborator: Tritanopia Cyan */}
+                <div className="p-3 rounded-xl bg-[#F7F8FC] dark:bg-[#151b23] border border-[#E5E7EB] dark:border-[#3d444d]">
+                  <div className="text-[0.65rem] font-mono uppercase text-[#9CA3AF] dark:text-[#656c76] mb-1 font-semibold">Collaborator</div>
+                  <div className="font-bold text-[#111827] dark:text-[#f0f6fc]">Alex M.</div>
+                  <div className="text-[0.68rem] text-[#17936C] dark:text-[#79c0ff] mt-0.5 flex items-center gap-1 font-medium">
+                    <span>✓</span>
+                    <span>Verified PostgreSQL Skill</span>
+                  </div>
                 </div>
               </div>
 
-              <div className="p-3 rounded-xl bg-[#F3F1FF] border border-[#635BFF]/25 text-xs">
-                <span className="font-semibold text-[#635BFF]">✨ Transparent Rationale: </span>
-                <span className="text-[#4B5563]">The collaborator's verified relational database experience complements the project's frontend team without opaque guesswork.</span>
+              <div className="p-3 rounded-xl bg-[#F3F1FF] dark:bg-[rgba(56,139,253,0.12)] border border-[#635BFF]/25 dark:border-[rgba(56,139,253,0.35)] text-xs">
+                <span className="font-semibold text-[#635BFF] dark:text-[#58a6ff]">✨ Transparent Rationale: </span>
+                <span className="text-[#4B5563] dark:text-[#c9d1d9]">The collaborator's verified relational database experience complements the project's frontend team without opaque guesswork.</span>
               </div>
             </div>
           </div>
@@ -290,15 +300,15 @@ export default function HomePage() {
 
       {/* SECTION E — OPEN SOURCE COMMUNITY */}
       <section id="community" className="max-w-[1280px] mx-auto px-4 sm:px-8">
-        <div className="bg-white border border-[#E5E7EB] rounded-3xl p-8 sm:p-12 text-center shadow-sm">
+        <div className="bg-white dark:bg-[#151b23] border border-[#E5E7EB] dark:border-[#3d444d] rounded-3xl p-8 sm:p-12 text-center shadow-sm">
           <div className="max-w-xl mx-auto space-y-4">
-            <div className="text-xs font-mono uppercase tracking-wider text-[#635BFF] font-semibold">
+            <div className="text-xs font-mono uppercase tracking-wider text-[#635BFF] dark:text-[#58a6ff] font-semibold">
               Open Collaboration
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#111827]">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#111827] dark:text-[#f0f6fc]">
               Built by developers. Open to everyone.
             </h2>
-            <p className="text-sm text-[#6B7280] leading-relaxed">
+            <p className="text-sm text-[#6B7280] dark:text-[#9198a1] leading-relaxed">
               DevSnapz is a community-driven initiative licensed under MIT. Students from any institution can explore the codebase, report bugs, propose features, and contribute directly.
             </p>
             <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
@@ -306,7 +316,7 @@ export default function HomePage() {
                 href="https://github.com/DevSnapz/web"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-2.5 bg-[#111827] hover:bg-black text-white rounded-xl text-xs font-semibold shadow-xs transition-all"
+                className="inline-flex items-center gap-2 px-6 py-2.5 bg-[#111827] hover:bg-black dark:bg-[#21262d] dark:hover:bg-[#30363d] dark:border dark:border-[#3d444d] text-white rounded-xl text-xs font-semibold shadow-xs transition-all"
               >
                 <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
                   <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
@@ -316,7 +326,7 @@ export default function HomePage() {
 
               <Link
                 to="/explore"
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-[#E5E7EB] hover:bg-[#F7F8FC] text-[#111827] rounded-xl text-xs font-semibold shadow-xs transition-all"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-[#E5E7EB] hover:bg-[#F7F8FC] dark:bg-[#151b23] dark:border-[#3d444d] dark:hover:bg-[#1c2128] text-[#111827] dark:text-[#f0f6fc] rounded-xl text-xs font-semibold shadow-xs transition-all"
               >
                 <span>Explore Student Projects</span>
               </Link>
