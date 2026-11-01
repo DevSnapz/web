@@ -11,303 +11,220 @@ interface CreatorDashboardProps {
   onCloseIssue: (projectId: string, issueId: string) => void;
 }
 
-type SidebarSection = 'overview' | 'projects' | 'collaborators' | 'requests';
-
 export default function CreatorDashboard({
   projects,
   applications,
   onApproveApplication,
   onDeclineApplication,
-  onReplyToGuidance,
-  onCloseIssue,
 }: CreatorDashboardProps) {
-  const [activeSection, setActiveSection] = useState<SidebarSection>('overview');
-  const [selectedProjectId, setSelectedProjectId] = useState<string>(projects[0]?.id || '');
-  const [replyInput, setReplyInput] = useState<{ [key: string]: string }>({});
-
-  const currentProject = projects.find((p) => p.id === selectedProjectId) || projects[0];
+  const [repoFilter, setRepoFilter] = useState('');
 
   const totalPendingApps = applications.filter((app) => app.status === 'pending').length;
-  const projectApplications = applications.filter((app) => app.projectId === currentProject?.id);
 
-  const handleReplyChange = (topicId: string, value: string) => {
-    setReplyInput((prev) => ({ ...prev, [topicId]: value }));
-  };
-
-  const submitCreatorReply = (topicId: string) => {
-    const text = replyInput[topicId];
-    if (!text || !text.trim() || !currentProject) return;
-    onReplyToGuidance(currentProject.id, topicId, text, true);
-    setReplyInput((prev) => ({ ...prev, [topicId]: '' }));
-  };
-
-  const sidebarItemClass = (section: SidebarSection) =>
-    `w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-sans flex items-center justify-between transition-all ${
-      activeSection === section
-        ? 'bg-[#F3F1FF] dark:bg-[rgba(56,139,253,0.15)] text-[#1f6feb] dark:text-[#58a6ff] font-semibold border border-[#1f6feb]/25 dark:border-[#1f6feb]/50 shadow-xs'
-        : 'text-[#6B7280] dark:text-[#9198a1] hover:text-[#111827] dark:hover:text-[#f0f6fc] hover:bg-[#F7F8FC] dark:hover:bg-[#010409] border border-transparent font-medium'
-    }`;
+  const filteredProjects = projects.filter((p) =>
+    p.title.toLowerCase().includes(repoFilter.toLowerCase()) ||
+    p.id.toLowerCase().includes(repoFilter.toLowerCase())
+  );
 
   return (
-    <section id="workspace-dashboard" className="max-w-[1280px] mx-auto px-4 sm:px-8 py-10 sm:py-14">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-10 items-start">
+    <div className="bg-[#0d1117] min-h-screen text-[#f0f6fc] py-8">
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-6">
         
-        {/* LEFT SIDEBAR: 250px on desktop */}
-        <aside className="md:col-span-4 lg:col-span-3 bg-white dark:bg-[#151b23] border border-[#E5E7EB] dark:border-[#3d444d] rounded-2xl p-5 shadow-xs space-y-6">
-          <div>
-            <div className="text-[0.68rem] font-mono uppercase tracking-wider text-[#9CA3AF] dark:text-[#656c76] font-semibold mb-3 px-1">
-              Workspace
-            </div>
-
-            <nav className="space-y-1.5">
-              <button
-                type="button"
-                onClick={() => setActiveSection('overview')}
-                className={sidebarItemClass('overview')}
-              >
-                <span className="flex items-center gap-2.5">
-                  <span className="text-sm">📊</span>
-                  <span>Overview</span>
-                </span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setActiveSection('projects')}
-                className={sidebarItemClass('projects')}
-              >
-                <span className="flex items-center gap-2.5">
-                  <span className="text-sm">📁</span>
-                  <span>My Projects</span>
-                </span>
-                <span className="text-[0.68rem] font-mono px-2 py-0.5 rounded-md bg-[#F7F8FC] dark:bg-[#010409] text-[#6B7280] dark:text-[#9198a1]">
-                  {projects.length}
-                </span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setActiveSection('collaborators')}
-                className={sidebarItemClass('collaborators')}
-              >
-                <span className="flex items-center gap-2.5">
-                  <span className="text-sm">👥</span>
-                  <span>Collaborators</span>
-                </span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setActiveSection('requests')}
-                className={sidebarItemClass('requests')}
-              >
-                <span className="flex items-center gap-2.5">
-                  <span className="text-sm">👤+</span>
-                  <span>Requests</span>
-                </span>
-                {totalPendingApps > 0 && (
-                  <span className="text-[0.65rem] font-bold font-mono px-2 py-0.5 rounded-full bg-[#cf222e] dark:bg-[#ff7b72] text-white dark:text-[#0d1117]">
-                    {totalPendingApps}
-                  </span>
-                )}
-              </button>
-
-              <Link
-                to="/profile"
-                className="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-sans text-[#6B7280] dark:text-[#9198a1] hover:text-[#111827] dark:hover:text-[#f0f6fc] hover:bg-[#F7F8FC] dark:hover:bg-[#010409] flex items-center justify-between transition-all"
-              >
-                <span className="flex items-center gap-2.5">
-                  <span className="text-sm">👤</span>
-                  <span>My Profile</span>
-                </span>
-                <span className="text-[0.68rem] text-[#9CA3AF] dark:text-[#656c76]">↗</span>
-              </Link>
-            </nav>
-          </div>
-
-          {/* Quick Publish Action */}
-          <div className="pt-4 border-t border-[#E5E7EB] dark:border-[#3d444d]">
-            <Link
-              to="/explore"
-              className="w-full block text-center py-2 px-3 rounded-xl bg-[#ddf4ff] dark:bg-[rgba(56,139,253,0.15)] text-[#1f6feb] dark:text-[#79c0ff] hover:bg-[#1f6feb] hover:text-white dark:hover:bg-[#1f6feb] dark:hover:text-white text-xs font-semibold transition-all border border-[#1f6feb]/25 dark:border-[#1f6feb]/40 shadow-xs"
-            >
-              + Browse Project Gallery
-            </Link>
-          </div>
-        </aside>
-
-        {/* RIGHT MAIN CONTENT AREA */}
-        <main className="md:col-span-8 lg:col-span-9 space-y-8">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
           
-          {/* Main Heading */}
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#111827] dark:text-[#f0f6fc] tracking-tight">
-              Your workspace
-            </h1>
-            <p className="text-sm text-[#6B7280] dark:text-[#9198a1] mt-1">
-              Keep your ideas moving forward.
-            </p>
-          </div>
+          {/* =============================================================== */}
+          {/* LEFT SIDEBAR: GITHUB TOP REPOSITORIES LIST (approx 3-4 cols)    */}
+          {/* =============================================================== */}
+          <aside className="md:col-span-4 lg:col-span-3 space-y-4">
+            
+            <div className="border border-[#3d444d] rounded-md bg-[#151b23] p-4 space-y-3">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-bold text-[#f0f6fc]">Top Repositories</span>
+                <Link
+                  to="/profile"
+                  className="px-2.5 py-1 bg-[#1f6feb] hover:bg-[#2a7aef] text-white font-semibold rounded-md text-[11px] shadow-xs"
+                >
+                  + New
+                </Link>
+              </div>
 
-          {/* SUMMARY CARDS GRID */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            {/* Summary Card 1: My Projects */}
-            <div className="bg-white dark:bg-[#151b23] border border-[#E5E7EB] dark:border-[#3d444d] rounded-2xl p-6 shadow-xs flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-[#ddf4ff] dark:bg-[rgba(56,139,253,0.15)] text-[#1f6feb] dark:text-[#79c0ff] flex items-center justify-center text-xl font-bold">
-                📁
-              </div>
-              <div>
-                <div className="text-xs font-mono uppercase tracking-wider text-[#9CA3AF] dark:text-[#656c76] font-semibold">
-                  My projects
-                </div>
-                <div className="text-xl sm:text-2xl font-extrabold text-[#111827] dark:text-[#f0f6fc] mt-0.5">
-                  {projects.length} Active {projects.length === 1 ? 'Project' : 'Projects'}
-                </div>
-              </div>
-            </div>
+              {/* Repo Search filter */}
+              <input
+                type="text"
+                value={repoFilter}
+                onChange={(e) => setRepoFilter(e.target.value)}
+                placeholder="Find a repository..."
+                className="w-full bg-[#010409] border border-[#3d444d] rounded-md px-2.5 py-1 text-xs text-[#f0f6fc] focus:outline-none focus:border-[#58a6ff] placeholder-[#9198a1]"
+              />
 
-            {/* Summary Card 2: Collaboration Requests */}
-            <div className="bg-white dark:bg-[#151b23] border border-[#E5E7EB] dark:border-[#3d444d] rounded-2xl p-6 shadow-xs flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-[#ddf4ff] dark:bg-[rgba(56,139,253,0.15)] text-[#1f6feb] dark:text-[#79c0ff] flex items-center justify-center text-xl font-bold">
-                👤+
-              </div>
-              <div>
-                <div className="text-xs font-mono uppercase tracking-wider text-[#9CA3AF] dark:text-[#656c76] font-semibold">
-                  Collaboration requests
-                </div>
-                <div className="text-xl sm:text-2xl font-extrabold text-[#111827] dark:text-[#f0f6fc] mt-0.5 flex items-center gap-2">
-                  <span>{totalPendingApps} Pending Review</span>
-                  {totalPendingApps > 0 && (
-                    <span className="w-2 h-2 rounded-full bg-[#ff7b72] animate-pulse" />
-                  )}
-                </div>
+              {/* Repos list */}
+              <div className="space-y-1 pt-1">
+                {filteredProjects.map((p) => (
+                  <Link
+                    key={p.id}
+                    to={`/projects/${p.id}`}
+                    className="flex items-center gap-2 p-1.5 rounded-md hover:bg-[#21262d] text-xs font-mono text-[#58a6ff] hover:underline truncate"
+                  >
+                    <svg className="w-3.5 h-3.5 fill-current text-[#9198a1] flex-shrink-0" viewBox="0 0 16 16">
+                      <path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z" />
+                    </svg>
+                    <span className="truncate">{p.id}</span>
+                  </Link>
+                ))}
               </div>
             </div>
-          </div>
 
-          {/* EXACT RECOMMENDED FOR YOU SECTION */}
-          <div className="space-y-3">
-            <h2 className="text-lg font-bold text-[#111827] dark:text-[#f0f6fc]">
-              Recommended for you
-            </h2>
+            {/* Quick Navigation links */}
+            <div className="border border-[#3d444d] rounded-md bg-[#151b23] p-3 text-xs space-y-1 text-[#9198a1]">
+              <div className="font-bold text-[#f0f6fc] px-2 py-1">Workspace</div>
+              <Link to="/explore" className="block px-2 py-1.5 rounded hover:bg-[#21262d] hover:text-[#f0f6fc]">
+                Explore Directory
+              </Link>
+              <Link to="/profile" className="block px-2 py-1.5 rounded hover:bg-[#21262d] hover:text-[#f0f6fc]">
+                Your GitHub Profile
+              </Link>
+            </div>
 
-            <div className="bg-white dark:bg-[#151b23] border border-[#E5E7EB] dark:border-[#3d444d] rounded-2xl p-6 shadow-xs space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <h3 className="font-bold text-base text-[#111827] dark:text-[#f0f6fc]">
-                  StudyMate AI is looking for a frontend developer.
-                </h3>
-                <span className="text-xs font-semibold text-[#cf222e] dark:text-[#ff7b72] bg-[#ffebe9] dark:bg-[rgba(248,81,73,0.15)] border border-[#ff8182]/30 dark:border-[rgba(248,81,73,0.45)] px-2.5 py-0.5 rounded-full self-start sm:self-auto flex items-center gap-1">
-                  <span>⚡</span>
-                  <span>Open to join</span>
-                </span>
-              </div>
+          </aside>
 
-              {/* High Contrast Tritanopia Skill Matching Panel */}
-              <div className="bg-[#F7F8FC] dark:bg-[#010409] border border-[#E5E7EB] dark:border-[#3d444d] rounded-xl p-4 space-y-1">
-                <div className="text-xs font-bold text-[#0969da] dark:text-[#79c0ff] flex items-center gap-1.5">
-                  <span>✨</span>
-                  <span>Relevant competencies: React and TypeScript (Verified)</span>
-                </div>
-                <p className="text-xs text-[#4B5563] dark:text-[#9198a1] leading-relaxed">
-                  Your verified technical competencies match 2 required project skills.
+          {/* =============================================================== */}
+          {/* MAIN COLUMN: PENDING PRs & REPOSITORY UPDATES (approx 8-9 cols) */}
+          {/* =============================================================== */}
+          <main className="md:col-span-8 lg:col-span-9 space-y-6">
+            
+            {/* Header */}
+            <div className="flex items-center justify-between pb-3 border-b border-[#3d444d]">
+              <div>
+                <h1 className="text-xl font-bold text-[#f0f6fc]">
+                  Maintainer Workspace
+                </h1>
+                <p className="text-xs text-[#9198a1] mt-0.5">
+                  Review collaboration pull requests and manage team permissions.
                 </p>
               </div>
+
+              {totalPendingApps > 0 && (
+                <span className="px-2.5 py-1 rounded-full bg-[rgba(248,81,73,0.15)] text-[#ff7b72] border border-[rgba(248,81,73,0.4)] text-xs font-mono font-bold">
+                  {totalPendingApps} Review Requests Pending
+                </span>
+              )}
+            </div>
+
+            {/* PULL REQUESTS / COLLABORATION APPLICATIONS REVIEW QUEUE */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between text-xs">
+                <h2 className="font-bold text-sm text-[#f0f6fc]">
+                  Incoming Pull Requests (Candidate Applications)
+                </h2>
+                <span className="text-xs font-mono text-[#9198a1]">
+                  {applications.length} Total Applications
+                </span>
+              </div>
+
+              {applications.length === 0 ? (
+                <div className="border border-[#3d444d] rounded-md bg-[#151b23] p-8 text-center text-xs text-[#9198a1]">
+                  No pull requests currently open for your repositories.
+                </div>
+              ) : (
+                <div className="border border-[#3d444d] rounded-md bg-[#151b23] divide-y divide-[#3d444d]">
+                  {applications.map((app) => (
+                    <div key={app.id} className="p-4 space-y-3 text-xs">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div className="flex items-center gap-2">
+                          <span className={app.status === 'approved' ? 'text-[#79c0ff]' : app.status === 'pending' ? 'text-[#ff7b72]' : 'text-[#9198a1]'}>
+                            ⑂
+                          </span>
+                          <span className="font-bold text-sm text-[#f0f6fc]">
+                            {app.applicantName}
+                          </span>
+                          <span className="text-[#9198a1]">wants to join</span>
+                          <span className="font-semibold text-[#58a6ff]">
+                            {app.projectTitle}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <span className="px-2 py-0.5 rounded bg-[rgba(56,139,253,0.15)] text-[#79c0ff] border border-[rgba(56,139,253,0.3)] font-mono text-[10px]">
+                            Role: {app.roleName}
+                          </span>
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono uppercase font-bold border ${
+                            app.status === 'pending'
+                              ? 'bg-[rgba(248,81,73,0.15)] text-[#ff7b72] border-[rgba(248,81,73,0.4)]'
+                              : app.status === 'approved'
+                              ? 'bg-[rgba(56,139,253,0.15)] text-[#79c0ff] border-[rgba(56,139,253,0.4)]'
+                              : 'bg-[#21262d] text-[#9198a1] border-[#3d444d]'
+                          }`}>
+                            {app.status}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Pull Request Description / Pitch Box */}
+                      <div className="p-3 bg-[#010409] border border-[#3d444d] rounded-md space-y-1.5 font-mono text-[11px]">
+                        <div className="text-[#9198a1]">
+                          Contact: <span className="text-[#f0f6fc]">{app.applicantEmail}</span>
+                        </div>
+                        <div className="text-[#79c0ff]">
+                          Competencies: {app.skills}
+                        </div>
+                        <p className="text-[#f0f6fc] font-sans text-xs italic pt-1">
+                          "{app.message}"
+                        </p>
+                      </div>
+
+                      {app.status === 'pending' && (
+                        <div className="flex justify-end gap-2 pt-1">
+                          <button
+                            type="button"
+                            onClick={() => onDeclineApplication(app.id)}
+                            className="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] border border-[#3d444d] rounded-md text-[#ff7b72] font-semibold text-xs transition-colors"
+                          >
+                            Close PR (Decline)
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => onApproveApplication(app.id)}
+                            className="px-3.5 py-1.5 bg-[#1f6feb] hover:bg-[#2a7aef] text-white font-semibold rounded-md text-xs shadow-xs transition-colors"
+                          >
+                            Merge & Add to Team ➔
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* RECOMMENDATIONS FOR YOU */}
+            <div className="border border-[#3d444d] rounded-md bg-[#151b23] p-5 space-y-3 text-xs">
+              <div className="flex items-center justify-between">
+                <h3 className="font-bold text-sm text-[#f0f6fc]">
+                  Recommended Repository for You
+                </h3>
+                <span className="text-[10px] font-mono px-2 py-0.2 rounded-full bg-[rgba(248,81,73,0.15)] text-[#ff7b72] border border-[rgba(248,81,73,0.4)] font-bold">
+                  ⚡ Open to Join
+                </span>
+              </div>
+
+              <p className="text-[#9198a1]">
+                <strong>StudyMate AI</strong> is looking for a frontend developer. Your verified technical competencies (React, TypeScript) match 2 required skills.
+              </p>
 
               <div className="pt-2 flex justify-end">
                 <Link
                   to="/projects/studymate-ai"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#1f6feb] dark:text-[#58a6ff] hover:text-[#2a7aef] dark:hover:text-[#79c0ff] transition-all"
+                  className="text-[#58a6ff] hover:underline font-semibold"
                 >
-                  <span>View Project Hub</span>
-                  <span>➔</span>
+                  View Repository ➔
                 </Link>
               </div>
             </div>
-          </div>
 
-          {/* CANDIDATE REVIEW PIPELINE (COLLABORATION REQUESTS) */}
-          <div className="space-y-4 pt-2">
-            <div className="flex items-center justify-between pb-2 border-b border-[#E5E7EB] dark:border-[#3d444d]">
-              <h2 className="text-lg font-bold text-[#111827] dark:text-[#f0f6fc]">
-                Pending Candidate Applications
-              </h2>
-              <span className="text-xs font-mono text-[#6B7280] dark:text-[#9198a1]">
-                {applications.length} Total Applications
-              </span>
-            </div>
+          </main>
+        </div>
 
-            {applications.length === 0 ? (
-              <div className="bg-white dark:bg-[#151b23] border border-[#E5E7EB] dark:border-[#3d444d] rounded-2xl p-8 text-center text-xs text-[#6B7280] dark:text-[#9198a1]">
-                No collaboration requests pending review right now.
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {applications.map((app) => (
-                  <div
-                    key={app.id}
-                    className="bg-white dark:bg-[#151b23] border border-[#E5E7EB] dark:border-[#3d444d] rounded-2xl p-5 sm:p-6 shadow-xs space-y-3.5"
-                  >
-                    <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
-                      <div>
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-bold text-sm text-[#111827] dark:text-[#f0f6fc]">{app.applicantName}</span>
-                          <span className="text-xs text-[#6B7280] dark:text-[#9198a1]">({app.applicantEmail})</span>
-                        </div>
-                        <div className="text-[0.68rem] font-mono text-[#9CA3AF] dark:text-[#656c76] mt-0.5">
-                          Applied on {new Date(app.appliedAt).toLocaleDateString()} for <span className="font-semibold text-[#111827] dark:text-[#f0f6fc]">{app.projectTitle}</span>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-mono text-[#0969da] dark:text-[#79c0ff] bg-[#ddf4ff] dark:bg-[rgba(56,139,253,0.15)] px-2.5 py-1 border border-[#54aeff]/30 dark:border-[rgba(56,139,253,0.4)] rounded-lg font-semibold">
-                          Role: {app.roleName}
-                        </span>
-                        <span className={`text-[0.62rem] font-bold font-mono uppercase px-2.5 py-1 rounded-full border ${
-                          app.status === 'pending'
-                            ? 'bg-[#ffebe9] dark:bg-[rgba(248,81,73,0.15)] text-[#cf222e] dark:text-[#ff7b72] border-[#ff8182]/30 dark:border-[rgba(248,81,73,0.45)]'
-                            : app.status === 'approved'
-                            ? 'bg-[#ddf4ff] dark:bg-[rgba(56,139,253,0.15)] text-[#0969da] dark:text-[#79c0ff] border-[#54aeff]/30 dark:border-[rgba(56,139,253,0.4)]'
-                            : 'bg-[#F7F8FC] dark:bg-[#010409] text-[#6B7280] dark:text-[#9198a1] border-[#E5E7EB] dark:border-[#3d444d]'
-                        }`}>
-                          {app.status}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="bg-[#F7F8FC] dark:bg-[#010409] border border-[#E5E7EB] dark:border-[#3d444d] p-3.5 rounded-xl text-xs text-[#111827] dark:text-[#f0f6fc] space-y-1.5">
-                      <div>
-                        <span className="text-[#9CA3AF] dark:text-[#656c76] font-mono text-[0.65rem] uppercase block">Competencies & Pitch:</span>
-                        <span className="text-[#4B5563] dark:text-[#9198a1]">{app.skills}</span>
-                      </div>
-                      <p className="text-xs text-[#6B7280] dark:text-[#9198a1] italic leading-relaxed">"{app.message}"</p>
-                    </div>
-
-                    {app.status === 'pending' && (
-                      <div className="flex justify-end gap-2 pt-1">
-                        <button
-                          type="button"
-                          onClick={() => onDeclineApplication(app.id)}
-                          className="px-4 py-2 text-xs font-semibold text-[#cf222e] dark:text-[#ff7b72] hover:bg-[#ffebe9] dark:hover:bg-[rgba(248,81,73,0.15)] border border-[#ff8182]/30 dark:border-[rgba(248,81,73,0.45)] rounded-xl transition-all"
-                        >
-                          Decline
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => onApproveApplication(app.id)}
-                          className="px-4 py-2 text-xs font-semibold text-white bg-[#1f6feb] hover:bg-[#2a7aef] rounded-xl shadow-xs transition-all active:scale-95"
-                        >
-                          Approve & Add to Team
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-        </main>
       </div>
-    </section>
+    </div>
   );
 }

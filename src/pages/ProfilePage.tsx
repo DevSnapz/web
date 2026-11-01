@@ -19,6 +19,7 @@ interface StudentProfile {
   github: string;
   portfolio: string;
   discord: string;
+  location: string;
   availability: 'Available for Hackathons & Projects' | 'Busy / Focused on Exams' | 'Open for Mentorship';
   skills: string[];
   learningInterests: string[];
@@ -27,11 +28,12 @@ interface StudentProfile {
 const defaultStudent: StudentProfile = {
   name: 'Frozen',
   avatar: 'https://avatars.githubusercontent.com/u/174297688?s=96&v=4',
-  handle: '@frozen-dev',
+  handle: 'Frozen-47',
   institution: 'Student Innovation Network',
   department: 'Computer Science & Engineering',
   year: 'Class of 2026',
-  bio: 'Full-stack builder passionate about autonomous agents, developer utilities, and high-performance reactive web systems. Seeking collaborators for campus-scale innovation builds.',
+  location: 'Bangalore, India',
+  bio: 'Full-stack builder passionate about autonomous agents, developer utilities, and high-performance reactive web systems. Open for campus hackathons and open-source systems.',
   github: 'https://github.com/Frozen-47',
   portfolio: 'https://frozenn.in',
   discord: 'frozen#0001',
@@ -40,7 +42,6 @@ const defaultStudent: StudentProfile = {
   learningInterests: ['Distributed LLM Pipelines', 'pgvector Clustering', 'WebAssembly', 'Rust'],
 };
 
-// Peer collaborators data for collaborator discovery
 interface PeerCollaborator {
   id: string;
   name: string;
@@ -90,7 +91,6 @@ const mockPeerCollaborators: PeerCollaborator[] = [
 ];
 
 export default function ProfilePage({ projects, applications, onOpenCreateWizard }: ProfilePageProps) {
-  // Load profile with local persistence
   const [profile, setProfile] = useState<StudentProfile>(() => {
     try {
       const saved = localStorage.getItem('devsnapz_student_profile');
@@ -101,15 +101,12 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
     return defaultStudent;
   });
 
-  // Edit modal state
+  const [activeTab, setActiveTab] = useState<'overview' | 'repositories' | 'gaps' | 'peers'>('overview');
   const [isEditing, setIsEditing] = useState(false);
   const [editForm, setEditForm] = useState<StudentProfile>(profile);
   const [newSkillInput, setNewSkillInput] = useState('');
   const [newInterestInput, setNewInterestInput] = useState('');
   const [copiedLink, setCopiedLink] = useState(false);
-
-  // Active section tab
-  const [activeTab, setActiveTab] = useState<'overview' | 'recommendations' | 'collaborators'>('overview');
 
   const userProjects = projects.filter(
     (p) => p.creatorName === profile.name || p.creatorGithub === 'Frozen-47'
@@ -131,7 +128,6 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
     }> = [];
 
     projects.forEach((proj) => {
-      // Don't recommend own project
       if (proj.creatorName === profile.name) return;
 
       proj.openRoles?.forEach((role) => {
@@ -157,7 +153,6 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
       });
     });
 
-    // Sort by most matching skills
     return list.sort((a, b) => b.matchingSkills.length - a.matchingSkills.length);
   }, [projects, profile.skills, profile.name]);
 
@@ -208,527 +203,606 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
     setTimeout(() => setCopiedLink(false), 2000);
   };
 
-  const tabButtonClass = (tab: 'overview' | 'recommendations' | 'collaborators') =>
-    `px-4 py-2 rounded-xl text-xs font-sans transition-all flex items-center gap-2 ${
+  // Mock 52-week activity cells generator (GitHub contribution heatmap)
+  const heatmapColumns = useMemo(() => {
+    const cols = [];
+    const colorLevels = [
+      'bg-[#161b22]',                      // Level 0 (no contribution)
+      'bg-[#0e4429] dark:bg-[#0c2d6b]',    // Level 1 (Tritanopia Cyan base)
+      'bg-[#006d32] dark:bg-[#1158c7]',    // Level 2
+      'bg-[#26a641] dark:bg-[#388bfd]',    // Level 3
+      'bg-[#39d353] dark:bg-[#79c0ff]',    // Level 4 (Highest)
+    ];
+
+    for (let c = 0; c < 50; c++) {
+      const days = [];
+      for (let d = 0; d < 7; d++) {
+        // pseudo-random contribution intensity
+        const seed = (c * 7 + d * 13) % 17;
+        const level = seed < 7 ? 0 : seed < 11 ? 1 : seed < 14 ? 2 : seed < 16 ? 3 : 4;
+        days.push(colorLevels[level]);
+      }
+      cols.push(days);
+    }
+    return cols;
+  }, []);
+
+  const tabItemClass = (tab: 'overview' | 'repositories' | 'gaps' | 'peers') =>
+    `flex items-center gap-2 px-3 py-2 text-xs font-medium border-b-2 transition-colors cursor-pointer whitespace-nowrap ${
       activeTab === tab
-        ? 'bg-[#F3F1FF] dark:bg-[rgba(56,139,253,0.15)] text-[#1f6feb] dark:text-[#58a6ff] font-semibold border border-[#1f6feb]/30 dark:border-[#1f6feb]/50 shadow-xs'
-        : 'text-[#6B7280] dark:text-[#9198a1] hover:text-[#111827] dark:hover:text-[#f0f6fc] hover:bg-[#F7F8FC] dark:hover:bg-[#010409] border border-transparent font-medium'
+        ? 'border-[#ff7b72] text-[#f0f6fc] font-semibold'
+        : 'border-transparent text-[#9198a1] hover:text-[#f0f6fc] hover:border-[#656c76]'
     }`;
 
   return (
-    <section id="student-profile" className="max-w-[1280px] mx-auto px-4 sm:px-8 py-10 sm:py-14 relative z-10">
+    <div className="bg-[#0d1117] min-h-screen text-[#f0f6fc]">
       
-      {/* Profile Header Card */}
-      <div className="bg-white dark:bg-[#151b23] border border-[#E5E7EB] dark:border-[#3d444d] rounded-2xl p-6 sm:p-8 mb-8 shadow-xs">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-[#E5E7EB] dark:border-[#3d444d]">
-          <div className="flex items-start sm:items-center gap-5">
-            <div className="relative">
+      {/* GitHub Profile Navigation Sub-bar */}
+      <div className="border-b border-[#3d444d] bg-[#0d1117] sticky top-14 z-20">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 flex items-center gap-1 overflow-x-auto">
+          
+          <button
+            type="button"
+            onClick={() => setActiveTab('overview')}
+            className={tabItemClass('overview')}
+          >
+            <svg className="w-4 h-4 fill-current" viewBox="0 0 16 16">
+              <path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25ZM1.5 6.5h13V1.75a.25.25 0 0 0-.25-.25H1.75a.25.25 0 0 0-.25.25ZM14.5 8h-13v6.25c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25Z" />
+            </svg>
+            <span>Overview</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('repositories')}
+            className={tabItemClass('repositories')}
+          >
+            <svg className="w-4 h-4 fill-current" viewBox="0 0 16 16">
+              <path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z" />
+            </svg>
+            <span>Repositories</span>
+            <span className="bg-[#30363d] text-[#f0f6fc] rounded-full px-1.5 py-0.2 text-[10px] font-mono">
+              {userProjects.length}
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('gaps')}
+            className={tabItemClass('gaps')}
+          >
+            <span className="text-[#ff7b72]">⚡</span>
+            <span>Recommended Roles</span>
+            <span className="bg-[#30363d] text-[#f0f6fc] rounded-full px-1.5 py-0.2 text-[10px] font-mono">
+              {recommendedRoles.length}
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('peers')}
+            className={tabItemClass('peers')}
+          >
+            <svg className="w-4 h-4 fill-current" viewBox="0 0 16 16">
+              <path d="M2 5.5a3.5 3.5 0 1 1 5.898 2.549 5.508 5.508 0 0 1 3.034 4.084.75.75 0 1 1-1.482.235 4.002 4.002 0 0 0-7.899 0 .75.75 0 0 1-1.482-.236A5.507 5.507 0 0 1 3.102 8.05 3.493 3.493 0 0 1 2 5.5ZM11 4a3.001 3.001 0 0 1 2.22 5.018 5.01 5.01 0 0 1 2.56 3.012.749.749 0 0 1-.512.924.75.75 0 0 1-.924-.513 3.51 3.51 0 0 0-2.316-2.52.75.75 0 0 1-.482-.72 1.5 1.5 0 1 0-2.091-1.393.75.75 0 0 1-.741-.75A3 3 0 0 1 11 4Zm-5.5 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z" />
+            </svg>
+            <span>Peer Discovery</span>
+            <span className="bg-[#30363d] text-[#f0f6fc] rounded-full px-1.5 py-0.2 text-[10px] font-mono">
+              {mockPeerCollaborators.length}
+            </span>
+          </button>
+
+        </div>
+      </div>
+
+      {/* GitHub Profile Main 2-Column Container */}
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 py-8">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+          
+          {/* =============================================================== */}
+          {/* LEFT COLUMN: GITHUB USER PROFILE SIDEBAR (approx 296px / 4 cols)*/}
+          {/* =============================================================== */}
+          <aside className="md:col-span-4 lg:col-span-3 space-y-4">
+            
+            {/* Avatar & Online Availability Pill */}
+            <div className="relative inline-block w-full">
               <img
                 src={profile.avatar}
                 alt={profile.name}
-                className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl ring-2 ring-[#1f6feb]/30 dark:ring-[#1f6feb]/50 object-cover shadow-xs bg-[#F7F8FC] dark:bg-[#010409]"
+                className="w-48 h-48 sm:w-64 sm:h-64 md:w-full md:h-auto aspect-square rounded-full object-cover ring-1 ring-[#3d444d] bg-[#151b23] mx-auto md:mx-0 shadow-lg"
               />
               <span
-                className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white dark:border-[#151b23] flex items-center justify-center ${
-                  profile.availability.includes('Available') ? 'bg-[#79c0ff]' : 'bg-[#ff7b72]'
-                }`}
+                className="absolute bottom-2 right-4 sm:right-6 md:right-3 px-2 py-0.5 rounded-full bg-[#151b23] border border-[#3d444d] text-[11px] font-medium flex items-center gap-1.5 shadow-md"
                 title={profile.availability}
-              />
+              >
+                <span className="w-2 h-2 rounded-full bg-[#79c0ff]" />
+                <span className="hidden sm:inline">Active</span>
+              </span>
             </div>
+
+            {/* Names & Bio */}
             <div>
-              <div className="flex items-center gap-3 flex-wrap">
-                <h1 className="text-2xl sm:text-3xl font-extrabold text-[#111827] dark:text-[#f0f6fc] tracking-tight">{profile.name}</h1>
-                <span className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold px-3 py-1 rounded-full bg-[#ddf4ff] dark:bg-[rgba(56,139,253,0.15)] text-[#0969da] dark:text-[#79c0ff] border border-[#54aeff]/30 dark:border-[rgba(56,139,253,0.4)]">
-                  <span className="w-2 h-2 rounded-full bg-[#0969da] dark:bg-[#79c0ff]" />
-                  {profile.availability}
-                </span>
+              <h1 className="text-2xl font-bold text-[#f0f6fc] leading-tight">
+                {profile.name}
+              </h1>
+              <div className="text-lg font-light text-[#9198a1] font-mono">
+                {profile.handle}
               </div>
-              <div className="text-xs font-mono text-[#6B7280] dark:text-[#9198a1] mt-1">
-                {profile.handle} · <span className="text-[#111827] dark:text-[#f0f6fc] font-sans font-medium">{profile.institution}</span>
-              </div>
-              <div className="text-xs text-[#9CA3AF] dark:text-[#656c76] mt-0.5">
-                {profile.department} · {profile.year}
-              </div>
+              <p className="text-xs text-[#f0f6fc] mt-3 leading-relaxed">
+                {profile.bio}
+              </p>
             </div>
-          </div>
 
-          {/* Action buttons */}
-          <div className="flex gap-2.5 flex-wrap items-center">
-            <button
-              onClick={() => {
-                setEditForm(profile);
-                setIsEditing(true);
-              }}
-              className="px-4 py-2 bg-[#ddf4ff] dark:bg-[rgba(56,139,253,0.15)] hover:bg-[#1f6feb] text-[#1f6feb] dark:text-[#79c0ff] hover:text-white dark:hover:text-white border border-[#1f6feb]/25 dark:border-[#1f6feb]/40 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 shadow-xs"
-            >
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-              </svg>
-              Edit Profile
-            </button>
-
-            <button
-              onClick={handleShareProfile}
-              className="px-3.5 py-2 bg-white dark:bg-[#151b23] hover:bg-[#F7F8FC] dark:hover:bg-[#010409] text-[#111827] dark:text-[#f0f6fc] border border-[#E5E7EB] dark:border-[#3d444d] rounded-xl text-xs font-medium transition-all shadow-xs"
-              title="Copy Profile URL"
-            >
-              {copiedLink ? 'Copied!' : 'Share Profile'}
-            </button>
-
-            <button
-              onClick={onOpenCreateWizard}
-              className="px-4 py-2 bg-[#1f6feb] hover:bg-[#2a7aef] text-white rounded-xl text-xs font-semibold shadow-xs transition-all flex items-center gap-1.5"
-            >
-              <svg className="w-3.5 h-3.5 stroke-[2.5]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path d="M12 5v14M5 12h14" />
-              </svg>
-              + Publish Project
-            </button>
-          </div>
-        </div>
-
-        {/* Bio */}
-        <div className="py-5">
-          <div className="text-[0.68rem] font-mono uppercase tracking-wider text-[#9CA3AF] dark:text-[#656c76] font-semibold mb-1.5">About Builder</div>
-          <p className="text-sm text-[#4B5563] dark:text-[#9198a1] leading-relaxed max-w-3xl">{profile.bio}</p>
-          
-          {/* External links */}
-          <div className="flex items-center gap-4 mt-3 text-xs font-mono text-[#6B7280] dark:text-[#9198a1]">
-            {profile.github && (
-              <a
-                href={profile.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-[#111827] dark:hover:text-[#f0f6fc] flex items-center gap-1.5 transition-colors"
+            {/* Edit Profile Button (Full Width Primer Button) */}
+            <div className="space-y-2 pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  setEditForm(profile);
+                  setIsEditing(true);
+                }}
+                className="w-full py-1.5 px-3 bg-[#21262d] hover:bg-[#30363d] border border-[#3d444d] rounded-md text-xs font-semibold text-[#f0f6fc] shadow-xs transition-colors"
               >
-                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                GitHub Profile
-              </a>
-            )}
-            {profile.portfolio && (
-              <a
-                href={profile.portfolio}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-[#111827] dark:hover:text-[#f0f6fc] flex items-center gap-1.5 transition-colors"
+                Edit profile
+              </button>
+
+              <button
+                type="button"
+                onClick={handleShareProfile}
+                className="w-full py-1 px-3 bg-[#151b23] hover:bg-[#21262d] border border-[#3d444d] rounded-md text-[11px] font-medium text-[#9198a1] hover:text-[#f0f6fc] transition-colors"
               >
-                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
-                Personal Website
-              </a>
-            )}
-          </div>
-        </div>
-
-        {/* Skills & Learning Matrix (Dark Tritanopia High Contrast) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-5 border-t border-[#E5E7EB] dark:border-[#3d444d]">
-          <div>
-            <div className="flex items-center justify-between mb-2.5">
-              <span className="text-[0.68rem] font-mono uppercase tracking-wider text-[#9CA3AF] dark:text-[#656c76] font-semibold">
-                Known Competencies & Stack ({profile.skills.length})
-              </span>
-            </div>
-            <div className="flex flex-wrap gap-1.5">
-              {profile.skills.map((skill) => (
-                <span
-                  key={skill}
-                  className="font-mono text-xs bg-[#ddf4ff] dark:bg-[rgba(56,139,253,0.15)] text-[#0969da] dark:text-[#79c0ff] border border-[#54aeff]/30 dark:border-[rgba(56,139,253,0.4)] px-2.5 py-1 rounded-lg font-medium"
-                >
-                  ✓ {skill}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <div className="flex items-center justify-between mb-2.5">
-              <span className="text-[0.68rem] font-mono uppercase tracking-wider text-[#9CA3AF] dark:text-[#656c76] font-semibold">
-                Currently Exploring / Learning Targets ({profile.learningInterests.length})
-              </span>
-            </div>
-            <div className="flex flex-wrap gap-1.5">
-              {profile.learningInterests.map((interest) => (
-                <span
-                  key={interest}
-                  className="font-mono text-xs bg-[#F7F8FC] dark:bg-[#010409] text-[#4B5563] dark:text-[#9198a1] border border-[#E5E7EB] dark:border-[#3d444d] px-2.5 py-1 rounded-lg font-medium"
-                >
-                  ⚡ {interest}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Navigation Sub-Tabs */}
-      <div className="flex items-center gap-2 mb-8 border-b border-[#E5E7EB] dark:border-[#3d444d] pb-3 overflow-x-auto">
-        <button
-          onClick={() => setActiveTab('overview')}
-          className={tabButtonClass('overview')}
-        >
-          My Projects & Applications
-        </button>
-
-        <button
-          onClick={() => setActiveTab('recommendations')}
-          className={tabButtonClass('recommendations')}
-        >
-          <span>Recommended Roles</span>
-          <span className="px-1.5 py-0.2 rounded-full bg-[#cf222e] dark:bg-[#ff7b72] text-white dark:text-[#0d1117] text-[0.62rem] font-bold">
-            {recommendedRoles.length}
-          </span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab('collaborators')}
-          className={tabButtonClass('collaborators')}
-        >
-          <span>Peer Collaborator Discovery</span>
-          <span className="px-1.5 py-0.2 rounded-full bg-[#F7F8FC] dark:bg-[#010409] border border-[#E5E7EB] dark:border-[#3d444d] text-[#6B7280] dark:text-[#9198a1] text-[0.62rem] font-bold">
-            {mockPeerCollaborators.length}
-          </span>
-        </button>
-      </div>
-
-      {/* TAB CONTENT 1: OVERVIEW (My Projects & Applications) */}
-      {activeTab === 'overview' && (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          
-          {/* Published Projects */}
-          <div className="lg:col-span-2 space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-bold text-[#111827] dark:text-[#f0f6fc]">Published Projects</h2>
-              <span className="text-xs font-mono text-[#9CA3AF] dark:text-[#656c76]">{userProjects.length} Active</span>
+                {copiedLink ? '✓ Copied Profile URL' : 'Share profile'}
+              </button>
             </div>
 
-            {userProjects.length === 0 ? (
-              <div className="bg-white dark:bg-[#151b23] border border-[#E5E7EB] dark:border-[#3d444d] rounded-2xl p-8 text-center text-sm text-[#6B7280] dark:text-[#9198a1] shadow-xs">
-                No projects published yet. Click "Publish Project" to showcase your innovation!
+            {/* Followers / Following Stats */}
+            <div className="flex items-center gap-2 text-xs text-[#9198a1]">
+              <svg className="w-4 h-4 fill-current" viewBox="0 0 16 16">
+                <path d="M2 5.5a3.5 3.5 0 1 1 5.898 2.549 5.508 5.508 0 0 1 3.034 4.084.75.75 0 1 1-1.482.235 4.002 4.002 0 0 0-7.899 0 .75.75 0 0 1-1.482-.236A5.507 5.507 0 0 1 3.102 8.05 3.493 3.493 0 0 1 2 5.5ZM11 4a3.001 3.001 0 0 1 2.22 5.018 5.01 5.01 0 0 1 2.56 3.012.749.749 0 0 1-.512.924.75.75 0 0 1-.924-.513 3.51 3.51 0 0 0-2.316-2.52.75.75 0 0 1-.482-.72 1.5 1.5 0 1 0-2.091-1.393.75.75 0 0 1-.741-.75A3 3 0 0 1 11 4Zm-5.5 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z" />
+              </svg>
+              <span><strong className="text-[#f0f6fc]">42</strong> followers</span>
+              <span>·</span>
+              <span><strong className="text-[#f0f6fc]">18</strong> following</span>
+            </div>
+
+            {/* Profile Metadata */}
+            <div className="space-y-2 pt-2 border-t border-[#3d444d] text-xs text-[#f0f6fc]">
+              <div className="flex items-center gap-2">
+                <span className="text-[#9198a1]">🏢</span>
+                <span className="truncate">{profile.institution}</span>
               </div>
-            ) : (
-              <div className="space-y-4">
-                {userProjects.map((p) => (
-                  <div
-                    key={p.id}
-                    className="bg-white dark:bg-[#151b23] border border-[#E5E7EB] dark:border-[#3d444d] hover:border-[#1f6feb]/50 rounded-2xl p-5 sm:p-6 transition-all shadow-xs"
+              <div className="flex items-center gap-2">
+                <span className="text-[#9198a1]">📍</span>
+                <span>{profile.location}</span>
+              </div>
+              {profile.portfolio && (
+                <div className="flex items-center gap-2 truncate">
+                  <span className="text-[#9198a1]">🔗</span>
+                  <a
+                    href={profile.portfolio}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#58a6ff] hover:underline truncate"
                   >
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-xl">{p.icon || '🚀'}</span>
-                          <Link
-                            to={`/projects/${p.id}`}
-                            className="font-bold text-lg text-[#111827] dark:text-[#f0f6fc] hover:text-[#1f6feb] dark:hover:text-[#58a6ff] transition-colors"
-                          >
-                            {p.title}
-                          </Link>
-                        </div>
-                        <p className="text-xs text-[#6B7280] dark:text-[#9198a1] mt-1.5 leading-relaxed">{p.pitch}</p>
-                        <div className="flex flex-wrap gap-1.5 mt-3">
-                          {p.techStack.map((tech) => (
-                            <span
-                              key={tech}
-                              className="text-xs font-mono bg-[#F7F8FC] dark:bg-[#010409] text-[#4B5563] dark:text-[#9198a1] px-2 py-0.5 rounded border border-[#E5E7EB] dark:border-[#3d444d]"
-                            >
-                              {tech}
+                    {profile.portfolio}
+                  </a>
+                </div>
+              )}
+              {profile.github && (
+                <div className="flex items-center gap-2">
+                  <span className="text-[#9198a1]">🐙</span>
+                  <a
+                    href={profile.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#58a6ff] hover:underline"
+                  >
+                    @{profile.handle}
+                  </a>
+                </div>
+              )}
+            </div>
+
+            {/* GitHub Achievements Badges */}
+            <div className="pt-3 border-t border-[#3d444d] space-y-2">
+              <h3 className="font-bold text-xs text-[#f0f6fc]">Achievements</h3>
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="px-2 py-1 rounded bg-[#151b23] border border-[#3d444d] text-xs flex items-center gap-1.5" title="Arctic Code Vault Contributor">
+                  <span>❄️</span>
+                  <span className="text-[11px] font-medium text-[#9198a1]">Arctic Vault</span>
+                </span>
+                <span className="px-2 py-1 rounded bg-[#151b23] border border-[#3d444d] text-xs flex items-center gap-1.5" title="Pull Shark">
+                  <span>🦈</span>
+                  <span className="text-[11px] font-medium text-[#9198a1]">Pull Shark</span>
+                </span>
+                <span className="px-2 py-1 rounded bg-[#151b23] border border-[#3d444d] text-xs flex items-center gap-1.5" title="Quickdraw">
+                  <span>⚡</span>
+                  <span className="text-[11px] font-medium text-[#9198a1]">Quickdraw</span>
+                </span>
+              </div>
+            </div>
+
+            {/* Known Stack Chips (Tritanopia Cyan) */}
+            <div className="pt-3 border-t border-[#3d444d] space-y-2">
+              <h3 className="font-bold text-xs text-[#f0f6fc]">Verified Competencies</h3>
+              <div className="flex flex-wrap gap-1">
+                {profile.skills.map((s) => (
+                  <span key={s} className="px-2 py-0.5 rounded bg-[rgba(56,139,253,0.15)] text-[#79c0ff] border border-[rgba(56,139,253,0.3)] text-[11px] font-mono">
+                    ✓ {s}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+          </aside>
+
+          {/* =============================================================== */}
+          {/* RIGHT COLUMN: GITHUB USER OVERVIEW CONTENT (approx 8-9 cols)     */}
+          {/* =============================================================== */}
+          <main className="md:col-span-8 lg:col-span-9 space-y-8">
+            
+            {/* OVERVIEW TAB */}
+            {activeTab === 'overview' && (
+              <>
+                {/* 1. PINNED REPOSITORIES SECTION (GitHub 2-column Grid) */}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between text-xs">
+                    <h2 className="font-semibold text-sm text-[#f0f6fc]">Pinned</h2>
+                    <button
+                      type="button"
+                      onClick={onOpenCreateWizard}
+                      className="text-[#58a6ff] hover:underline font-medium"
+                    >
+                      + New Repository
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {userProjects.map((p) => (
+                      <div
+                        key={p.id}
+                        className="p-4 border border-[#3d444d] rounded-md bg-[#151b23] flex flex-col justify-between hover:border-[#58a6ff]/50 transition-colors shadow-xs"
+                      >
+                        <div>
+                          <div className="flex items-center justify-between gap-2 mb-1.5">
+                            <div className="flex items-center gap-2 truncate">
+                              <span className="text-sm">{p.icon || '📁'}</span>
+                              <Link
+                                to={`/projects/${p.id}`}
+                                className="font-semibold text-sm text-[#58a6ff] hover:underline truncate"
+                              >
+                                {p.title}
+                              </Link>
+                            </div>
+                            <span className="text-[10px] font-mono px-2 py-0.2 rounded-full border border-[#3d444d] text-[#9198a1]">
+                              Public
                             </span>
+                          </div>
+
+                          <p className="text-xs text-[#9198a1] line-clamp-2 leading-relaxed mb-3">
+                            {p.pitch}
+                          </p>
+                        </div>
+
+                        <div className="flex items-center gap-4 text-xs text-[#9198a1] pt-2 border-t border-[#3d444d]/40">
+                          <span className="flex items-center gap-1.5">
+                            <span className="w-2.5 h-2.5 rounded-full bg-[#3178c6]" />
+                            <span className="text-[11px] font-mono">{p.techStack[0] || 'TypeScript'}</span>
+                          </span>
+                          <span className="flex items-center gap-1 text-[11px]">
+                            <span>★</span> 38
+                          </span>
+                          <span className="flex items-center gap-1 text-[11px]">
+                            <span>⑂</span> 4
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 2. GITHUB 52-WEEK CONTRIBUTION ACTIVITY HEATMAP GRAPH */}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between text-xs">
+                    <h2 className="font-semibold text-sm text-[#f0f6fc]">
+                      384 contributions in the last year
+                    </h2>
+                    <span className="text-[#9198a1] font-mono text-xs">Contribution settings ▾</span>
+                  </div>
+
+                  <div className="p-4 border border-[#3d444d] rounded-md bg-[#151b23] overflow-x-auto">
+                    <div className="inline-flex gap-1">
+                      {heatmapColumns.map((col, cIdx) => (
+                        <div key={cIdx} className="flex flex-col gap-1">
+                          {col.map((colorClass, dIdx) => (
+                            <div
+                              key={dIdx}
+                              className={`w-2.5 h-2.5 rounded-[2px] ${colorClass}`}
+                              title={`Activity on week ${cIdx + 1}, day ${dIdx + 1}`}
+                            />
+                          ))}
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Heatmap Legend */}
+                    <div className="flex items-center justify-between text-[11px] text-[#9198a1] pt-3 mt-3 border-t border-[#3d444d]">
+                      <a href="#activity" className="text-[#58a6ff] hover:underline">
+                        Learn how we count contributions
+                      </a>
+                      <div className="flex items-center gap-1.5">
+                        <span>Less</span>
+                        <span className="w-2.5 h-2.5 rounded-[2px] bg-[#161b22]" />
+                        <span className="w-2.5 h-2.5 rounded-[2px] bg-[#0c2d6b]" />
+                        <span className="w-2.5 h-2.5 rounded-[2px] bg-[#1158c7]" />
+                        <span className="w-2.5 h-2.5 rounded-[2px] bg-[#388bfd]" />
+                        <span className="w-2.5 h-2.5 rounded-[2px] bg-[#79c0ff]" />
+                        <span>More</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3. CONTRIBUTION ACTIVITY TIMELINE */}
+                <div className="space-y-3">
+                  <h3 className="font-semibold text-sm text-[#f0f6fc]">Contribution activity</h3>
+                  
+                  <div className="border border-[#3d444d] rounded-md bg-[#151b23] divide-y divide-[#3d444d] text-xs">
+                    <div className="p-4 flex items-start gap-3">
+                      <span className="text-base text-[#79c0ff] mt-0.5">📦</span>
+                      <div className="space-y-1">
+                        <div className="font-bold text-[#f0f6fc]">
+                          Created 2 repositories
+                        </div>
+                        <div className="text-[#9198a1] text-xs">
+                          {userProjects.map((p) => (
+                            <Link key={p.id} to={`/projects/${p.id}`} className="text-[#58a6ff] hover:underline block">
+                              {p.id} · {p.pitch}
+                            </Link>
                           ))}
                         </div>
                       </div>
+                    </div>
+
+                    <div className="p-4 flex items-start gap-3">
+                      <span className="text-base text-[#ff7b72] mt-0.5">⚡</span>
+                      <div className="space-y-1">
+                        <div className="font-bold text-[#f0f6fc]">
+                          Flagged 3 engineering skill gaps
+                        </div>
+                        <p className="text-xs text-[#9198a1]">
+                          Campus EcoSync · MedVision-AI · StudyMate AI
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* REPOSITORIES TAB */}
+            {activeTab === 'repositories' && (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between pb-3 border-b border-[#3d444d]">
+                  <input
+                    type="text"
+                    placeholder="Find a repository..."
+                    className="px-3 py-1.5 bg-[#010409] border border-[#3d444d] rounded-md text-xs text-[#f0f6fc] w-72 focus:outline-none focus:border-[#58a6ff]"
+                    readOnly
+                  />
+                  <button
+                    type="button"
+                    onClick={onOpenCreateWizard}
+                    className="px-3 py-1.5 bg-[#1f6feb] hover:bg-[#2a7aef] text-white font-semibold rounded-md text-xs shadow-xs"
+                  >
+                    + New
+                  </button>
+                </div>
+
+                <div className="divide-y divide-[#3d444d] border border-[#3d444d] rounded-md bg-[#151b23]">
+                  {userProjects.map((p) => (
+                    <div key={p.id} className="p-4 flex items-start justify-between gap-4 text-xs">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <Link
+                            to={`/projects/${p.id}`}
+                            className="font-bold text-base text-[#58a6ff] hover:underline"
+                          >
+                            {p.id}
+                          </Link>
+                          <span className="text-[10px] font-mono border border-[#3d444d] rounded-full px-2 py-0.2 text-[#9198a1]">
+                            Public
+                          </span>
+                        </div>
+                        <p className="text-xs text-[#9198a1] mt-1.5 max-w-xl">{p.pitch}</p>
+                        
+                        <div className="flex items-center gap-4 text-[11px] text-[#9198a1] mt-3">
+                          <span className="flex items-center gap-1.5">
+                            <span className="w-2.5 h-2.5 rounded-full bg-[#3178c6]" />
+                            <span className="font-mono">{p.techStack[0] || 'TypeScript'}</span>
+                          </span>
+                          <span>★ 38</span>
+                          <span>Updated 3 hours ago</span>
+                        </div>
+                      </div>
+
                       <Link
                         to={`/projects/${p.id}`}
-                        className="text-xs font-semibold text-[#1f6feb] dark:text-[#58a6ff] hover:text-[#2a7aef] dark:hover:text-[#79c0ff] whitespace-nowrap pt-1 flex items-center gap-1"
+                        className="px-3 py-1 bg-[#21262d] hover:bg-[#30363d] border border-[#3d444d] rounded-md text-xs font-semibold text-[#f0f6fc] whitespace-nowrap"
                       >
-                        Project Hub ➔
+                        Star
                       </Link>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             )}
-          </div>
 
-          {/* Outgoing Applications */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-bold text-[#111827] dark:text-[#f0f6fc]">My Applications</h2>
-              <span className="text-xs font-mono text-[#9CA3AF] dark:text-[#656c76]">{userApplications.length} Total</span>
-            </div>
-
-            <div className="bg-white dark:bg-[#151b23] border border-[#E5E7EB] dark:border-[#3d444d] rounded-2xl p-5 space-y-3 shadow-xs">
-              {userApplications.length === 0 ? (
-                <p className="text-xs text-[#6B7280] dark:text-[#9198a1] text-center py-4">
-                  No active applications. Explore projects in the directory to find open roles!
-                </p>
-              ) : (
-                userApplications.map((app) => (
-                  <div key={app.id} className="p-3.5 bg-[#F7F8FC] dark:bg-[#010409] rounded-xl border border-[#E5E7EB] dark:border-[#3d444d]">
-                    <div className="flex items-center justify-between mb-1.5">
-                      <span className="font-semibold text-xs text-[#111827] dark:text-[#f0f6fc] truncate max-w-[160px]">{app.projectTitle}</span>
-                      <span
-                        className={`text-[0.62rem] font-sans uppercase font-bold px-2 py-0.5 rounded-full ${
-                          app.status === 'approved'
-                            ? 'bg-[#ddf4ff] dark:bg-[rgba(56,139,253,0.15)] text-[#0969da] dark:text-[#79c0ff] border border-[#54aeff]/30 dark:border-[rgba(56,139,253,0.4)]'
-                            : app.status === 'pending'
-                            ? 'bg-[#ffebe9] dark:bg-[rgba(248,81,73,0.15)] text-[#cf222e] dark:text-[#ff7b72] border border-[#ff8182]/30 dark:border-[rgba(248,81,73,0.45)]'
-                            : 'bg-[#F7F8FC] dark:bg-[#010409] text-[#6B7280] dark:text-[#9198a1] border border-[#E5E7EB] dark:border-[#3d444d]'
-                        }`}
-                      >
-                        {app.status}
-                      </span>
-                    </div>
-                    <div className="text-xs text-[#1f6feb] dark:text-[#58a6ff] font-semibold">{app.roleName}</div>
-                    <div className="text-[0.68rem] text-[#9CA3AF] dark:text-[#656c76] mt-1">
-                      Applied {new Date(app.appliedAt).toLocaleDateString()}
-                    </div>
+            {/* RECOMMENDED ROLES TAB */}
+            {activeTab === 'gaps' && (
+              <div className="space-y-4">
+                <div className="border border-[#3d444d] rounded-md bg-[#151b23] p-4 text-xs text-[#9198a1] space-y-1">
+                  <div className="font-bold text-sm text-[#f0f6fc] flex items-center gap-1.5">
+                    <span className="text-[#58a6ff]">⚡</span>
+                    <span>Explainable Skill-Matching Algorithm</span>
                   </div>
-                ))
-              )}
+                  <p>
+                    Open positions across student repositories that directly align with your verified competencies.
+                  </p>
+                </div>
 
-              <Link
-                to="/explore"
-                className="block text-center text-xs font-semibold text-[#1f6feb] dark:text-[#58a6ff] hover:text-[#2a7aef] dark:hover:text-[#79c0ff] pt-3 border-t border-[#E5E7EB] dark:border-[#3d444d]"
-              >
-                Browse Open Roles in Directory ➔
-              </Link>
-            </div>
-          </div>
-        </div>
-      )}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {recommendedRoles.map(({ project, role, matchingSkills, growthSkills }) => (
+                    <div
+                      key={role.id}
+                      className="p-4 border border-[#3d444d] rounded-md bg-[#151b23] flex flex-col justify-between text-xs space-y-3"
+                    >
+                      <div>
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="font-mono text-[11px] text-[#9198a1] truncate">{project.title}</span>
+                          <span className="px-2 py-0.2 rounded-full bg-[rgba(56,139,253,0.15)] text-[#79c0ff] border border-[rgba(56,139,253,0.3)] text-[10px] font-mono">
+                            Match
+                          </span>
+                        </div>
+                        <h4 className="font-bold text-sm text-[#f0f6fc] mt-1">{role.roleName}</h4>
+                        <p className="text-[#9198a1] mt-1 line-clamp-2">{role.description}</p>
 
-      {/* TAB CONTENT 2: EXPLAINABLE AI ROLE RECOMMENDATIONS */}
-      {activeTab === 'recommendations' && (
-        <div className="space-y-6">
-          <div className="bg-white dark:bg-[#151b23] border border-[#E5E7EB] dark:border-[#3d444d] rounded-2xl p-5 sm:p-6 shadow-xs">
-            <div className="flex items-start gap-3.5">
-              <div className="w-9 h-9 rounded-xl bg-[#ddf4ff] dark:bg-[rgba(56,139,253,0.15)] border border-[#1f6feb]/25 dark:border-[#1f6feb]/40 flex items-center justify-center text-[#1f6feb] dark:text-[#79c0ff] flex-shrink-0 mt-0.5">
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="text-sm font-bold text-[#111827] dark:text-[#f0f6fc]">Explainable Skill Matching Engine</h3>
-                <p className="text-xs text-[#6B7280] dark:text-[#9198a1] mt-1 leading-relaxed">
-                  These open positions directly match your known competencies. We calculate transparent skill alignment without opaque chatbots or arbitrary percentage scores.
-                </p>
-              </div>
-            </div>
-          </div>
+                        <div className="mt-3 space-y-2 pt-2 border-t border-[#3d444d]">
+                          <div>
+                            <span className="text-[10px] font-mono text-[#79c0ff] block mb-1">✓ MATCHING SKILLS</span>
+                            <div className="flex flex-wrap gap-1">
+                              {matchingSkills.map((s) => (
+                                <span key={s} className="px-1.5 py-0.2 rounded bg-[rgba(56,139,253,0.15)] text-[#79c0ff] border border-[rgba(56,139,253,0.3)] font-mono text-[10px]">
+                                  {s}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {recommendedRoles.map(({ project, role, matchingSkills, growthSkills }) => (
-              <div
-                key={role.id}
-                className="bg-white dark:bg-[#151b23] border border-[#E5E7EB] dark:border-[#3d444d] hover:border-[#1f6feb]/50 rounded-2xl p-6 transition-all shadow-xs flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-center justify-between gap-2 mb-2">
-                    <span className="text-xs font-mono text-[#9CA3AF] dark:text-[#656c76] truncate">{project.title}</span>
-                    <span className="text-[0.65rem] font-sans font-semibold px-2.5 py-0.5 rounded-full bg-[#ddf4ff] dark:bg-[rgba(56,139,253,0.15)] text-[#1f6feb] dark:text-[#79c0ff] border border-[#1f6feb]/25 dark:border-[#1f6feb]/40">
-                      High Skill Alignment
-                    </span>
-                  </div>
-
-                  <h3 className="text-base font-bold text-[#111827] dark:text-[#f0f6fc] mb-2">{role.roleName}</h3>
-                  <p className="text-xs text-[#6B7280] dark:text-[#9198a1] mb-4 line-clamp-2 leading-relaxed">{role.description}</p>
-
-                  {/* Matching Rationale Box (Tritanopia-Safe: Cyan vs Coral) */}
-                  <div className="p-3.5 rounded-xl bg-[#F7F8FC] dark:bg-[#010409] border border-[#E5E7EB] dark:border-[#3d444d] mb-4 space-y-2.5">
-                    <div>
-                      <div className="text-[0.68rem] font-sans text-[#0969da] dark:text-[#79c0ff] flex items-center gap-1 mb-1 font-bold">
-                        <span>✓</span> MATCHING SKILLS ({matchingSkills.length})
+                          {growthSkills.length > 0 && (
+                            <div>
+                              <span className="text-[10px] font-mono text-[#ff7b72] block mb-1">⚡ GROWTH OPPORTUNITY</span>
+                              <div className="flex flex-wrap gap-1">
+                                {growthSkills.map((s) => (
+                                  <span key={s} className="px-1.5 py-0.2 rounded bg-[rgba(248,81,73,0.15)] text-[#ff7b72] border border-[rgba(248,81,73,0.4)] font-mono text-[10px]">
+                                    Learn {s}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                      <div className="flex flex-wrap gap-1">
-                        {matchingSkills.map((s) => (
-                          <span
-                            key={s}
-                            className="text-xs px-2 py-0.5 rounded bg-[#ddf4ff] dark:bg-[rgba(56,139,253,0.15)] text-[#0969da] dark:text-[#79c0ff] border border-[#54aeff]/30 dark:border-[rgba(56,139,253,0.4)] font-mono font-medium"
-                          >
-                            ✓ {s}
+
+                      <div className="pt-2 flex justify-end">
+                        <Link
+                          to={`/projects/${project.id}`}
+                          className="text-[#58a6ff] hover:underline font-semibold"
+                        >
+                          View Repository ➔
+                        </Link>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* PEER COLLABORATOR DISCOVERY TAB */}
+            {activeTab === 'peers' && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {mockPeerCollaborators.map((c) => (
+                  <div key={c.id} className="p-4 border border-[#3d444d] rounded-md bg-[#151b23] flex flex-col justify-between text-xs space-y-3">
+                    <div>
+                      <div className="flex items-center gap-3">
+                        <img src={c.avatar} alt={c.name} className="w-10 h-10 rounded-full object-cover ring-1 ring-[#3d444d]" />
+                        <div>
+                          <div className="font-bold text-sm text-[#f0f6fc]">{c.name}</div>
+                          <div className="text-[11px] font-mono text-[#9198a1]">{c.handle}</div>
+                        </div>
+                      </div>
+
+                      <p className="text-xs text-[#9198a1] mt-3">{c.recommendationReason}</p>
+                      
+                      <div className="flex flex-wrap gap-1 mt-3">
+                        {c.primarySkills.map((s) => (
+                          <span key={s} className="px-1.5 py-0.2 rounded bg-[#21262d] border border-[#3d444d] font-mono text-[10px] text-[#f0f6fc]">
+                            {s}
                           </span>
                         ))}
                       </div>
                     </div>
 
-                    {growthSkills.length > 0 && (
-                      <div>
-                        <div className="text-[0.68rem] font-sans text-[#cf222e] dark:text-[#ff7b72] flex items-center gap-1 mb-1 font-bold">
-                          <span>⚡</span> GROWTH OPPORTUNITY ({growthSkills.length})
-                        </div>
-                        <div className="flex flex-wrap gap-1">
-                          {growthSkills.map((s) => (
-                            <span
-                              key={s}
-                              className="text-xs px-2 py-0.5 rounded bg-[#ffebe9] dark:bg-[rgba(248,81,73,0.15)] text-[#cf222e] dark:text-[#ff7b72] border border-[#ff8182]/30 dark:border-[rgba(248,81,73,0.45)] font-mono font-medium"
-                            >
-                              ⚡ Learn {s}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
+                    <div className="pt-2 border-t border-[#3d444d] flex items-center justify-between">
+                      <span className="text-[#79c0ff] text-[11px] font-medium">{c.availability}</span>
+                      <a href={c.github} target="_blank" rel="noopener noreferrer" className="text-[#58a6ff] hover:underline">
+                        Profile ↗
+                      </a>
+                    </div>
                   </div>
-                </div>
-
-                <div className="pt-3 border-t border-[#E5E7EB] dark:border-[#3d444d] flex items-center justify-between">
-                  <div className="text-xs text-[#6B7280] dark:text-[#9198a1]">
-                    Lead: <span className="text-[#111827] dark:text-[#f0f6fc] font-semibold">@{project.creatorGithub || project.creatorName}</span>
-                  </div>
-                  <Link
-                    to={`/projects/${project.id}`}
-                    className="text-xs font-semibold text-[#1f6feb] dark:text-[#58a6ff] hover:text-[#2a7aef] dark:hover:text-[#79c0ff] flex items-center gap-1"
-                  >
-                    View in Project Hub ➔
-                  </Link>
-                </div>
+                ))}
               </div>
-            ))}
-          </div>
+            )}
+
+          </main>
         </div>
-      )}
-
-      {/* TAB CONTENT 3: COLLABORATOR DISCOVERY */}
-      {activeTab === 'collaborators' && (
-        <div className="space-y-6">
-          <div className="bg-white dark:bg-[#151b23] border border-[#E5E7EB] dark:border-[#3d444d] rounded-2xl p-5 sm:p-6 shadow-xs">
-            <h3 className="text-sm font-bold text-[#111827] dark:text-[#f0f6fc]">Suggested Peer Builders</h3>
-            <p className="text-xs text-[#6B7280] dark:text-[#9198a1] mt-1 leading-relaxed">
-              Connect with fellow student engineers whose expertise complements your own for hackathon squads, research papers, and open-source initiatives.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {mockPeerCollaborators.map((collab) => (
-              <div
-                key={collab.id}
-                className="bg-white dark:bg-[#151b23] border border-[#E5E7EB] dark:border-[#3d444d] hover:border-[#1f6feb]/50 rounded-2xl p-5 sm:p-6 transition-all shadow-xs flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-center gap-3.5 mb-4">
-                    <img
-                      src={collab.avatar}
-                      alt={collab.name}
-                      className="w-12 h-12 rounded-xl object-cover ring-2 ring-[#E5E7EB] dark:ring-[#3d444d] bg-[#F7F8FC] dark:bg-[#010409]"
-                    />
-                    <div>
-                      <h4 className="text-sm font-bold text-[#111827] dark:text-[#f0f6fc]">{collab.name}</h4>
-                      <div className="text-xs font-mono text-[#6B7280] dark:text-[#9198a1]">{collab.handle}</div>
-                      <div className="text-xs text-[#1f6feb] dark:text-[#58a6ff] font-semibold">{collab.institution}</div>
-                    </div>
-                  </div>
-
-                  {/* Recommendation Rationale */}
-                  <div className="p-3.5 rounded-xl bg-[#F7F8FC] dark:bg-[#010409] border border-[#E5E7EB] dark:border-[#3d444d] mb-4">
-                    <div className="text-[0.65rem] font-mono uppercase tracking-wider text-[#cf222e] dark:text-[#ff7b72] font-bold mb-1">
-                      Why Recommended
-                    </div>
-                    <p className="text-xs text-[#4B5563] dark:text-[#9198a1] leading-relaxed">{collab.recommendationReason}</p>
-                  </div>
-
-                  {/* Tech stack */}
-                  <div className="mb-4">
-                    <div className="text-[0.65rem] font-mono text-[#9CA3AF] dark:text-[#656c76] mb-1.5 uppercase font-semibold">Primary Skills</div>
-                    <div className="flex flex-wrap gap-1">
-                      {collab.primarySkills.map((skill) => (
-                        <span
-                          key={skill}
-                          className="text-xs font-mono px-2 py-0.5 rounded bg-[#F7F8FC] dark:bg-[#010409] border border-[#E5E7EB] dark:border-[#3d444d] text-[#4B5563] dark:text-[#9198a1]"
-                        >
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="pt-3 border-t border-[#E5E7EB] dark:border-[#3d444d] flex items-center justify-between">
-                  <span className="text-xs font-sans font-semibold text-[#0969da] dark:text-[#79c0ff]">{collab.availability}</span>
-                  <a
-                    href={collab.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs font-semibold text-[#1f6feb] dark:text-[#58a6ff] hover:text-[#2a7aef] dark:hover:text-[#79c0ff]"
-                  >
-                    View Work ➔
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      </div>
 
       {/* EDIT PROFILE MODAL */}
       {isEditing && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
-          <div className="bg-white dark:bg-[#151b23] border border-[#E5E7EB] dark:border-[#3d444d] rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 sm:p-8 shadow-xl text-[#111827] dark:text-[#f0f6fc]">
-            <div className="flex items-center justify-between pb-4 border-b border-[#E5E7EB] dark:border-[#3d444d] mb-6">
-              <div>
-                <h3 className="text-lg font-bold text-[#111827] dark:text-[#f0f6fc]">Edit Student Profile</h3>
-                <p className="text-xs text-[#6B7280] dark:text-[#9198a1] mt-0.5">Update your builder info and skill matrix</p>
-              </div>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs">
+          <div className="bg-[#151b23] border border-[#3d444d] rounded-md w-full max-w-xl max-h-[90vh] overflow-y-auto p-6 text-xs text-[#f0f6fc] shadow-2xl">
+            <div className="flex items-center justify-between pb-3 border-b border-[#3d444d] mb-4">
+              <h3 className="font-bold text-sm text-[#f0f6fc]">Edit Profile</h3>
               <button
+                type="button"
                 onClick={() => setIsEditing(false)}
-                className="text-[#9CA3AF] dark:text-[#656c76] hover:text-[#111827] dark:hover:text-[#f0f6fc] text-2xl font-bold w-8 h-8 rounded-lg flex items-center justify-center hover:bg-[#F7F8FC] dark:hover:bg-[#010409] transition-colors"
+                className="text-[#9198a1] hover:text-[#f0f6fc] text-lg font-bold"
               >
                 ✕
               </button>
             </div>
 
-            <form onSubmit={handleSaveProfile} className="space-y-5">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <form onSubmit={handleSaveProfile} className="space-y-4">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-mono text-[#6B7280] dark:text-[#9198a1] mb-1.5 font-semibold">Full Name</label>
+                  <label className="block text-[#9198a1] font-mono uppercase text-[11px] mb-1">Name</label>
                   <input
                     type="text"
+                    required
                     value={editForm.name}
                     onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-[#F7F8FC] dark:bg-[#010409] border border-[#E5E7EB] dark:border-[#3d444d] rounded-xl text-xs text-[#111827] dark:text-[#f0f6fc] focus:outline-none focus:border-[#1f6feb] focus:ring-2 focus:ring-[#1f6feb]/20 placeholder-[#9CA3AF] dark:placeholder-[#656c76]"
-                    required
+                    className="w-full px-3 py-1.5 bg-[#010409] border border-[#3d444d] rounded-md text-[#f0f6fc] focus:outline-none focus:border-[#58a6ff]"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-mono text-[#6B7280] dark:text-[#9198a1] mb-1.5 font-semibold">University / Institution</label>
+                  <label className="block text-[#9198a1] font-mono uppercase text-[11px] mb-1">Institution</label>
                   <input
                     type="text"
                     value={editForm.institution}
                     onChange={(e) => setEditForm({ ...editForm, institution: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-[#F7F8FC] dark:bg-[#010409] border border-[#E5E7EB] dark:border-[#3d444d] rounded-xl text-xs text-[#111827] dark:text-[#f0f6fc] focus:outline-none focus:border-[#1f6feb] focus:ring-2 focus:ring-[#1f6feb]/20 placeholder-[#9CA3AF] dark:placeholder-[#656c76]"
+                    className="w-full px-3 py-1.5 bg-[#010409] border border-[#3d444d] rounded-md text-[#f0f6fc] focus:outline-none focus:border-[#58a6ff]"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-mono text-[#6B7280] dark:text-[#9198a1] mb-1.5 font-semibold">Availability Status</label>
-                <select
-                  value={editForm.availability}
-                  onChange={(e) => setEditForm({ ...editForm, availability: e.target.value as StudentProfile['availability'] })}
-                  className="w-full px-3.5 py-2.5 bg-[#F7F8FC] dark:bg-[#010409] border border-[#E5E7EB] dark:border-[#3d444d] rounded-xl text-xs text-[#111827] dark:text-[#f0f6fc] focus:outline-none focus:border-[#1f6feb] focus:ring-2 focus:ring-[#1f6feb]/20"
-                >
-                  <option value="Available for Hackathons & Projects">Available for Hackathons & Projects</option>
-                  <option value="Busy / Focused on Exams">Busy / Focused on Exams</option>
-                  <option value="Open for Mentorship">Open for Mentorship</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-xs font-mono text-[#6B7280] dark:text-[#9198a1] mb-1.5 font-semibold">Bio</label>
+                <label className="block text-[#9198a1] font-mono uppercase text-[11px] mb-1">Bio</label>
                 <textarea
                   rows={3}
                   value={editForm.bio}
                   onChange={(e) => setEditForm({ ...editForm, bio: e.target.value })}
-                  className="w-full px-3.5 py-2.5 bg-[#F7F8FC] dark:bg-[#010409] border border-[#E5E7EB] dark:border-[#3d444d] rounded-xl text-xs text-[#111827] dark:text-[#f0f6fc] focus:outline-none focus:border-[#1f6feb] focus:ring-2 focus:ring-[#1f6feb]/20 resize-none placeholder-[#9CA3AF] dark:placeholder-[#656c76]"
+                  className="w-full px-3 py-1.5 bg-[#010409] border border-[#3d444d] rounded-md text-[#f0f6fc] focus:outline-none focus:border-[#58a6ff] resize-none"
                 />
               </div>
 
               {/* Known Skills Management */}
               <div>
-                <label className="block text-xs font-mono text-[#6B7280] dark:text-[#9198a1] mb-1.5 font-semibold">Known Competencies</label>
+                <label className="block text-[#9198a1] font-mono uppercase text-[11px] mb-1">Known Competencies</label>
                 <div className="flex gap-2 mb-2">
                   <input
                     type="text"
-                    placeholder="Add skill (e.g. Next.js, Docker)"
+                    placeholder="Add skill (e.g. Docker, Rust)"
                     value={newSkillInput}
                     onChange={(e) => setNewSkillInput(e.target.value)}
                     onKeyDown={(e) => {
@@ -737,115 +811,39 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
                         handleAddSkill();
                       }
                     }}
-                    className="flex-grow px-3.5 py-2 bg-[#F7F8FC] dark:bg-[#010409] border border-[#E5E7EB] dark:border-[#3d444d] rounded-xl text-xs text-[#111827] dark:text-[#f0f6fc] focus:outline-none focus:border-[#1f6feb] placeholder-[#9CA3AF] dark:placeholder-[#656c76]"
+                    className="flex-grow px-3 py-1.5 bg-[#010409] border border-[#3d444d] rounded-md text-[#f0f6fc] focus:outline-none focus:border-[#58a6ff]"
                   />
                   <button
                     type="button"
                     onClick={handleAddSkill}
-                    className="px-3.5 py-2 bg-[#1f6feb] text-white text-xs font-semibold rounded-xl hover:bg-[#2a7aef] shadow-xs"
+                    className="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] border border-[#3d444d] rounded-md font-semibold text-[#f0f6fc]"
                   >
                     Add
                   </button>
                 </div>
-                <div className="flex flex-wrap gap-1.5 max-h-28 overflow-y-auto p-2 bg-[#F7F8FC] dark:bg-[#010409] rounded-xl border border-[#E5E7EB] dark:border-[#3d444d]">
+                <div className="flex flex-wrap gap-1 p-2 bg-[#010409] border border-[#3d444d] rounded-md max-h-24 overflow-y-auto">
                   {editForm.skills.map((skill) => (
-                    <span
-                      key={skill}
-                      className="inline-flex items-center gap-1.5 text-xs font-mono bg-[#ddf4ff] dark:bg-[rgba(56,139,253,0.15)] text-[#0969da] dark:text-[#79c0ff] border border-[#54aeff]/30 dark:border-[rgba(56,139,253,0.4)] px-2.5 py-1 rounded-lg"
-                    >
-                      ✓ {skill}
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveSkill(skill)}
-                        className="text-[#6B7280] dark:text-[#9198a1] hover:text-[#111827] dark:hover:text-[#f0f6fc] ml-1 font-bold"
-                      >
-                        ×
-                      </button>
+                    <span key={skill} className="px-2 py-0.5 rounded bg-[rgba(56,139,253,0.15)] text-[#79c0ff] border border-[rgba(56,139,253,0.3)] font-mono text-[10px] flex items-center gap-1">
+                      {skill}
+                      <button type="button" onClick={() => handleRemoveSkill(skill)} className="text-[#9198a1] hover:text-[#f0f6fc]">×</button>
                     </span>
                   ))}
                 </div>
               </div>
 
-              {/* Learning Interests Management */}
-              <div>
-                <label className="block text-xs font-mono text-[#6B7280] dark:text-[#9198a1] mb-1.5 font-semibold">Learning Targets</label>
-                <div className="flex gap-2 mb-2">
-                  <input
-                    type="text"
-                    placeholder="Add learning target (e.g. Rust, PyTorch)"
-                    value={newInterestInput}
-                    onChange={(e) => setNewInterestInput(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        e.preventDefault();
-                        handleAddInterest();
-                      }
-                    }}
-                    className="flex-grow px-3.5 py-2 bg-[#F7F8FC] dark:bg-[#010409] border border-[#E5E7EB] dark:border-[#3d444d] rounded-xl text-xs text-[#111827] dark:text-[#f0f6fc] focus:outline-none focus:border-[#1f6feb] placeholder-[#9CA3AF] dark:placeholder-[#656c76]"
-                  />
-                  <button
-                    type="button"
-                    onClick={handleAddInterest}
-                    className="px-3.5 py-2 bg-[#1f6feb] text-white text-xs font-semibold rounded-xl hover:bg-[#2a7aef] shadow-xs"
-                  >
-                    Add
-                  </button>
-                </div>
-                <div className="flex flex-wrap gap-1.5 max-h-28 overflow-y-auto p-2 bg-[#F7F8FC] dark:bg-[#010409] rounded-xl border border-[#E5E7EB] dark:border-[#3d444d]">
-                  {editForm.learningInterests.map((interest) => (
-                    <span
-                      key={interest}
-                      className="inline-flex items-center gap-1.5 text-xs font-mono bg-white dark:bg-[#151b23] text-[#4B5563] dark:text-[#9198a1] border border-[#E5E7EB] dark:border-[#3d444d] px-2.5 py-1 rounded-lg"
-                    >
-                      ⚡ {interest}
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveInterest(interest)}
-                        className="text-[#6B7280] dark:text-[#9198a1] hover:text-[#111827] dark:hover:text-[#f0f6fc] ml-1 font-bold"
-                      >
-                        ×
-                      </button>
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Links */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-mono text-[#6B7280] dark:text-[#9198a1] mb-1.5 font-semibold">GitHub URL</label>
-                  <input
-                    type="url"
-                    value={editForm.github}
-                    onChange={(e) => setEditForm({ ...editForm, github: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-[#F7F8FC] dark:bg-[#010409] border border-[#E5E7EB] dark:border-[#3d444d] rounded-xl text-xs text-[#111827] dark:text-[#f0f6fc] focus:outline-none focus:border-[#1f6feb] placeholder-[#9CA3AF] dark:placeholder-[#656c76]"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-mono text-[#6B7280] dark:text-[#9198a1] mb-1.5 font-semibold">Portfolio / Website</label>
-                  <input
-                    type="url"
-                    value={editForm.portfolio}
-                    onChange={(e) => setEditForm({ ...editForm, portfolio: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-[#F7F8FC] dark:bg-[#010409] border border-[#E5E7EB] dark:border-[#3d444d] rounded-xl text-xs text-[#111827] dark:text-[#f0f6fc] focus:outline-none focus:border-[#1f6feb] placeholder-[#9CA3AF] dark:placeholder-[#656c76]"
-                  />
-                </div>
-              </div>
-
-              {/* Actions */}
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#E5E7EB] dark:border-[#3d444d]">
+              <div className="flex justify-end gap-2 pt-3 border-t border-[#3d444d]">
                 <button
                   type="button"
                   onClick={() => setIsEditing(false)}
-                  className="px-4 py-2 rounded-xl text-xs font-sans text-[#6B7280] dark:text-[#9198a1] hover:text-[#111827] dark:hover:text-[#f0f6fc] hover:bg-[#F7F8FC] dark:hover:bg-[#010409] transition-colors"
+                  className="px-3 py-1.5 border border-[#3d444d] rounded-md text-[#9198a1] hover:text-[#f0f6fc]"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 bg-[#1f6feb] hover:bg-[#2a7aef] text-white text-xs font-semibold rounded-xl shadow-xs transition-all"
+                  className="px-4 py-1.5 bg-[#1f6feb] hover:bg-[#2a7aef] text-white font-semibold rounded-md shadow-xs"
                 >
-                  Save Profile
+                  Save
                 </button>
               </div>
             </form>
@@ -853,6 +851,6 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
         </div>
       )}
 
-    </section>
+    </div>
   );
 }
