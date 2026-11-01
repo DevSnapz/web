@@ -12,8 +12,12 @@
           var saved = localStorage.getItem('theme') || localStorage.getItem('devsnapz_theme');
           if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
+            document.documentElement.setAttribute('data-color-mode', 'dark');
+            document.documentElement.setAttribute('data-dark-theme', 'dark_tritanopia');
           } else {
             document.documentElement.classList.remove('dark');
+            document.documentElement.setAttribute('data-color-mode', 'light');
+            document.documentElement.removeAttribute('data-dark-theme');
           }
         } catch (e) {}
       })();

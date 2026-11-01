@@ -32,6 +32,21 @@ module.exports = {
         'studio-muted': '#9CA3AF',
         'studio-success': '#17936C',
         'studio-success-soft': '#ECFDF5',
+
+        // GitHub Primer Dark Tritanopia Tokens
+        'gh-canvas': '#0d1117',
+        'gh-surface': '#151b23',
+        'gh-surface-elevated': '#1c2128',
+        'gh-inset': '#010409',
+        'gh-border': '#3d444d',
+        'gh-border-subtle': '#212830',
+        'gh-fg': '#f0f6fc',
+        'gh-muted': '#9198a1',
+        'gh-subdued': '#656c76',
+        'gh-blue': '#4493f8',
+        'gh-blue-btn': '#1f6feb',
+        'gh-coral': '#ff7b72',
+        'gh-cyan': '#79c0ff',
       },
       fontFamily: {
         sans: ['Inter', 'Plus Jakarta Sans', 'sans-serif'],

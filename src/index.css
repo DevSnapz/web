@@ -5,7 +5,7 @@
 @layer base {
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  /* DevSnapz Studio — Light Theme as Primary Foundation */
+  /* DevSnapz Studio — Light Theme Foundation */
   :root {
     /* Exact Design Tokens */
     --color-brand-primary: #635BFF;
@@ -47,29 +47,48 @@
     --border-g: 1px solid var(--color-brand-primary);
   }
 
-  /* Full Dark Theme Support */
-  .dark {
+  /* GitHub Primer Dark Tritanopia Accessible Theme */
+  .dark,
+  [data-color-mode="dark"],
+  [data-dark-theme="dark_tritanopia"] {
     color-scheme: dark;
-    --color-bg-main: #0B1020;
-    --color-bg-card: #151B2D;
-    --color-bg-elevated: #1E263C;
-    --color-text-primary: #F9FAFB;
-    --color-text-secondary: #A1A1AA;
-    --color-text-muted: #71717A;
-    --color-border: #222F4C;
-    --color-brand-soft: rgba(99, 91, 255, 0.15);
 
-    --bg0: var(--color-bg-main);
-    --bg1: var(--color-bg-card);
-    --bg2: #1E263C;
-    --bg3: #28334E;
-    --bg4: #334062;
-    --ink0: var(--color-text-primary);
-    --ink1: var(--color-text-secondary);
-    --ink2: var(--color-text-muted);
-    --ink3: var(--color-border);
-    --g-glow: rgba(99, 91, 255, 0.2);
-    --border: 1px solid var(--color-border);
+    /* Core Primer Dark Tritanopia Tokens */
+    --color-bg-main: #0d1117;           /* Primer canvas default */
+    --color-bg-card: #151b23;           /* Primer surface/muted background */
+    --color-bg-elevated: #1c2128;       /* Primer elevated overlay */
+    --color-bg-inset: #010409;          /* Primer inset background */
+    --color-border: #3d444d;            /* High-contrast accessible border */
+    --color-border-subtle: #212830;     /* Subtle muted border */
+
+    --color-text-primary: #f0f6fc;      /* High-contrast foreground default */
+    --color-text-secondary: #9198a1;    /* Accessible foreground muted */
+    --color-text-muted: #656c76;        /* Subtle footnote text */
+
+    /* Tritanopia-Safe Accents: Blue & Coral/Red separation */
+    --color-brand-primary: #1f6feb;     /* Primer primary button */
+    --color-brand-hover: #2a7aef;       /* Primer button hover */
+    --color-brand-accent: #ff7b72;      /* Primer Tritanopia high-visibility coral */
+    --color-brand-soft: rgba(56, 139, 253, 0.15); /* Soft blue container */
+
+    --color-success: #79c0ff;           /* Tritanopia: Bright Cyan replaces green */
+    --color-success-soft: rgba(56, 139, 253, 0.15);
+
+    --bg0: #0d1117;
+    --bg1: #151b23;
+    --bg2: #1c2128;
+    --bg3: #3d444d;
+    --bg4: #212830;
+    --ink0: #f0f6fc;
+    --ink1: #9198a1;
+    --ink2: #656c76;
+    --ink3: #3d444d;
+    --g: #4493f8;
+    --g-dim: #1f6feb;
+    --g-glow: rgba(56, 139, 253, 0.2);
+    --g-text: #58a6ff;
+    --gold: #ff7b72;
+    --border: 1px solid #3d444d;
   }
 
   html { scroll-behavior: smooth; }
@@ -81,12 +100,12 @@
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     scrollbar-width: thin;
-    scrollbar-color: rgba(99, 91, 255, 0.3) var(--color-bg-main);
+    scrollbar-color: rgba(56, 139, 253, 0.35) var(--color-bg-main);
   }
 
   * {
     scrollbar-width: thin;
-    scrollbar-color: rgba(99, 91, 255, 0.3) var(--color-bg-main);
+    scrollbar-color: rgba(56, 139, 253, 0.35) var(--color-bg-main);
   }
 
   body::-webkit-scrollbar,
@@ -102,80 +121,148 @@
 
   body::-webkit-scrollbar-thumb,
   *::-webkit-scrollbar-thumb {
-    background: rgba(99, 91, 255, 0.35);
+    background: rgba(56, 139, 253, 0.4);
     border-radius: 999px;
     border: 2px solid var(--color-bg-main);
   }
   body::-webkit-scrollbar-thumb:hover {
-    background: rgba(99, 91, 255, 0.6);
+    background: rgba(56, 139, 253, 0.7);
   }
 
-  /* Seamless Dark Mode Surface & Text Overrides */
+  /* ========================================================= */
+  /* GITHUB DARK TRITANOPIA ACCESSIBLE SURFACE OVERRIDES       */
+  /* ========================================================= */
   .dark nav {
-    background-color: rgba(21, 27, 45, 0.95) !important;
-    border-color: #222F4C !important;
+    background-color: rgba(21, 27, 35, 0.95) !important;
+    border-color: #3d444d !important;
   }
   .dark footer {
-    background-color: #151B2D !important;
-    border-color: #222F4C !important;
+    background-color: #151b23 !important;
+    border-color: #3d444d !important;
   }
   .dark .bg-white,
   .dark .bg-white\/95,
   .dark .bg-white\/90 {
-    background-color: #151B2D !important;
+    background-color: #151b23 !important;
   }
   .dark .bg-\[\#F7F8FC\] {
-    background-color: #0B1020 !important;
+    background-color: #0d1117 !important;
   }
   .dark .hover\:bg-\[\#F7F8FC\]:hover {
-    background-color: #1E263C !important;
+    background-color: #1c2128 !important;
   }
   .dark .hover\:bg-white:hover {
-    background-color: #151B2D !important;
+    background-color: #151b23 !important;
   }
   .dark .text-\[\#111827\] {
-    color: #F9FAFB !important;
+    color: #f0f6fc !important;
   }
   .dark .hover\:text-\[\#111827\]:hover {
-    color: #FFFFFF !important;
+    color: #ffffff !important;
   }
   .dark .text-\[\#6B7280\] {
-    color: #A1A1AA !important;
+    color: #9198a1 !important;
   }
   .dark .text-\[\#4B5563\] {
-    color: #D1D5DB !important;
+    color: #c9d1d9 !important;
   }
   .dark .text-\[\#9CA3AF\] {
-    color: #71717A !important;
+    color: #656c76 !important;
   }
   .dark .border-\[\#E5E7EB\] {
-    border-color: #222F4C !important;
+    border-color: #3d444d !important;
   }
   .dark .border-\[\#E5E7EB\]\/60 {
-    border-color: rgba(34, 47, 76, 0.6) !important;
+    border-color: rgba(61, 68, 77, 0.6) !important;
   }
   .dark .border-b-\[\#E5E7EB\] {
-    border-bottom-color: #222F4C !important;
+    border-bottom-color: #3d444d !important;
   }
   .dark .border-t-\[\#E5E7EB\] {
-    border-top-color: #222F4C !important;
+    border-top-color: #3d444d !important;
   }
+  
+  /* Primary Action and Soft Purple -> GitHub Primer Blue */
   .dark .bg-\[\#F3F1FF\] {
-    background-color: rgba(99, 91, 255, 0.15) !important;
+    background-color: rgba(56, 139, 253, 0.15) !important;
   }
   .dark .hover\:bg-\[\#F3F1FF\]:hover {
-    background-color: rgba(99, 91, 255, 0.22) !important;
+    background-color: rgba(56, 139, 253, 0.25) !important;
   }
+  .dark .text-\[\#635BFF\] {
+    color: #58a6ff !important;
+  }
+  .dark .hover\:text-\[\#5246C9\]:hover {
+    color: #79c0ff !important;
+  }
+  .dark .bg-\[\#635BFF\] {
+    background-color: #1f6feb !important;
+  }
+  .dark .hover\:bg-\[\#5246C9\]:hover,
+  .dark .hover\:bg-\[\#5249e0\]:hover {
+    background-color: #2a7aef !important;
+  }
+  .dark .border-\[\#635BFF\] {
+    border-color: #1f6feb !important;
+  }
+  .dark .border-\[\#635BFF\]\/20,
+  .dark .border-\[\#635BFF\]\/25,
+  .dark .border-\[\#635BFF\]\/30 {
+    border-color: rgba(56, 139, 253, 0.4) !important;
+  }
+
+  /* Tritanopia Coral / Red (Open, Attention, Skill Gap Matrix) */
+  .dark .text-\[\#F9735B\] {
+    color: #ff7b72 !important;
+  }
+  .dark .bg-\[\#F9735B\] {
+    background-color: #da3633 !important;
+  }
+  .dark .border-\[\#F9735B\],
+  .dark .border-\[\#F9735B\]\/30,
+  .dark .border-\[\#F9735B\]\/40 {
+    border-color: rgba(248, 81, 73, 0.45) !important;
+  }
+  .dark .bg-\[\#FFF5F3\],
+  .dark .bg-\[\#F9735B\]\/10,
+  .dark .bg-\[\#F9735B\]\/15 {
+    background-color: rgba(248, 81, 73, 0.15) !important;
+  }
+
+  /* Tritanopia Success / Verified (Green -> High-Contrast Cyan/Sky Blue) */
+  .dark .text-\[\#17936C\] {
+    color: #79c0ff !important;
+  }
+  .dark .bg-\[\#17936C\] {
+    background-color: #1f6feb !important;
+  }
+  .dark .border-\[\#17936C\],
+  .dark .border-\[\#17936C\]\/20,
+  .dark .border-\[\#17936C\]\/25,
+  .dark .border-\[\#17936C\]\/30 {
+    border-color: rgba(56, 139, 253, 0.4) !important;
+  }
+  .dark .bg-\[\#ECFDF5\] {
+    background-color: rgba(56, 139, 253, 0.15) !important;
+  }
+
+  /* High-Contrast Inset Inputs & Controls */
   .dark input,
   .dark textarea,
   .dark select {
-    background-color: #0B1020 !important;
-    border-color: #222F4C !important;
-    color: #F9FAFB !important;
+    background-color: #010409 !important;
+    border-color: #3d444d !important;
+    color: #f0f6fc !important;
+  }
+  .dark input:focus,
+  .dark textarea:focus,
+  .dark select:focus {
+    border-color: #58a6ff !important;
+    box-shadow: 0 0 0 2px rgba(56, 139, 253, 0.3) !important;
   }
   .dark input::placeholder,
   .dark textarea::placeholder {
-    color: #71717A !important;
+    color: #656c76 !important;
   }
 
   .manifesto-hl {
