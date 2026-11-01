@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { ZapIcon } from './Octicons';
 
 export default function Ecosystem() {
   return (
@@ -47,7 +48,10 @@ export default function Ecosystem() {
             </div>
             <div>
               <div className="text-[0.7rem] font-mono text-ink2 uppercase tracking-wider">Identified Gaps</div>
-              <div className="text-sm font-semibold text-gold mt-1">⚡ PostgreSQL · UI/UX</div>
+              <div className="text-sm font-semibold text-gold mt-1 flex items-center gap-1">
+                <ZapIcon className="w-3.5 h-3.5 fill-current text-gold" />
+                <span>PostgreSQL · UI/UX</span>
+              </div>
             </div>
             <div>
               <div className="text-[0.7rem] font-mono text-ink2 uppercase tracking-wider">Founding Stack</div>

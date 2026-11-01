@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { RepoIcon, ZapIcon, CheckIcon, StarIcon, ForkIcon } from './Octicons';
 
 export default function Hero() {
   const handleHowItWorksClick = (e: React.MouseEvent) => {
@@ -65,15 +66,14 @@ export default function Hero() {
           <div>
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <svg className="w-4 h-4 fill-current text-[#9198a1]" viewBox="0 0 16 16">
-                  <path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z" />
-                </svg>
+                <RepoIcon className="w-4 h-4 fill-current text-[#9198a1]" />
                 <span className="font-bold text-sm text-[#58a6ff]">
                   campus-recycling-app
                 </span>
               </div>
-              <span className="text-[10px] font-mono font-semibold text-[#ff7b72] bg-[rgba(248,81,73,0.15)] border border-[rgba(248,81,73,0.4)] px-2 py-0.2 rounded-full">
-                ⚡ 2 Gaps Open
+              <span className="text-[10px] font-mono font-semibold text-[#ff7b72] bg-[rgba(248,81,73,0.15)] border border-[rgba(248,81,73,0.4)] px-2 py-0.2 rounded-full flex items-center gap-1">
+                <ZapIcon className="w-3 h-3 fill-current text-[#ff7b72]" />
+                <span>2 Gaps Open</span>
               </span>
             </div>
 
@@ -99,8 +99,14 @@ export default function Hero() {
           {/* Mini Skill-Gap Visualizer Box inside Hero */}
           <div className="bg-[#010409] border border-[#3d444d] rounded-md p-3.5 space-y-2 text-xs">
             <div className="flex items-center justify-between text-[11px]">
-              <span className="text-[#79c0ff] font-semibold">✓ Known: React, Node.js</span>
-              <span className="text-[#ff7b72] font-semibold">⚡ Need: Embedded C++</span>
+              <span className="text-[#79c0ff] font-semibold flex items-center gap-1">
+                <CheckIcon className="w-3 h-3 fill-current" />
+                <span>Known: React, Node.js</span>
+              </span>
+              <span className="text-[#ff7b72] font-semibold flex items-center gap-1">
+                <ZapIcon className="w-3 h-3 fill-current" />
+                <span>Need: Embedded C++</span>
+              </span>
             </div>
             <div className="w-full bg-[#151b23] h-1.5 rounded-full overflow-hidden flex">
               <div className="bg-[#79c0ff] h-full" style={{ width: '65%' }} />
@@ -110,8 +116,14 @@ export default function Hero() {
 
           <div className="pt-1 flex items-center justify-between text-xs">
             <div className="flex items-center gap-3 text-[#9198a1] font-mono text-[11px]">
-              <span>★ 42</span>
-              <span>⑂ 9</span>
+              <span className="flex items-center gap-1">
+                <StarIcon className="w-3.5 h-3.5 fill-current" />
+                <span>42</span>
+              </span>
+              <span className="flex items-center gap-1">
+                <ForkIcon className="w-3.5 h-3.5 fill-current" />
+                <span>9</span>
+              </span>
               <span>Updated today</span>
             </div>
             <Link

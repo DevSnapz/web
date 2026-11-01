@@ -1,6 +1,26 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Project, OpenRole, SponsorshipTier } from '../types';
+import {
+  RepoIcon,
+  StarIcon,
+  StarFillIcon,
+  ForkIcon,
+  GitBranchIcon,
+  GitPullRequestIcon,
+  IssueOpenedIcon,
+  IssueClosedIcon,
+  HeartIcon,
+  ZapIcon,
+  CheckIcon,
+  EyeIcon,
+  CommentDiscussionIcon,
+  SearchIcon,
+  GlobeIcon,
+  BookIcon,
+  LinkIcon,
+  CodeIcon,
+} from '../components/Octicons';
 
 interface ProjectDetailPageProps {
   projects: Project[];
@@ -64,7 +84,7 @@ export default function ProjectDetailPage({
     return (
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 py-20 text-center">
         <div className="bg-[#151b23] border border-[#3d444d] rounded-md p-12 max-w-md mx-auto shadow-xs">
-          <div className="text-4xl mb-4">🔍</div>
+          <SearchIcon className="w-10 h-10 fill-current text-[#9198a1] mx-auto mb-4" />
           <h2 className="font-bold text-xl text-[#f0f6fc] mb-2">Repository Not Found</h2>
           <p className="text-xs text-[#9198a1] mb-6">
             The repository you are looking for may have been removed or does not exist.
@@ -210,7 +230,7 @@ export default function ProjectDetailPage({
                 onClick={() => setActiveTab('sponsor')}
                 className="flex items-center gap-1.5 px-3 py-1 bg-[#21262d] hover:bg-[#30363d] text-[#ff7b72] border border-[#ff7b72]/40 rounded-md font-semibold transition-colors shadow-xs"
               >
-                <span>♡</span>
+                <HeartIcon className="w-3.5 h-3.5 fill-current text-[#ff7b72]" />
                 <span>Sponsor</span>
               </button>
 
@@ -220,9 +240,7 @@ export default function ProjectDetailPage({
                   type="button"
                   className="px-2.5 py-1 hover:bg-[#30363d] text-[#f0f6fc] font-semibold flex items-center gap-1"
                 >
-                  <svg className="w-3.5 h-3.5 fill-current text-[#9198a1]" viewBox="0 0 16 16">
-                    <path d="M8 2c1.981 0 3.671.992 4.933 2.078 1.27 1.091 2.187 2.345 2.637 3.023a1.62 1.62 0 0 1 0 1.798c-.45.678-1.367 1.932-2.637 3.023C11.67 13.008 9.981 14 8 14c-1.981 0-3.671-.992-4.933-2.078C1.797 10.83.88 9.577.43 8.899a1.62 1.62 0 0 1 0-1.798c.45-.678 1.367-1.932 2.637-3.023C4.33 2.992 6.019 2 8 2ZM1.679 7.932a.12.12 0 0 0 0 .136c.411.62 1.259 1.766 2.41 2.756C5.243 11.815 6.643 12.5 8 12.5c1.357 0 2.757-.685 3.91-1.676 1.152-.99 2-2.136 2.411-2.756a.12.12 0 0 0 0-.136c-.411-.62-1.259-1.766-2.41-2.756C10.757 4.185 9.357 3.5 8 3.5c-1.357 0-2.757.685-3.91 1.676-1.152.99-2 2.136-2.411 2.756ZM8 5a3 3 0 1 1 0 6 3 3 0 0 1 0-6Z" />
-                  </svg>
+                  <EyeIcon className="w-3.5 h-3.5 fill-current text-[#9198a1]" />
                   <span>Watch</span>
                 </button>
                 <span className="px-2 py-1 bg-[#151b23] border-l border-[#3d444d] text-[#9198a1] font-mono text-[11px]">
@@ -236,9 +254,7 @@ export default function ProjectDetailPage({
                   type="button"
                   className="px-2.5 py-1 hover:bg-[#30363d] text-[#f0f6fc] font-semibold flex items-center gap-1"
                 >
-                  <svg className="w-3.5 h-3.5 fill-current text-[#9198a1]" viewBox="0 0 16 16">
-                    <path d="M5 3.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm0 2.122a2.25 2.25 0 1 0-1.5 0v.878A2.25 2.25 0 0 0 5.75 8.5h1.5v2.128a2.251 2.251 0 1 0 1.5 0V8.5h1.5a2.25 2.25 0 0 0 2.25-2.25v-.878a2.25 2.25 0 1 0-1.5 0v.878a.75.75 0 0 1-.75.75h-4.5A.75.75 0 0 1 5 6.25v-.878Zm3.75 7.378a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm3-8.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
-                  </svg>
+                  <ForkIcon className="w-3.5 h-3.5 fill-current text-[#9198a1]" />
                   <span>Fork</span>
                 </button>
                 <span className="px-2 py-1 bg-[#151b23] border-l border-[#3d444d] text-[#9198a1] font-mono text-[11px]">
@@ -255,7 +271,11 @@ export default function ProjectDetailPage({
                     isStarred ? 'text-[#ff7b72]' : 'text-[#f0f6fc]'
                   }`}
                 >
-                  <span>★</span>
+                  {isStarred ? (
+                    <StarFillIcon className="w-3.5 h-3.5 fill-current text-[#ff7b72]" />
+                  ) : (
+                    <StarIcon className="w-3.5 h-3.5 fill-current text-[#9198a1]" />
+                  )}
                   <span>{isStarred ? 'Starred' : 'Star'}</span>
                 </button>
                 <span className="px-2 py-1 bg-[#151b23] border-l border-[#3d444d] text-[#9198a1] font-mono text-[11px]">
@@ -276,9 +296,7 @@ export default function ProjectDetailPage({
               onClick={() => setActiveTab('code')}
               className={tabItemClass('code')}
             >
-              <svg className="w-4 h-4 fill-current" viewBox="0 0 16 16">
-                <path d="m11.28 3.22 4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L13.94 8l-3.72-3.72a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215Zm-6.56 0a.751.751 0 0 1 1.06 1.06L2.06 8l3.72 3.72a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L.47 8.53a.75.75 0 0 1 0-1.06Z" />
-              </svg>
+              <CodeIcon className="w-4 h-4 fill-current" />
               <span>Code</span>
             </button>
 
@@ -287,7 +305,7 @@ export default function ProjectDetailPage({
               onClick={() => setActiveTab('gaps')}
               className={tabItemClass('gaps')}
             >
-              <span className="text-[#ff7b72]">⚡</span>
+              <ZapIcon className="w-4 h-4 fill-current text-[#ff7b72]" />
               <span>Skill Gaps</span>
               <span className="bg-[#30363d] text-[#f0f6fc] rounded-full px-1.5 py-0.2 text-[10px] font-mono">
                 {allGapSkills.length}
@@ -299,10 +317,7 @@ export default function ProjectDetailPage({
               onClick={() => setActiveTab('issues')}
               className={tabItemClass('issues')}
             >
-              <svg className="w-4 h-4 fill-current" viewBox="0 0 16 16">
-                <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z" />
-                <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Z" />
-              </svg>
+              <IssueOpenedIcon className="w-4 h-4 fill-current" />
               <span>Issues</span>
               <span className="bg-[#30363d] text-[#f0f6fc] rounded-full px-1.5 py-0.2 text-[10px] font-mono">
                 {project.contributeIssues?.length || 0}
@@ -314,9 +329,7 @@ export default function ProjectDetailPage({
               onClick={() => setActiveTab('pulls')}
               className={tabItemClass('pulls')}
             >
-              <svg className="w-4 h-4 fill-current" viewBox="0 0 16 16">
-                <path d="M1.5 3.25a2.25 2.25 0 1 1 3 2.122v5.256a2.251 2.251 0 1 1-1.5 0V5.372A2.25 2.25 0 0 1 1.5 3.25Zm5.677-.177L9.5 5.396V4h3.25a.75.75 0 0 1 .75.75v5.372a2.25 2.25 0 1 1-1.5 0V5.5H9.5v1.396l-2.323-2.323a.75.75 0 0 1 0-1.06l2.323-2.323V2.5H12a2.25 2.25 0 0 1 2.25 2.25v5.372a2.25 2.25 0 1 1-1.5 0V4.75a.75.75 0 0 0-.75-.75H9.5V2.604Z" />
-              </svg>
+              <GitPullRequestIcon className="w-4 h-4 fill-current" />
               <span>Pull requests (Roles)</span>
               <span className="bg-[#30363d] text-[#f0f6fc] rounded-full px-1.5 py-0.2 text-[10px] font-mono">
                 {activeOpenRoles.length}
@@ -328,9 +341,7 @@ export default function ProjectDetailPage({
               onClick={() => setActiveTab('discussions')}
               className={tabItemClass('discussions')}
             >
-              <svg className="w-4 h-4 fill-current" viewBox="0 0 16 16">
-                <path d="M1.75 1A1.75 1.75 0 0 0 0 2.75v9.5C0 13.216.784 14 1.75 14H3v1.543a1.458 1.458 0 0 0 2.504.996L8.53 14H14.25A1.75 1.75 0 0 0 16 12.25v-9.5A1.75 1.75 0 0 0 14.25 1H1.75ZM1.5 2.75a.25.25 0 0 1 .25-.25h12.5a.25.25 0 0 1 .25.25v9.5a.25.25 0 0 1-.25.25H8.53a.75.75 0 0 0-.53.22L5 15.443V13.5a.75.75 0 0 0-.75-.75H1.75a.25.25 0 0 1-.25-.25Z" />
-              </svg>
+              <CommentDiscussionIcon className="w-4 h-4 fill-current" />
               <span>Discussions</span>
               <span className="bg-[#30363d] text-[#f0f6fc] rounded-full px-1.5 py-0.2 text-[10px] font-mono">
                 {project.guidanceTopics?.length || 0}
@@ -342,7 +353,7 @@ export default function ProjectDetailPage({
               onClick={() => setActiveTab('sponsor')}
               className={tabItemClass('sponsor')}
             >
-              <span className="text-[#ff7b72]">💖</span>
+              <HeartIcon className="w-4 h-4 fill-current text-[#ff7b72]" />
               <span>Milestones</span>
             </button>
 
@@ -370,7 +381,7 @@ export default function ProjectDetailPage({
                     type="button"
                     className="flex items-center gap-1.5 px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] border border-[#3d444d] rounded-md font-semibold text-[#f0f6fc] shadow-xs"
                   >
-                    <span>⑂</span>
+                    <GitBranchIcon className="w-3.5 h-3.5 fill-current text-[#9198a1]" />
                     <span>main</span>
                     <span className="text-[10px] text-[#9198a1]">▾</span>
                   </button>
@@ -383,9 +394,10 @@ export default function ProjectDetailPage({
                       href={project.liveUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] border border-[#3d444d] rounded-md text-[#f0f6fc] font-semibold flex items-center gap-1"
+                      className="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] border border-[#3d444d] rounded-md text-[#f0f6fc] font-semibold flex items-center gap-1.5"
                     >
-                      <span>🌐 Live Demo</span>
+                      <GlobeIcon className="w-3.5 h-3.5 fill-current text-[#9198a1]" />
+                      <span>Live Demo</span>
                       <span>↗</span>
                     </a>
                   )}
@@ -395,7 +407,8 @@ export default function ProjectDetailPage({
                     onClick={() => setCodeDropdownOpen(!codeDropdownOpen)}
                     className="px-3.5 py-1.5 bg-[#1f6feb] hover:bg-[#2a7aef] text-white font-semibold rounded-md shadow-xs flex items-center gap-1.5"
                   >
-                    <span>&lt; &gt; Code</span>
+                    <CodeIcon className="w-3.5 h-3.5 fill-current text-white" />
+                    <span>Code</span>
                     <span className="text-[10px]">▾</span>
                   </button>
 
@@ -449,7 +462,7 @@ export default function ProjectDetailPage({
               <div className="bg-[#151b23] border border-[#3d444d] rounded-md p-4 space-y-3">
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <span className="text-[#ff7b72] text-sm">⚡</span>
+                    <ZapIcon className="w-4 h-4 fill-current text-[#ff7b72]" />
                     <h3 className="font-bold text-sm text-[#f0f6fc]">
                       DevSnapz Skill-Gap Detection Matrix
                     </h3>
@@ -467,13 +480,14 @@ export default function ProjectDetailPage({
                   {/* Known competencies */}
                   <div className="p-3 bg-[#010409] border border-[#3d444d] rounded-md">
                     <div className="text-xs font-bold text-[#79c0ff] flex items-center gap-1.5 mb-2">
-                      <span>✓</span>
+                      <CheckIcon className="w-3.5 h-3.5 fill-current text-[#79c0ff]" />
                       <span>Team Known Competencies ({knownSkills.length > 0 ? knownSkills.length : project.techStack.length})</span>
                     </div>
                     <div className="flex flex-wrap gap-1">
                       {(knownSkills.length > 0 ? knownSkills : project.techStack).map((s) => (
-                        <span key={s} className="text-xs font-mono px-2 py-0.5 rounded bg-[rgba(56,139,253,0.15)] text-[#79c0ff] border border-[rgba(56,139,253,0.3)]">
-                          ✓ {s}
+                        <span key={s} className="text-xs font-mono px-2 py-0.5 rounded bg-[rgba(56,139,253,0.15)] text-[#79c0ff] border border-[rgba(56,139,253,0.3)] flex items-center gap-1">
+                          <CheckIcon className="w-3 h-3 fill-current" />
+                          <span>{s}</span>
                         </span>
                       ))}
                     </div>
@@ -482,7 +496,7 @@ export default function ProjectDetailPage({
                   {/* Missing skill gaps */}
                   <div className="p-3 bg-[#010409] border border-[rgba(248,81,73,0.4)] rounded-md">
                     <div className="text-xs font-bold text-[#ff7b72] flex items-center gap-1.5 mb-2">
-                      <span>⚡</span>
+                      <ZapIcon className="w-3.5 h-3.5 fill-current text-[#ff7b72]" />
                       <span>Identified Skill Gaps ({allGapSkills.length})</span>
                     </div>
                     {allGapSkills.length === 0 ? (
@@ -490,8 +504,9 @@ export default function ProjectDetailPage({
                     ) : (
                       <div className="flex flex-wrap gap-1">
                         {allGapSkills.map((gap) => (
-                          <span key={gap} className="text-xs font-mono px-2 py-0.5 rounded bg-[rgba(248,81,73,0.15)] text-[#ff7b72] border border-[rgba(248,81,73,0.4)]">
-                            ⚡ Need: {gap}
+                          <span key={gap} className="text-xs font-mono px-2 py-0.5 rounded bg-[rgba(248,81,73,0.15)] text-[#ff7b72] border border-[rgba(248,81,73,0.4)] flex items-center gap-1">
+                            <ZapIcon className="w-3 h-3 fill-current" />
+                            <span>Need: {gap}</span>
                           </span>
                         ))}
                       </div>
@@ -518,9 +533,7 @@ export default function ProjectDetailPage({
                 {/* Header */}
                 <div className="bg-[#151b23] border-b border-[#3d444d] px-4 py-2.5 flex items-center justify-between text-xs">
                   <div className="flex items-center gap-2 font-mono font-semibold text-[#f0f6fc]">
-                    <svg className="w-4 h-4 fill-current text-[#9198a1]" viewBox="0 0 16 16">
-                      <path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 13.25 16h-9.5A1.75 1.75 0 0 1 2 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h9.5a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 9 4.25V1.5Zm6.75.062V4.25c0 .138.112.25.25.25h2.688Z" />
-                    </svg>
+                    <BookIcon className="w-4 h-4 fill-current text-[#9198a1]" />
                     <span>README.md</span>
                   </div>
                   <div className="text-[11px] font-mono text-[#9198a1]">
@@ -534,7 +547,7 @@ export default function ProjectDetailPage({
                   {/* Repo Heading */}
                   <div className="border-b border-[#3d444d] pb-4">
                     <h1 className="text-2xl sm:text-3xl font-extrabold flex items-center gap-3">
-                      <span>{project.icon || '🚀'}</span>
+                      <RepoIcon className="w-8 h-8 fill-current text-[#79c0ff]" />
                       <span>{project.title}</span>
                     </h1>
                     <p className="text-base text-[#9198a1] mt-2 italic">
@@ -590,8 +603,9 @@ export default function ProjectDetailPage({
                               <p className="text-xs text-[#9198a1] mt-1">{role.description}</p>
                               <div className="flex flex-wrap gap-1 mt-2">
                                 {role.skillsNeeded.map((s) => (
-                                  <span key={s} className="text-xs font-mono px-1.5 py-0.2 rounded bg-[#21262d] text-[#ff7b72] border border-[#3d444d]">
-                                    ⚡ {s}
+                                  <span key={s} className="text-xs font-mono px-2 py-0.5 rounded bg-[#21262d] text-[#ff7b72] border border-[#3d444d] flex items-center gap-1">
+                                    <ZapIcon className="w-3 h-3 fill-current text-[#ff7b72]" />
+                                    <span>{s}</span>
                                   </span>
                                 ))}
                               </div>
@@ -633,7 +647,7 @@ export default function ProjectDetailPage({
 
                 {project.liveUrl && (
                   <div className="flex items-center gap-2 text-[#58a6ff]">
-                    <span>🔗</span>
+                    <LinkIcon className="w-3.5 h-3.5 fill-current text-[#9198a1]" />
                     <a
                       href={project.liveUrl}
                       target="_blank"
@@ -658,16 +672,20 @@ export default function ProjectDetailPage({
                 </div>
 
                 <div className="flex items-center gap-2 text-[#9198a1] pt-2">
-                  <span>📖 Readme</span>
+                  <BookIcon className="w-3.5 h-3.5 fill-current text-[#9198a1]" />
+                  <span>Readme</span>
                 </div>
                 <div className="flex items-center gap-2 text-[#9198a1]">
-                  <span>⭐ {starCount} stars</span>
+                  <StarIcon className="w-3.5 h-3.5 fill-current text-[#9198a1]" />
+                  <span>{starCount} stars</span>
                 </div>
                 <div className="flex items-center gap-2 text-[#9198a1]">
-                  <span>👁️ 6 watching</span>
+                  <EyeIcon className="w-3.5 h-3.5 fill-current text-[#9198a1]" />
+                  <span>6 watching</span>
                 </div>
                 <div className="flex items-center gap-2 text-[#9198a1]">
-                  <span>⑂ 4 forks</span>
+                  <ForkIcon className="w-3.5 h-3.5 fill-current text-[#9198a1]" />
+                  <span>4 forks</span>
                 </div>
               </div>
 
@@ -757,8 +775,9 @@ export default function ProjectDetailPage({
                       <p className="text-xs text-[#9198a1] mt-1">{role.description}</p>
                       <div className="flex flex-wrap gap-1.5 mt-2">
                         {role.skillsNeeded.map((s) => (
-                          <span key={s} className="text-xs font-mono px-2 py-0.5 rounded bg-[rgba(248,81,73,0.15)] text-[#ff7b72] border border-[rgba(248,81,73,0.4)]">
-                            ⚡ {s}
+                          <span key={s} className="text-xs font-mono px-2 py-0.5 rounded bg-[rgba(248,81,73,0.15)] text-[#ff7b72] border border-[rgba(248,81,73,0.4)] flex items-center gap-1">
+                            <ZapIcon className="w-3 h-3 fill-current text-[#ff7b72]" />
+                            <span>{s}</span>
                           </span>
                         ))}
                       </div>
@@ -810,11 +829,11 @@ export default function ProjectDetailPage({
               <div className="bg-[#151b23] border-b border-[#3d444d] px-4 py-3 flex items-center justify-between text-xs">
                 <div className="flex items-center gap-3 font-semibold text-[#f0f6fc]">
                   <span className="flex items-center gap-1.5 text-[#79c0ff]">
-                    <span>⊙</span>
+                    <IssueOpenedIcon className="w-3.5 h-3.5 fill-current text-[#79c0ff]" />
                     <span>{project.contributeIssues?.length || 0} Open</span>
                   </span>
                   <span className="flex items-center gap-1.5 text-[#9198a1]">
-                    <span>✓</span>
+                    <IssueClosedIcon className="w-3.5 h-3.5 fill-current text-[#9198a1]" />
                     <span>0 Closed</span>
                   </span>
                 </div>
@@ -835,7 +854,7 @@ export default function ProjectDetailPage({
                       className="p-3.5 hover:bg-[#21262d]/50 transition-colors flex items-center justify-between gap-4 text-xs"
                     >
                       <div className="flex items-start gap-2.5">
-                        <span className="text-[#79c0ff] mt-0.5">⊙</span>
+                        <IssueOpenedIcon className="w-3.5 h-3.5 fill-current text-[#79c0ff] mt-0.5 shrink-0" />
                         <div>
                           <div className="flex items-center gap-2 flex-wrap">
                             <span className="font-semibold text-sm text-[#f0f6fc] hover:text-[#58a6ff] cursor-pointer">
@@ -908,8 +927,9 @@ export default function ProjectDetailPage({
                 </div>
 
                 {applicationSuccess ? (
-                  <div className="p-4 bg-[rgba(56,139,253,0.15)] border border-[rgba(56,139,253,0.4)] rounded-md text-center text-xs text-[#79c0ff] font-semibold">
-                    🎉 Collaboration request submitted! The repository maintainer has been notified.
+                  <div className="p-4 bg-[rgba(56,139,253,0.15)] border border-[rgba(56,139,253,0.4)] rounded-md text-center text-xs text-[#79c0ff] font-semibold flex items-center justify-center gap-2">
+                    <CheckIcon className="w-4 h-4 fill-current text-[#79c0ff]" />
+                    <span>Collaboration request submitted! The repository maintainer has been notified.</span>
                   </div>
                 ) : (
                   <form onSubmit={handleApplicationSubmit} className="space-y-4 text-xs">
@@ -985,7 +1005,7 @@ export default function ProjectDetailPage({
             <div className="border border-[#3d444d] rounded-md bg-[#151b23] overflow-hidden">
               <div className="bg-[#151b23] border-b border-[#3d444d] px-4 py-3 flex items-center justify-between text-xs">
                 <span className="font-semibold text-[#f0f6fc] flex items-center gap-1.5">
-                  <span className="text-[#79c0ff]">⑂</span>
+                  <GitPullRequestIcon className="w-3.5 h-3.5 fill-current text-[#79c0ff]" />
                   <span>{activeOpenRoles.length} Open Roles Ready for Contributors</span>
                 </span>
               </div>
@@ -995,7 +1015,7 @@ export default function ProjectDetailPage({
                   <div key={role.id} className="p-4 hover:bg-[#21262d]/50 flex items-center justify-between gap-4 text-xs">
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-[#79c0ff]">⑂</span>
+                        <GitPullRequestIcon className="w-3.5 h-3.5 fill-current text-[#79c0ff] shrink-0" />
                         <span className="font-bold text-sm text-[#f0f6fc]">{role.roleName}</span>
                         <span className="px-2 py-0.2 rounded-full bg-[rgba(56,139,253,0.15)] text-[#79c0ff] border border-[rgba(56,139,253,0.3)] text-[10px] font-mono">
                           {role.status}
@@ -1004,8 +1024,9 @@ export default function ProjectDetailPage({
                       <p className="text-xs text-[#9198a1] mt-1">{role.description}</p>
                       <div className="flex flex-wrap gap-1 mt-2">
                         {role.skillsNeeded.map((s) => (
-                          <span key={s} className="text-xs font-mono px-2 py-0.5 rounded bg-[rgba(248,81,73,0.15)] text-[#ff7b72] border border-[rgba(248,81,73,0.4)]">
-                            ⚡ {s}
+                          <span key={s} className="text-xs font-mono px-2 py-0.5 rounded bg-[rgba(248,81,73,0.15)] text-[#ff7b72] border border-[rgba(248,81,73,0.4)] flex items-center gap-1">
+                            <ZapIcon className="w-3 h-3 fill-current text-[#ff7b72]" />
+                            <span>{s}</span>
                           </span>
                         ))}
                       </div>
@@ -1063,7 +1084,7 @@ export default function ProjectDetailPage({
                   <div key={topic.id} className="border border-[#3d444d] rounded-md bg-[#151b23] p-5 space-y-4 text-xs">
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-center gap-2">
-                        <span className="text-[#58a6ff] text-base">💬</span>
+                        <CommentDiscussionIcon className="w-4 h-4 fill-current text-[#58a6ff] shrink-0" />
                         <h4 className="font-bold text-sm text-[#f0f6fc]">{topic.question}</h4>
                       </div>
                       <span className="text-[11px] font-mono text-[#9198a1]">

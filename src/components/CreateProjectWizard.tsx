@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Project, OpenRole, ContributeIssue } from '../types';
+import { ZapIcon, IssueOpenedIcon } from './Octicons';
 
 interface CreateProjectWizardProps {
   onClose: () => void;
@@ -252,8 +253,9 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
           {/* Skill-Gap Configuration */}
           <div className="border-t border-[#3d444d] pt-3 space-y-3">
             <div className="flex items-center justify-between">
-              <span className="font-bold text-xs text-[#f0f6fc]">
-                ⚡ Open Collaboration Roles (Skill Gaps)
+              <span className="font-bold text-xs text-[#f0f6fc] flex items-center gap-1.5">
+                <ZapIcon className="w-3.5 h-3.5 fill-current text-[#ff7b72]" />
+                <span>Open Collaboration Roles (Skill Gaps)</span>
               </span>
               <span className="text-[11px] font-mono text-[#9198a1]">
                 {rolesList.length} role(s) configured
@@ -301,8 +303,9 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
 
           {/* Starter Tasks Issues */}
           <div className="border-t border-[#3d444d] pt-3 space-y-2">
-            <span className="font-bold text-xs text-[#f0f6fc]">
-              ⊙ Starter Task Issue (Optional)
+            <span className="font-bold text-xs text-[#f0f6fc] flex items-center gap-1.5">
+              <IssueOpenedIcon className="w-3.5 h-3.5 fill-current text-[#79c0ff]" />
+              <span>Starter Task Issue (Optional)</span>
             </span>
             <div className="flex gap-2">
               <input

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Project, OpenRole, SponsorshipTier } from '../types';
+import { CheckIcon } from './Octicons';
 
 interface ProjectDetailModalProps {
   project: Project;
@@ -875,8 +876,9 @@ export default function ProjectDetailModal({
                             Claim Issue
                           </button>
                         ) : (
-                          <span className="text-[0.65rem] font-dmmono text-ink2 bg-bg3 border border-ink3 px-2.5 py-1 rounded">
-                            Claimed ✓
+                          <span className="text-[0.65rem] font-dmmono text-ink2 bg-bg3 border border-ink3 px-2.5 py-1 rounded inline-flex items-center gap-1">
+                            <CheckIcon className="w-3 h-3 fill-current text-ink2" />
+                            <span>Claimed</span>
                           </span>
                         )}
                       </div>

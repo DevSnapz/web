@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
+import { RepoIcon, ZapIcon } from './Octicons';
 
 interface NavProps {
   onOpenCreateWizard: () => void;
@@ -127,7 +128,7 @@ export default function Nav({
                   }}
                   className="w-full text-left px-3 py-2 hover:bg-[#1f6feb] hover:text-white flex items-center gap-2"
                 >
-                  <span>📁</span>
+                  <RepoIcon className="w-3.5 h-3.5 fill-current" />
                   <span>New repository</span>
                 </button>
                 <Link
@@ -135,7 +136,7 @@ export default function Nav({
                   onClick={() => setPlusMenuOpen(false)}
                   className="w-full text-left px-3 py-2 hover:bg-[#1f6feb] hover:text-white flex items-center gap-2"
                 >
-                  <span>⚡</span>
+                  <ZapIcon className="w-3.5 h-3.5 fill-current text-[#ff7b72]" />
                   <span>Find open skill gaps</span>
                 </Link>
               </div>

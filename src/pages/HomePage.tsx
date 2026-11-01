@@ -1,26 +1,34 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Hero from '../components/Hero';
+import {
+  SearchIcon,
+  PeopleIcon,
+  ZapIcon,
+  SparkleIcon,
+  RepoIcon,
+  CheckIcon,
+} from '../components/Octicons';
 
 export default function HomePage() {
   const features = [
     {
-      icon: '🔍',
+      icon: <SearchIcon className="w-5 h-5 fill-current text-[#79c0ff]" />,
       title: 'Discover Repositories',
       desc: 'Explore meaningful student-built projects across various domains and technical stacks.',
     },
     {
-      icon: '🤝',
+      icon: <PeopleIcon className="w-5 h-5 fill-current text-[#79c0ff]" />,
       title: 'Find Collaborators',
       desc: 'Connect with developers who have complementary skills and a passion for building.',
     },
     {
-      icon: '⚡',
+      icon: <ZapIcon className="w-5 h-5 fill-current text-[#ff7b72]" />,
       title: 'Identify Skill Gaps',
       desc: 'Understand what technical competencies your repository needs to ship to production.',
     },
     {
-      icon: '🌱',
+      icon: <SparkleIcon className="w-5 h-5 fill-current text-[#79c0ff]" />,
       title: 'Grow Together',
       desc: 'Learn, contribute, and build real-world software alongside other ambitious developers.',
     },
@@ -29,7 +37,6 @@ export default function HomePage() {
   const featuredProjects = [
     {
       id: 'campus-recycling',
-      icon: '♻️',
       status: 'Open to join',
       title: 'campus-recycling-app',
       description: 'Build a smarter recycling telemetry experience for college campuses.',
@@ -38,7 +45,6 @@ export default function HomePage() {
     },
     {
       id: 'studymate-ai',
-      icon: '🧠',
       status: 'Open to join',
       title: 'studymate-ai',
       description: 'Personalized study planning and spaced repetition for students.',
@@ -47,7 +53,6 @@ export default function HomePage() {
     },
     {
       id: 'openfarm',
-      icon: '🌱',
       status: 'Open to join',
       title: 'openfarm-telemetry',
       description: 'An open platform for smarter agricultural sensor analytics.',
@@ -139,7 +144,7 @@ export default function HomePage() {
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-1.5 truncate">
-                    <span className="text-sm">{p.icon}</span>
+                    <RepoIcon className="w-4 h-4 fill-current text-[#9198a1] shrink-0" />
                     <Link
                       to="/explore"
                       className="font-bold text-sm text-[#58a6ff] hover:underline truncate"
@@ -147,8 +152,9 @@ export default function HomePage() {
                       {p.title}
                     </Link>
                   </div>
-                  <span className="text-[10px] font-mono px-2 py-0.2 rounded-full bg-[rgba(248,81,73,0.15)] text-[#ff7b72] border border-[rgba(248,81,73,0.4)]">
-                    ⚡ Open
+                  <span className="text-[10px] font-mono px-2 py-0.2 rounded-full bg-[rgba(248,81,73,0.15)] text-[#ff7b72] border border-[rgba(248,81,73,0.4)] flex items-center gap-1">
+                    <ZapIcon className="w-3 h-3 fill-current text-[#ff7b72]" />
+                    <span>Open</span>
                   </span>
                 </div>
 
@@ -252,14 +258,20 @@ export default function HomePage() {
               <div className="grid grid-cols-2 gap-3">
                 <div className="p-2.5 rounded bg-[#151b23] border border-[#3d444d]">
                   <div className="text-[10px] font-mono uppercase text-[#9198a1] mb-1">Repo Need</div>
-                  <div className="font-bold text-[#ff7b72]">⚡ PostgreSQL Lead</div>
+                  <div className="font-bold text-[#ff7b72] flex items-center gap-1">
+                    <ZapIcon className="w-3.5 h-3.5 fill-current text-[#ff7b72]" />
+                    <span>PostgreSQL Lead</span>
+                  </div>
                   <div className="text-[10px] text-[#9198a1]">campus-recycling-app</div>
                 </div>
 
                 <div className="p-2.5 rounded bg-[#151b23] border border-[#3d444d]">
                   <div className="text-[10px] font-mono uppercase text-[#9198a1] mb-1">Collaborator</div>
                   <div className="font-bold text-[#f0f6fc]">Alex M.</div>
-                  <div className="text-[10px] text-[#79c0ff]">✓ Verified Competency</div>
+                  <div className="text-[10px] text-[#79c0ff] flex items-center gap-1">
+                    <CheckIcon className="w-3 h-3 fill-current text-[#79c0ff]" />
+                    <span>Verified Competency</span>
+                  </div>
                 </div>
               </div>
 

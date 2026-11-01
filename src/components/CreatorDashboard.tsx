@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Project, CollaboratorApplication } from '../types';
+import { GitPullRequestIcon, ZapIcon } from './Octicons';
 
 interface CreatorDashboardProps {
   projects: Project[];
@@ -131,9 +132,15 @@ export default function CreatorDashboard({
                     <div key={app.id} className="p-4 space-y-3 text-xs">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                         <div className="flex items-center gap-2">
-                          <span className={app.status === 'approved' ? 'text-[#79c0ff]' : app.status === 'pending' ? 'text-[#ff7b72]' : 'text-[#9198a1]'}>
-                            ⑂
-                          </span>
+                          <GitPullRequestIcon
+                            className={`w-3.5 h-3.5 fill-current ${
+                              app.status === 'approved'
+                                ? 'text-[#79c0ff]'
+                                : app.status === 'pending'
+                                ? 'text-[#ff7b72]'
+                                : 'text-[#9198a1]'
+                            }`}
+                          />
                           <span className="font-bold text-sm text-[#f0f6fc]">
                             {app.applicantName}
                           </span>
@@ -202,8 +209,9 @@ export default function CreatorDashboard({
                 <h3 className="font-bold text-sm text-[#f0f6fc]">
                   Recommended Repository for You
                 </h3>
-                <span className="text-[10px] font-mono px-2 py-0.2 rounded-full bg-[rgba(248,81,73,0.15)] text-[#ff7b72] border border-[rgba(248,81,73,0.4)] font-bold">
-                  ⚡ Open to Join
+                <span className="text-[10px] font-mono px-2 py-0.2 rounded-full bg-[rgba(248,81,73,0.15)] text-[#ff7b72] border border-[rgba(248,81,73,0.4)] font-bold flex items-center gap-1">
+                  <ZapIcon className="w-3 h-3 fill-current text-[#ff7b72]" />
+                  <span>Open to Join</span>
                 </span>
               </div>
 

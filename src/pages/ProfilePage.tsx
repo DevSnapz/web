@@ -1,6 +1,20 @@
 import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Project, CollaboratorApplication } from '../types';
+import {
+  RepoIcon,
+  StarIcon,
+  ForkIcon,
+  PeopleIcon,
+  OrganizationIcon,
+  LocationIcon,
+  LinkIcon,
+  OctocatIcon,
+  TrophyIcon,
+  GitPullRequestIcon,
+  ZapIcon,
+  CheckIcon,
+} from '../components/Octicons';
 
 interface ProfilePageProps {
   projects: Project[];
@@ -271,7 +285,7 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
             onClick={() => setActiveTab('gaps')}
             className={tabItemClass('gaps')}
           >
-            <span className="text-[#ff7b72]">⚡</span>
+            <ZapIcon className="w-4 h-4 fill-current text-[#ff7b72]" />
             <span>Recommended Roles</span>
             <span className="bg-[#30363d] text-[#f0f6fc] rounded-full px-1.5 py-0.2 text-[10px] font-mono">
               {recommendedRoles.length}
@@ -283,9 +297,7 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
             onClick={() => setActiveTab('peers')}
             className={tabItemClass('peers')}
           >
-            <svg className="w-4 h-4 fill-current" viewBox="0 0 16 16">
-              <path d="M2 5.5a3.5 3.5 0 1 1 5.898 2.549 5.508 5.508 0 0 1 3.034 4.084.75.75 0 1 1-1.482.235 4.002 4.002 0 0 0-7.899 0 .75.75 0 0 1-1.482-.236A5.507 5.507 0 0 1 3.102 8.05 3.493 3.493 0 0 1 2 5.5ZM11 4a3.001 3.001 0 0 1 2.22 5.018 5.01 5.01 0 0 1 2.56 3.012.749.749 0 0 1-.512.924.75.75 0 0 1-.924-.513 3.51 3.51 0 0 0-2.316-2.52.75.75 0 0 1-.482-.72 1.5 1.5 0 1 0-2.091-1.393.75.75 0 0 1-.741-.75A3 3 0 0 1 11 4Zm-5.5 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z" />
-            </svg>
+            <PeopleIcon className="w-4 h-4 fill-current" />
             <span>Peer Discovery</span>
             <span className="bg-[#30363d] text-[#f0f6fc] rounded-full px-1.5 py-0.2 text-[10px] font-mono">
               {mockPeerCollaborators.length}
@@ -349,17 +361,22 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
               <button
                 type="button"
                 onClick={handleShareProfile}
-                className="w-full py-1 px-3 bg-[#151b23] hover:bg-[#21262d] border border-[#3d444d] rounded-md text-[11px] font-medium text-[#9198a1] hover:text-[#f0f6fc] transition-colors"
+                className="w-full py-1 px-3 bg-[#151b23] hover:bg-[#21262d] border border-[#3d444d] rounded-md text-[11px] font-medium text-[#9198a1] hover:text-[#f0f6fc] transition-colors flex items-center justify-center gap-1.5"
               >
-                {copiedLink ? '✓ Copied Profile URL' : 'Share profile'}
+                {copiedLink ? (
+                  <>
+                    <CheckIcon className="w-3.5 h-3.5 fill-current text-[#79c0ff]" />
+                    <span className="text-[#79c0ff]">Copied Profile URL</span>
+                  </>
+                ) : (
+                  <span>Share profile</span>
+                )}
               </button>
             </div>
 
             {/* Followers / Following Stats */}
             <div className="flex items-center gap-2 text-xs text-[#9198a1]">
-              <svg className="w-4 h-4 fill-current" viewBox="0 0 16 16">
-                <path d="M2 5.5a3.5 3.5 0 1 1 5.898 2.549 5.508 5.508 0 0 1 3.034 4.084.75.75 0 1 1-1.482.235 4.002 4.002 0 0 0-7.899 0 .75.75 0 0 1-1.482-.236A5.507 5.507 0 0 1 3.102 8.05 3.493 3.493 0 0 1 2 5.5ZM11 4a3.001 3.001 0 0 1 2.22 5.018 5.01 5.01 0 0 1 2.56 3.012.749.749 0 0 1-.512.924.75.75 0 0 1-.924-.513 3.51 3.51 0 0 0-2.316-2.52.75.75 0 0 1-.482-.72 1.5 1.5 0 1 0-2.091-1.393.75.75 0 0 1-.741-.75A3 3 0 0 1 11 4Zm-5.5 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z" />
-              </svg>
+              <PeopleIcon className="w-4 h-4 fill-current text-[#9198a1]" />
               <span><strong className="text-[#f0f6fc]">42</strong> followers</span>
               <span>·</span>
               <span><strong className="text-[#f0f6fc]">18</strong> following</span>
@@ -368,16 +385,16 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
             {/* Profile Metadata */}
             <div className="space-y-2 pt-2 border-t border-[#3d444d] text-xs text-[#f0f6fc]">
               <div className="flex items-center gap-2">
-                <span className="text-[#9198a1]">🏢</span>
+                <OrganizationIcon className="w-4 h-4 fill-current text-[#9198a1] shrink-0" />
                 <span className="truncate">{profile.institution}</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-[#9198a1]">📍</span>
+                <LocationIcon className="w-4 h-4 fill-current text-[#9198a1] shrink-0" />
                 <span>{profile.location}</span>
               </div>
               {profile.portfolio && (
                 <div className="flex items-center gap-2 truncate">
-                  <span className="text-[#9198a1]">🔗</span>
+                  <LinkIcon className="w-4 h-4 fill-current text-[#9198a1] shrink-0" />
                   <a
                     href={profile.portfolio}
                     target="_blank"
@@ -390,7 +407,7 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
               )}
               {profile.github && (
                 <div className="flex items-center gap-2">
-                  <span className="text-[#9198a1]">🐙</span>
+                  <OctocatIcon className="w-4 h-4 fill-current text-[#9198a1] shrink-0" />
                   <a
                     href={profile.github}
                     target="_blank"
@@ -408,15 +425,15 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
               <h3 className="font-bold text-xs text-[#f0f6fc]">Achievements</h3>
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="px-2 py-1 rounded bg-[#151b23] border border-[#3d444d] text-xs flex items-center gap-1.5" title="Arctic Code Vault Contributor">
-                  <span>❄️</span>
+                  <TrophyIcon className="w-3.5 h-3.5 fill-current text-[#79c0ff]" />
                   <span className="text-[11px] font-medium text-[#9198a1]">Arctic Vault</span>
                 </span>
                 <span className="px-2 py-1 rounded bg-[#151b23] border border-[#3d444d] text-xs flex items-center gap-1.5" title="Pull Shark">
-                  <span>🦈</span>
+                  <GitPullRequestIcon className="w-3.5 h-3.5 fill-current text-[#79c0ff]" />
                   <span className="text-[11px] font-medium text-[#9198a1]">Pull Shark</span>
                 </span>
                 <span className="px-2 py-1 rounded bg-[#151b23] border border-[#3d444d] text-xs flex items-center gap-1.5" title="Quickdraw">
-                  <span>⚡</span>
+                  <ZapIcon className="w-3.5 h-3.5 fill-current text-[#ff7b72]" />
                   <span className="text-[11px] font-medium text-[#9198a1]">Quickdraw</span>
                 </span>
               </div>
@@ -427,8 +444,9 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
               <h3 className="font-bold text-xs text-[#f0f6fc]">Verified Competencies</h3>
               <div className="flex flex-wrap gap-1">
                 {profile.skills.map((s) => (
-                  <span key={s} className="px-2 py-0.5 rounded bg-[rgba(56,139,253,0.15)] text-[#79c0ff] border border-[rgba(56,139,253,0.3)] text-[11px] font-mono">
-                    ✓ {s}
+                  <span key={s} className="px-2 py-0.5 rounded bg-[rgba(56,139,253,0.15)] text-[#79c0ff] border border-[rgba(56,139,253,0.3)] text-[11px] font-mono flex items-center gap-1">
+                    <CheckIcon className="w-3 h-3 fill-current" />
+                    <span>{s}</span>
                   </span>
                 ))}
               </div>
@@ -466,7 +484,7 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
                         <div>
                           <div className="flex items-center justify-between gap-2 mb-1.5">
                             <div className="flex items-center gap-2 truncate">
-                              <span className="text-sm">{p.icon || '📁'}</span>
+                              <RepoIcon className="w-4 h-4 fill-current text-[#9198a1] shrink-0" />
                               <Link
                                 to={`/projects/${p.id}`}
                                 className="font-semibold text-sm text-[#58a6ff] hover:underline truncate"
@@ -490,10 +508,12 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
                             <span className="text-[11px] font-mono">{p.techStack[0] || 'TypeScript'}</span>
                           </span>
                           <span className="flex items-center gap-1 text-[11px]">
-                            <span>★</span> 38
+                            <StarIcon className="w-3.5 h-3.5 fill-current text-[#9198a1]" />
+                            <span>38</span>
                           </span>
                           <span className="flex items-center gap-1 text-[11px]">
-                            <span>⑂</span> 4
+                            <ForkIcon className="w-3.5 h-3.5 fill-current text-[#9198a1]" />
+                            <span>4</span>
                           </span>
                         </div>
                       </div>
@@ -549,7 +569,7 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
                   
                   <div className="border border-[#3d444d] rounded-md bg-[#151b23] divide-y divide-[#3d444d] text-xs">
                     <div className="p-4 flex items-start gap-3">
-                      <span className="text-base text-[#79c0ff] mt-0.5">📦</span>
+                      <RepoIcon className="w-4 h-4 fill-current text-[#79c0ff] mt-0.5 shrink-0" />
                       <div className="space-y-1">
                         <div className="font-bold text-[#f0f6fc]">
                           Created 2 repositories
@@ -565,7 +585,7 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
                     </div>
 
                     <div className="p-4 flex items-start gap-3">
-                      <span className="text-base text-[#ff7b72] mt-0.5">⚡</span>
+                      <ZapIcon className="w-4 h-4 fill-current text-[#ff7b72] mt-0.5 shrink-0" />
                       <div className="space-y-1">
                         <div className="font-bold text-[#f0f6fc]">
                           Flagged 3 engineering skill gaps
@@ -621,7 +641,10 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
                             <span className="w-2.5 h-2.5 rounded-full bg-[#3178c6]" />
                             <span className="font-mono">{p.techStack[0] || 'TypeScript'}</span>
                           </span>
-                          <span>★ 38</span>
+                          <span className="flex items-center gap-1">
+                            <StarIcon className="w-3.5 h-3.5 fill-current text-[#9198a1]" />
+                            <span>38</span>
+                          </span>
                           <span>Updated 3 hours ago</span>
                         </div>
                       </div>
@@ -643,7 +666,7 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
               <div className="space-y-4">
                 <div className="border border-[#3d444d] rounded-md bg-[#151b23] p-4 text-xs text-[#9198a1] space-y-1">
                   <div className="font-bold text-sm text-[#f0f6fc] flex items-center gap-1.5">
-                    <span className="text-[#58a6ff]">⚡</span>
+                    <ZapIcon className="w-4 h-4 fill-current text-[#58a6ff]" />
                     <span>Explainable Skill-Matching Algorithm</span>
                   </div>
                   <p>
@@ -669,7 +692,10 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
 
                         <div className="mt-3 space-y-2 pt-2 border-t border-[#3d444d]">
                           <div>
-                            <span className="text-[10px] font-mono text-[#79c0ff] block mb-1">✓ MATCHING SKILLS</span>
+                            <span className="text-[10px] font-mono text-[#79c0ff] flex items-center gap-1 mb-1">
+                              <CheckIcon className="w-3 h-3 fill-current" />
+                              <span>MATCHING SKILLS</span>
+                            </span>
                             <div className="flex flex-wrap gap-1">
                               {matchingSkills.map((s) => (
                                 <span key={s} className="px-1.5 py-0.2 rounded bg-[rgba(56,139,253,0.15)] text-[#79c0ff] border border-[rgba(56,139,253,0.3)] font-mono text-[10px]">
@@ -681,7 +707,10 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
 
                           {growthSkills.length > 0 && (
                             <div>
-                              <span className="text-[10px] font-mono text-[#ff7b72] block mb-1">⚡ GROWTH OPPORTUNITY</span>
+                              <span className="text-[10px] font-mono text-[#ff7b72] flex items-center gap-1 mb-1">
+                                <ZapIcon className="w-3 h-3 fill-current" />
+                                <span>GROWTH OPPORTUNITY</span>
+                              </span>
                               <div className="flex flex-wrap gap-1">
                                 {growthSkills.map((s) => (
                                   <span key={s} className="px-1.5 py-0.2 rounded bg-[rgba(248,81,73,0.15)] text-[#ff7b72] border border-[rgba(248,81,73,0.4)] font-mono text-[10px]">
