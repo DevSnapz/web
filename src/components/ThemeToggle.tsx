@@ -44,9 +44,13 @@ export default function ThemeToggle() {
     if (theme === 'dark') {
       root.classList.add('dark');
       root.classList.remove('light');
+      root.setAttribute('data-color-mode', 'dark');
+      root.setAttribute('data-dark-theme', 'dark_tritanopia');
     } else {
       root.classList.remove('dark');
       root.classList.add('light');
+      root.setAttribute('data-color-mode', 'light');
+      root.removeAttribute('data-dark-theme');
     }
     try {
       localStorage.setItem('theme', theme);
@@ -61,15 +65,15 @@ export default function ThemeToggle() {
   return (
     <button
       type="button"
-      aria-label={theme === 'light' ? 'Switch to dark theme' : 'Switch to light theme'}
-      title={theme === 'light' ? 'Switch to dark theme' : 'Switch to light theme'}
+      aria-label={theme === 'light' ? 'Switch to GitHub Dark Tritanopia' : 'Switch to Light theme'}
+      title={theme === 'light' ? 'Switch to GitHub Dark Tritanopia' : 'Switch to Light theme'}
       onClick={toggleTheme}
-      className="inline-flex items-center justify-center w-9 h-9 rounded-xl border border-[#E5E7EB] hover:border-[#635BFF]/30 bg-[#F7F8FC] hover:bg-white text-[#6B7280] hover:text-[#111827] dark:bg-[#151B2D] dark:border-[#222F4C] dark:text-[#A1A1AA] dark:hover:text-white dark:hover:bg-[#1E263C] transition-all shadow-xs cursor-pointer"
+      className="inline-flex items-center justify-center w-9 h-9 rounded-xl border border-[#E5E7EB] hover:border-[#635BFF]/30 bg-[#F7F8FC] hover:bg-white text-[#6B7280] hover:text-[#111827] dark:bg-[#151b23] dark:border-[#3d444d] dark:text-[#9198a1] dark:hover:text-[#f0f6fc] dark:hover:bg-[#1c2128] transition-all shadow-xs cursor-pointer"
     >
       {theme === 'light' ? (
         <MoonIcon className="w-4 h-4 text-[#6B7280] hover:text-[#635BFF]" />
       ) : (
-        <SunIcon className="w-4 h-4 text-[#F9735B]" />
+        <SunIcon className="w-4 h-4 text-[#ff7b72]" />
       )}
     </button>
   );
