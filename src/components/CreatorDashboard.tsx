@@ -40,7 +40,7 @@ export default function CreatorDashboard({
             
             <div className="border border-[#3d444d] rounded-md bg-[#151b23] p-4 space-y-3">
               <div className="flex items-center justify-between text-xs">
-                <span className="font-bold text-[#f0f6fc]">Top Repositories</span>
+                <span className="font-bold text-[#f0f6fc]">Your Projects</span>
                 <Link
                   to="/profile"
                   className="px-2.5 py-1 bg-[#1f6feb] hover:bg-[#2a7aef] text-white font-semibold rounded-md text-[11px] shadow-xs"
@@ -49,12 +49,12 @@ export default function CreatorDashboard({
                 </Link>
               </div>
 
-              {/* Repo Search filter */}
+              {/* Project Search filter */}
               <input
                 type="text"
                 value={repoFilter}
                 onChange={(e) => setRepoFilter(e.target.value)}
-                placeholder="Find a repository..."
+                placeholder="Find a project..."
                 className="w-full bg-[#010409] border border-[#3d444d] rounded-md px-2.5 py-1 text-xs text-[#f0f6fc] focus:outline-none focus:border-[#58a6ff] placeholder-[#9198a1]"
               />
 
@@ -66,9 +66,7 @@ export default function CreatorDashboard({
                     to={`/projects/${p.id}`}
                     className="flex items-center gap-2 p-1.5 rounded-md hover:bg-[#21262d] text-xs font-mono text-[#58a6ff] hover:underline truncate"
                   >
-                    <svg className="w-3.5 h-3.5 fill-current text-[#9198a1] flex-shrink-0" viewBox="0 0 16 16">
-                      <path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z" />
-                    </svg>
+                    <RepoIcon className="w-3.5 h-3.5 fill-current text-[#9198a1] flex-shrink-0" />
                     <span className="truncate">{p.id}</span>
                   </Link>
                 ))}
@@ -82,7 +80,7 @@ export default function CreatorDashboard({
                 Explore Directory
               </Link>
               <Link to="/profile" className="block px-2 py-1.5 rounded hover:bg-[#21262d] hover:text-[#f0f6fc]">
-                Your GitHub Profile
+                Your Student Profile
               </Link>
             </div>
 
@@ -115,7 +113,7 @@ export default function CreatorDashboard({
             <div className="space-y-4">
               <div className="flex items-center justify-between text-xs">
                 <h2 className="font-bold text-sm text-[#f0f6fc]">
-                  Incoming Pull Requests (Candidate Applications)
+                  Incoming Collaboration Applications
                 </h2>
                 <span className="text-xs font-mono text-[#9198a1]">
                   {applications.length} Total Applications
@@ -224,7 +222,7 @@ export default function CreatorDashboard({
                   to="/projects/studymate-ai"
                   className="text-[#58a6ff] hover:underline font-semibold"
                 >
-                  View Repository ➔
+                  View Project ➔
                 </Link>
               </div>
             </div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
-import { RepoIcon, ZapIcon } from './Octicons';
+import { DevSnapzLogo, RepoIcon, ZapIcon, SearchIcon } from './Octicons';
 
 interface NavProps {
   onOpenCreateWizard: () => void;
@@ -35,58 +35,50 @@ export default function Nav({
     <nav className="sticky top-0 z-50 bg-[#010409] border-b border-[#3d444d] h-14 flex items-center transition-colors">
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 w-full flex items-center justify-between gap-3">
         
-        {/* Left Side: GitHub Octocat Logo & DevSnapz Breadcrumb */}
+        {/* Left Side: DevSnapz Brand Mark & Global Search */}
         <div className="flex items-center gap-3">
           <Link
             to="/"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="flex items-center gap-2 group outline-none cursor-pointer text-[#f0f6fc] hover:text-[#58a6ff] transition-colors"
-            title="DevSnapz GitHub Workspace"
+            className="flex items-center gap-2.5 group outline-none cursor-pointer text-[#f0f6fc] hover:text-[#58a6ff] transition-colors"
+            title="DevSnapz - Student Projects & Skill Matching"
           >
-            {/* GitHub Invertocat SVG Mark */}
-            <svg height="30" viewBox="0 0 24 24" width="30" className="fill-current" aria-hidden="true">
-              <path d="M12.5.75C6.146.75 1 5.896 1 12.25c0 5.089 3.292 9.387 7.863 10.91.575.101.79-.244.79-.546 0-.272-.014-1.178-.014-2.142-2.889.532-3.636-.704-3.866-1.35-.13-.331-.69-1.352-1.18-1.625-.402-.216-.977-.748-.014-.762.906-.014 1.553.834 1.769 1.179 1.035 1.74 2.688 1.25 3.349.948.1-.747.402-1.25.733-1.538-2.559-.287-5.232-1.279-5.232-5.678 0-1.25.445-2.285 1.178-3.09-.115-.288-.517-1.467.115-3.048 0 0 .963-.302 3.163 1.179.92-.259 1.897-.388 2.875-.388.977 0 1.955.13 2.875.388 2.2-1.495 3.162-1.179 3.162-1.179.633 1.581.23 2.76.115 3.048.733.805 1.179 1.825 1.179 3.09 0 4.413-2.688 5.39-5.247 5.678.417.36.776 1.05.776 2.128 0 1.538-.014 2.774-.014 3.162 0 .302.216.662.79.547C20.709 21.637 24 17.324 24 12.25 24 5.896 18.854.75 12.5.75Z" />
-            </svg>
-            <span className="font-sans font-semibold text-sm tracking-tight text-[#f0f6fc] flex items-center gap-1.5">
+            <DevSnapzLogo className="w-7 h-7 shadow-xs" />
+            <span className="font-sans font-bold text-sm tracking-tight text-[#f0f6fc] flex items-center gap-1.5">
               <span>DevSnapz</span>
               <span className="text-[#656c76]">/</span>
-              <span className="text-[#9198a1] text-xs font-normal">student-network</span>
+              <span className="text-[#79c0ff] text-xs font-mono font-medium">network</span>
             </span>
           </Link>
 
-          {/* GitHub-style Global Search Box */}
+          {/* Primer-style Search Box */}
           <div className="hidden lg:flex items-center">
             <Link
               to="/explore"
-              className="flex items-center justify-between w-60 h-7 px-2.5 text-xs bg-[#151b23] border border-[#3d444d] rounded-md text-[#9198a1] hover:border-[#58a6ff] hover:text-[#f0f6fc] transition-colors"
+              className="flex items-center justify-between w-64 h-7 px-2.5 text-xs bg-[#151b23] border border-[#3d444d] rounded-md text-[#9198a1] hover:border-[#58a6ff] hover:text-[#f0f6fc] transition-colors"
             >
               <span className="flex items-center gap-2">
-                <svg className="w-3.5 h-3.5 fill-current text-[#9198a1]" viewBox="0 0 16 16">
-                  <path d="M10.68 11.74a6 6 0 0 1-7.922-8.982 6 6 0 0 1 8.982 7.922l3.04 3.04a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215ZM11.5 7a4.499 4.499 0 1 0-8.997 0A4.499 4.499 0 0 0 11.5 7Z" />
-                </svg>
-                <span>Type <kbd className="px-1 py-0.2 bg-[#21262d] border border-[#3d444d] rounded text-[10px] text-[#f0f6fc]">/</kbd> to search</span>
+                <SearchIcon className="w-3.5 h-3.5 fill-current text-[#9198a1]" />
+                <span>Search projects, skills...</span>
               </span>
+              <kbd className="px-1.5 py-0.2 bg-[#21262d] border border-[#3d444d] rounded text-[10px] text-[#9198a1] font-mono">/</kbd>
             </Link>
           </div>
         </div>
 
         {/* Center / Navigation Tabs */}
         <div className="hidden md:flex items-center gap-1">
-          <NavLink to="/explore" className={navLinkClass}>
-            <span>Explore</span>
+          <NavLink to="/explore" end className={navLinkClass}>
+            <span>Explore Projects</span>
           </NavLink>
-          
+
           <NavLink to="/dashboard" className={navLinkClass}>
-            <span>Pull requests</span>
+            <span>Collaborations</span>
             {pendingNotifications > 0 && (
               <span className="px-1.5 py-0.2 rounded-full bg-[#1f6feb] text-white text-[10px] font-mono font-bold">
                 {pendingNotifications}
               </span>
             )}
-          </NavLink>
-
-          <NavLink to="/explore" end className={navLinkClass}>
-            <span>Issues & Gaps</span>
           </NavLink>
 
           <Link
@@ -96,18 +88,22 @@ export default function Nav({
           >
             Discussions
           </Link>
+
+          <NavLink to="/profile" className={navLinkClass}>
+            <span>My Profile</span>
+          </NavLink>
         </div>
 
-        {/* Right Action Icons (GitHub Top-Right Toolbar) */}
+        {/* Right Action Icons (GitHub-style Primer Toolbar) */}
         <div className="flex items-center gap-2">
           
-          {/* GitHub "+" Create Dropdown */}
+          {/* "+" Create Dropdown */}
           <div className="relative">
             <button
               type="button"
               onClick={() => setPlusMenuOpen(!plusMenuOpen)}
               className="flex items-center gap-1 px-2.5 py-1 text-xs font-semibold bg-[#21262d] hover:bg-[#30363d] text-[#f0f6fc] border border-[#3d444d] rounded-md shadow-xs transition-colors cursor-pointer"
-              title="Create new..."
+              title="Create new project..."
             >
               <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 16 16">
                 <path d="M7.75 2a.75.75 0 0 1 .75.75V7h4.25a.75.75 0 0 1 0 1.5H8.5v4.25a.75.75 0 0 1-1.5 0V8.5H2.75a.75.75 0 0 1 0-1.5H7V2.75A.75.75 0 0 1 7.75 2Z" />
@@ -117,7 +113,7 @@ export default function Nav({
 
             {plusMenuOpen && (
               <div
-                className="absolute right-0 top-full mt-1.5 w-48 bg-[#151b23] border border-[#3d444d] rounded-md shadow-xl py-1 z-50 text-xs text-[#f0f6fc]"
+                className="absolute right-0 top-full mt-1.5 w-52 bg-[#151b23] border border-[#3d444d] rounded-md shadow-xl py-1 z-50 text-xs text-[#f0f6fc]"
                 onMouseLeave={() => setPlusMenuOpen(false)}
               >
                 <button
@@ -129,7 +125,7 @@ export default function Nav({
                   className="w-full text-left px-3 py-2 hover:bg-[#1f6feb] hover:text-white flex items-center gap-2"
                 >
                   <RepoIcon className="w-3.5 h-3.5 fill-current" />
-                  <span>New repository</span>
+                  <span>New project showcase</span>
                 </button>
                 <Link
                   to="/explore"
@@ -143,11 +139,11 @@ export default function Nav({
             )}
           </div>
 
-          {/* GitHub Notification Bell */}
+          {/* Notifications Bell */}
           <Link
             to="/dashboard"
             className="relative p-1.5 rounded-md text-[#9198a1] hover:text-[#f0f6fc] hover:bg-[#21262d] border border-[#3d444d] bg-[#21262d]/60 transition-colors"
-            title="Notifications"
+            title="Collaboration Notifications"
           >
             <svg className="w-4 h-4 fill-current" viewBox="0 0 16 16">
               <path d="M8 16a2 2 0 0 0 1.985-1.75c.001-.014.002-.028.002-.042H6.013A2 2 0 0 0 8 16ZM8 1.5a4.5 4.5 0 0 0-4.5 4.5v2.879c0 .546-.217 1.07-.604 1.456L1.854 11.378A.75.75 0 0 0 2.384 12.65h11.232a.75.75 0 0 0 .53-1.272l-1.042-1.043a2.06 2.06 0 0 1-.604-1.456V6A4.5 4.5 0 0 0 8 1.5Z" />
@@ -164,7 +160,7 @@ export default function Nav({
           <Link
             to="/profile"
             className="flex items-center gap-1 p-0.5 rounded-md hover:bg-[#21262d] transition-colors"
-            title="Your GitHub Profile"
+            title="Your Student Profile"
           >
             <img
               src="https://avatars.githubusercontent.com/u/174297688?s=96&v=4"
@@ -196,14 +192,14 @@ export default function Nav({
             onClick={() => setOpen(false)}
             className="px-3 py-2 rounded-md hover:bg-[#21262d] text-[#f0f6fc]"
           >
-            Explore Repositories
+            Explore Projects
           </NavLink>
           <NavLink
             to="/dashboard"
             onClick={() => setOpen(false)}
             className="px-3 py-2 rounded-md hover:bg-[#21262d] text-[#f0f6fc] flex justify-between items-center"
           >
-            <span>Pull requests</span>
+            <span>Collaborations</span>
             {pendingNotifications > 0 && (
               <span className="px-1.5 py-0.2 rounded-full bg-[#1f6feb] text-white text-[10px] font-bold">
                 {pendingNotifications}
@@ -225,7 +221,7 @@ export default function Nav({
             }}
             className="text-left px-3 py-2 rounded-md bg-[#1f6feb] text-white font-semibold mt-2"
           >
-            + New Repository
+            + New Project Showcase
           </button>
         </div>
       )}

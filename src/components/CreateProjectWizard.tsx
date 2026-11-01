@@ -117,12 +117,12 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto bg-black/75 backdrop-blur-xs">
       <div className="relative w-full max-w-2xl bg-[#151b23] border border-[#3d444d] rounded-md shadow-2xl overflow-hidden flex flex-col my-8 text-xs text-[#f0f6fc]">
         
-        {/* GitHub Header */}
+        {/* Header */}
         <div className="px-6 py-4 border-b border-[#3d444d] flex justify-between items-center bg-[#151b23]">
           <div>
-            <h2 className="font-bold text-base text-[#f0f6fc]">Create a new repository</h2>
+            <h2 className="font-bold text-base text-[#f0f6fc]">Publish a new project showcase</h2>
             <p className="text-[#9198a1] text-xs mt-0.5">
-              A repository contains all student project files, commit history, and skill-gap requirements.
+              Publish your student project to analyze architectural skill gaps, find collaborators, and list starter tasks.
             </p>
           </div>
           <button
@@ -137,7 +137,7 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
         {/* Form Body */}
         <form onSubmit={handleFinalSubmit} className="p-6 overflow-y-auto max-h-[75vh] space-y-5">
           
-          {/* Owner / Repository Name */}
+          {/* Owner / Project Name */}
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <div>
@@ -152,7 +152,7 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
 
               <div className="flex-grow">
                 <label className="block text-[11px] font-mono text-[#9198a1] mb-1">
-                  Repository name <span className="text-[#ff7b72]">*</span>
+                  Project name <span className="text-[#ff7b72]">*</span>
                 </label>
                 <input
                   type="text"
@@ -165,7 +165,7 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
               </div>
             </div>
             <p className="text-[11px] text-[#9198a1]">
-              Great repository names are short and memorable.
+              Great project names are short and memorable.
             </p>
           </div>
 
@@ -346,7 +346,7 @@ export default function CreateProjectWizard({ onClose, onSubmit }: CreateProject
               type="submit"
               className="px-4 py-1.5 bg-[#1f6feb] hover:bg-[#2a7aef] text-white font-semibold rounded-md shadow-xs"
             >
-              Create repository
+              Publish Project Showcase
             </button>
           </div>
 

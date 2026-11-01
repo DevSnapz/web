@@ -40,7 +40,7 @@ export default function Hero() {
             to="/explore"
             className="text-xs font-semibold bg-[#1f6feb] hover:bg-[#2a7aef] text-white px-5 py-2.5 rounded-md shadow-xs transition-colors flex items-center gap-2"
           >
-            <span>Explore Repositories</span>
+            <span>Explore Projects</span>
             <span>→</span>
           </Link>
 
@@ -54,7 +54,7 @@ export default function Hero() {
         </div>
 
         <div className="text-[11px] text-[#656c76] font-mono pt-1">
-          git clone devsnapz · automated skill-gap matrix · ₹0 budget open source
+          student project showcases · automated skill-gap matrix · peer collaboration
         </div>
       </div>
 
@@ -130,7 +130,7 @@ export default function Hero() {
               to="/projects/campus-recycling-app"
               className="font-semibold text-xs text-[#58a6ff] hover:underline"
             >
-              View Repository ➔
+              View Project ➔
             </Link>
           </div>
 

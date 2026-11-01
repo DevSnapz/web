@@ -137,19 +137,19 @@ export default function ShowcaseFeed({
 
       </div>
 
-      {/* Repository Count Notice */}
+      {/* Project Count Notice */}
       <div className="text-xs text-[#9198a1] font-mono">
-        <strong>{filteredProjects.length}</strong> results for repositories
+        <strong>{filteredProjects.length}</strong> project showcases found
       </div>
 
       {/* =================================================================== */}
-      {/* GITHUB REPOSITORY LIST (Classic GitHub search / explore feed)        */}
+      {/* DEVSNAPZ PROJECT DIRECTORY (GitHub Primer Feed Styling)              */}
       {/* =================================================================== */}
       <div className="border border-[#3d444d] rounded-md bg-[#151b23] divide-y divide-[#3d444d]">
         {filteredProjects.length === 0 ? (
           <div className="p-12 text-center text-xs text-[#9198a1] space-y-2">
             <SearchIcon className="w-8 h-8 fill-current text-[#9198a1] mx-auto mb-2" />
-            <div className="font-bold text-[#f0f6fc]">No matching repositories found</div>
+            <div className="font-bold text-[#f0f6fc]">No matching projects found</div>
             <p>Try searching for a different framework, language, or clear your query.</p>
           </div>
         ) : (
@@ -249,7 +249,7 @@ export default function ShowcaseFeed({
                     to={`/projects/${project.id}`}
                     className="px-3 py-1 bg-[#1f6feb] hover:bg-[#2a7aef] text-white font-semibold rounded-md text-xs shadow-xs whitespace-nowrap"
                   >
-                    View Repo ➔
+                    View Project ➔
                   </Link>
                 </div>
 

@@ -271,10 +271,8 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
             onClick={() => setActiveTab('repositories')}
             className={tabItemClass('repositories')}
           >
-            <svg className="w-4 h-4 fill-current" viewBox="0 0 16 16">
-              <path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z" />
-            </svg>
-            <span>Repositories</span>
+            <RepoIcon className="w-4 h-4 fill-current" />
+            <span>Projects & Repositories</span>
             <span className="bg-[#30363d] text-[#f0f6fc] rounded-full px-1.5 py-0.2 text-[10px] font-mono">
               {userProjects.length}
             </span>
@@ -462,16 +460,16 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
             {/* OVERVIEW TAB */}
             {activeTab === 'overview' && (
               <>
-                {/* 1. PINNED REPOSITORIES SECTION (GitHub 2-column Grid) */}
+                {/* 1. PINNED SHOWCASES SECTION (GitHub 2-column Grid) */}
                 <div className="space-y-3">
                   <div className="flex items-center justify-between text-xs">
-                    <h2 className="font-semibold text-sm text-[#f0f6fc]">Pinned</h2>
+                    <h2 className="font-semibold text-sm text-[#f0f6fc]">Pinned Showcases</h2>
                     <button
                       type="button"
                       onClick={onOpenCreateWizard}
                       className="text-[#58a6ff] hover:underline font-medium"
                     >
-                      + New Repository
+                      + New Project Showcase
                     </button>
                   </div>
 
@@ -572,7 +570,7 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
                       <RepoIcon className="w-4 h-4 fill-current text-[#79c0ff] mt-0.5 shrink-0" />
                       <div className="space-y-1">
                         <div className="font-bold text-[#f0f6fc]">
-                          Created 2 repositories
+                          Created {userProjects.length} project showcases
                         </div>
                         <div className="text-[#9198a1] text-xs">
                           {userProjects.map((p) => (
@@ -606,7 +604,7 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
                 <div className="flex items-center justify-between pb-3 border-b border-[#3d444d]">
                   <input
                     type="text"
-                    placeholder="Find a repository..."
+                    placeholder="Find a project showcase..."
                     className="px-3 py-1.5 bg-[#010409] border border-[#3d444d] rounded-md text-xs text-[#f0f6fc] w-72 focus:outline-none focus:border-[#58a6ff]"
                     readOnly
                   />
@@ -615,7 +613,7 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
                     onClick={onOpenCreateWizard}
                     className="px-3 py-1.5 bg-[#1f6feb] hover:bg-[#2a7aef] text-white font-semibold rounded-md text-xs shadow-xs"
                   >
-                    + New
+                    + New Project
                   </button>
                 </div>
 
@@ -728,7 +726,7 @@ export default function ProfilePage({ projects, applications, onOpenCreateWizard
                           to={`/projects/${project.id}`}
                           className="text-[#58a6ff] hover:underline font-semibold"
                         >
-                          View Repository ➔
+                          View Project ➔
                         </Link>
                       </div>
                     </div>

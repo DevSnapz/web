@@ -14,22 +14,22 @@ export default function HomePage() {
   const features = [
     {
       icon: <SearchIcon className="w-5 h-5 fill-current text-[#79c0ff]" />,
-      title: 'Discover Repositories',
+      title: 'Discover Project Showcases',
       desc: 'Explore meaningful student-built projects across various domains and technical stacks.',
     },
     {
       icon: <PeopleIcon className="w-5 h-5 fill-current text-[#79c0ff]" />,
-      title: 'Find Collaborators',
+      title: 'Find Peer Collaborators',
       desc: 'Connect with developers who have complementary skills and a passion for building.',
     },
     {
       icon: <ZapIcon className="w-5 h-5 fill-current text-[#ff7b72]" />,
       title: 'Identify Skill Gaps',
-      desc: 'Understand what technical competencies your repository needs to ship to production.',
+      desc: 'Understand what technical competencies your project needs to ship to production.',
     },
     {
       icon: <SparkleIcon className="w-5 h-5 fill-current text-[#79c0ff]" />,
-      title: 'Grow Together',
+      title: 'Ship Real Software',
       desc: 'Learn, contribute, and build real-world software alongside other ambitious developers.',
     },
   ];
@@ -116,22 +116,22 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* SECTION B — FEATURED REPOSITORIES */}
+      {/* SECTION B — FEATURED PROJECT SHOWCASES */}
       <section className="max-w-[1280px] mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between pb-3 border-b border-[#3d444d] mb-4">
           <div>
             <h2 className="text-xl font-bold text-[#f0f6fc]">
-              Featured Repositories
+              Featured Project Showcases
             </h2>
             <p className="text-xs text-[#9198a1] mt-0.5">
-              Explore student repositories assembling teams and contributors.
+              Explore student projects assembling engineering teams and bridging skill gaps.
             </p>
           </div>
           <Link
             to="/explore"
             className="text-xs font-semibold text-[#58a6ff] hover:underline"
           >
-            View all repositories →
+            View all projects →
           </Link>
         </div>
 
@@ -198,7 +198,7 @@ export default function HomePage() {
               How DevSnapz works
             </h2>
             <p className="text-xs text-[#9198a1] mt-0.5">
-              From repository initialization to automated skill-gap matching and merged pull requests.
+              From project showcase initialization to automated skill-gap matching and student team collaboration.
             </p>
           </div>
 
@@ -229,17 +229,17 @@ export default function HomePage() {
               Skill Alignment Matrix
             </div>
             <h2 className="text-xl sm:text-2xl font-bold text-[#f0f6fc]">
-              Automated skill-gap matching across repositories.
+              Automated skill-gap matching across student projects.
             </h2>
             <p className="text-xs text-[#9198a1] leading-relaxed">
-              DevSnapz inspects repository dependencies to flag missing developer proficiencies and connects you directly with matching student engineers.
+              DevSnapz inspects project requirements to flag missing engineering proficiencies and connects you directly with matching student collaborators.
             </p>
             <div className="pt-1">
               <Link
                 to="/explore"
                 className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#1f6feb] hover:bg-[#2a7aef] text-white font-semibold rounded-md text-xs shadow-xs"
               >
-                <span>Browse Repositories</span>
+                <span>Browse Projects</span>
                 <span>→</span>
               </Link>
             </div>

@@ -5,21 +5,16 @@ import {
   RepoIcon,
   StarIcon,
   StarFillIcon,
-  ForkIcon,
-  GitBranchIcon,
-  GitPullRequestIcon,
-  IssueOpenedIcon,
-  IssueClosedIcon,
   HeartIcon,
   ZapIcon,
   CheckIcon,
-  EyeIcon,
+  IssueOpenedIcon,
+  IssueClosedIcon,
+  GitPullRequestIcon,
   CommentDiscussionIcon,
   SearchIcon,
   GlobeIcon,
-  BookIcon,
-  LinkIcon,
-  CodeIcon,
+  OctocatIcon,
 } from '../components/Octicons';
 
 interface ProjectDetailPageProps {
@@ -39,11 +34,11 @@ interface ProjectDetailPageProps {
     message: string;
   }) => void;
   onAddGuidanceTopic: (projectId: string, question: string) => void;
-  onReplyToGuidance: (projectId: string, topicId: string, replyText: string) => void;
+  onReplyToGuidance: (projectId: string, topicId: string, replyText: string, isCreator: boolean) => void;
   onClaimIssue: (projectId: string, issueId: string) => void;
 }
 
-type GitHubRepoTab = 'code' | 'issues' | 'pulls' | 'discussions' | 'gaps' | 'sponsor';
+type DevSnapzTab = 'overview' | 'tasks' | 'discussions' | 'milestones';
 
 export default function ProjectDetailPage({
   projects,
@@ -56,10 +51,9 @@ export default function ProjectDetailPage({
   const { id } = useParams<{ id: string }>();
   const project = projects.find((p) => p.id === id);
 
-  const [activeTab, setActiveTab] = useState<GitHubRepoTab>('code');
+  const [activeTab, setActiveTab] = useState<DevSnapzTab>('overview');
   const [isStarred, setIsStarred] = useState(false);
   const [starCount, setStarCount] = useState(38);
-  const [codeDropdownOpen, setCodeDropdownOpen] = useState(false);
 
   // Application Form State
   const [selectedRole, setSelectedRole] = useState<OpenRole | null>(null);
@@ -85,15 +79,15 @@ export default function ProjectDetailPage({
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 py-20 text-center">
         <div className="bg-[#151b23] border border-[#3d444d] rounded-md p-12 max-w-md mx-auto shadow-xs">
           <SearchIcon className="w-10 h-10 fill-current text-[#9198a1] mx-auto mb-4" />
-          <h2 className="font-bold text-xl text-[#f0f6fc] mb-2">Repository Not Found</h2>
+          <h2 className="font-bold text-xl text-[#f0f6fc] mb-2">Project Showcase Not Found</h2>
           <p className="text-xs text-[#9198a1] mb-6">
-            The repository you are looking for may have been removed or does not exist.
+            The project you are looking for may have been removed or does not exist.
           </p>
           <Link
             to="/explore"
             className="bg-[#1f6feb] hover:bg-[#2a7aef] text-white font-semibold px-4 py-2 rounded-md text-xs font-sans inline-flex items-center gap-2 shadow-xs transition-colors"
           >
-            ← Back to Explore Repositories
+            ← Back to Explore Projects
           </Link>
         </div>
       </div>
@@ -156,7 +150,7 @@ export default function ProjectDetailPage({
   const handleReplySubmit = (topicId: string) => {
     const text = replyInput[topicId];
     if (!text || !text.trim()) return;
-    onReplyToGuidance(project.id, topicId, text);
+    onReplyToGuidance(project.id, topicId, text, false);
     setReplyInput((prev) => ({ ...prev, [topicId]: '' }));
   };
 
@@ -182,92 +176,74 @@ export default function ProjectDetailPage({
     }, 2500);
   };
 
-  const tabItemClass = (tab: GitHubRepoTab) =>
-    `flex items-center gap-2 px-3 py-2 text-xs font-medium border-b-2 transition-colors cursor-pointer whitespace-nowrap ${
+  const tabItemClass = (tab: DevSnapzTab) =>
+    `flex items-center gap-2 px-3.5 py-2.5 text-xs font-medium border-b-2 transition-colors cursor-pointer whitespace-nowrap ${
       activeTab === tab
         ? 'border-[#ff7b72] text-[#f0f6fc] font-semibold'
         : 'border-transparent text-[#9198a1] hover:text-[#f0f6fc] hover:border-[#656c76]'
     }`;
 
+  const totalSkillPoints = knownSkills.length + allGapSkills.length;
+  const knownPercent = totalSkillPoints > 0 ? Math.round((knownSkills.length / totalSkillPoints) * 100) : 70;
+
   return (
     <div className="bg-[#0d1117] min-h-screen text-[#f0f6fc]">
       
       {/* =================================================================== */}
-      {/* 1. GITHUB REPOSITORY HEADER BAR                                     */}
+      {/* 1. PROJECT SHOWCASE HEADER BAR (GitHub Primer Styling)              */}
       {/* =================================================================== */}
-      <div className="bg-[#151b23] border-b border-[#3d444d] pt-4">
+      <div className="bg-[#151b23] border-b border-[#3d444d] pt-5">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6">
           
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4">
-            {/* Repo Breadcrumbs: Owner / Repo-name + Public pill */}
-            <div className="flex items-center gap-2 flex-wrap">
-              <svg className="w-4 h-4 fill-current text-[#9198a1]" viewBox="0 0 16 16">
-                <path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z" />
-              </svg>
+            
+            {/* Breadcrumbs: Creator / Project Title + Public Badge */}
+            <div className="space-y-1">
+              <div className="flex items-center gap-2 flex-wrap">
+                <RepoIcon className="w-4 h-4 fill-current text-[#79c0ff]" />
 
-              <Link
-                to="/profile"
-                className="text-xs font-normal text-[#58a6ff] hover:underline"
-              >
-                {project.creatorGithub || project.creatorName.toLowerCase().replace(/\s+/g, '-')}
-              </Link>
-              <span className="text-[#656c76] text-xs">/</span>
-              <span className="text-xs font-bold text-[#58a6ff] hover:underline">
-                {project.id}
-              </span>
+                <Link
+                  to="/profile"
+                  className="text-xs font-normal text-[#58a6ff] hover:underline"
+                >
+                  @{project.creatorGithub || project.creatorName.toLowerCase().replace(/\s+/g, '-')}
+                </Link>
+                <span className="text-[#656c76] text-xs">/</span>
+                <span className="text-sm sm:text-base font-bold text-[#f0f6fc]">
+                  {project.title}
+                </span>
 
-              <span className="text-[11px] font-medium text-[#9198a1] border border-[#3d444d] rounded-full px-2 py-0.2">
-                Public
-              </span>
+                <span className="text-[11px] font-medium text-[#79c0ff] bg-[rgba(56,139,253,0.15)] border border-[rgba(56,139,253,0.3)] rounded-full px-2.5 py-0.2">
+                  Student Showcase
+                </span>
+                <span className="text-[11px] font-mono text-[#9198a1] border border-[#3d444d] rounded-full px-2 py-0.2">
+                  {project.category || 'Engineering'}
+                </span>
+              </div>
+              <p className="text-xs text-[#9198a1] mt-0.5 line-clamp-1">
+                {project.pitch}
+              </p>
             </div>
 
-            {/* GitHub Repo Action Buttons (Watch, Fork, Star, Sponsor) */}
+            {/* Quick Action Toolbar (Star, Sponsor, Links) */}
             <div className="flex items-center gap-2 flex-wrap text-xs">
               
               {/* Sponsor Button */}
               <button
                 type="button"
-                onClick={() => setActiveTab('sponsor')}
-                className="flex items-center gap-1.5 px-3 py-1 bg-[#21262d] hover:bg-[#30363d] text-[#ff7b72] border border-[#ff7b72]/40 rounded-md font-semibold transition-colors shadow-xs"
+                onClick={() => setActiveTab('milestones')}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] text-[#ff7b72] border border-[#ff7b72]/40 rounded-md font-semibold transition-colors shadow-xs"
               >
                 <HeartIcon className="w-3.5 h-3.5 fill-current text-[#ff7b72]" />
                 <span>Sponsor</span>
               </button>
 
-              {/* Watch Button */}
-              <div className="flex items-center border border-[#3d444d] rounded-md bg-[#21262d] overflow-hidden text-xs">
-                <button
-                  type="button"
-                  className="px-2.5 py-1 hover:bg-[#30363d] text-[#f0f6fc] font-semibold flex items-center gap-1"
-                >
-                  <EyeIcon className="w-3.5 h-3.5 fill-current text-[#9198a1]" />
-                  <span>Watch</span>
-                </button>
-                <span className="px-2 py-1 bg-[#151b23] border-l border-[#3d444d] text-[#9198a1] font-mono text-[11px]">
-                  6
-                </span>
-              </div>
-
-              {/* Fork Button */}
-              <div className="flex items-center border border-[#3d444d] rounded-md bg-[#21262d] overflow-hidden text-xs">
-                <button
-                  type="button"
-                  className="px-2.5 py-1 hover:bg-[#30363d] text-[#f0f6fc] font-semibold flex items-center gap-1"
-                >
-                  <ForkIcon className="w-3.5 h-3.5 fill-current text-[#9198a1]" />
-                  <span>Fork</span>
-                </button>
-                <span className="px-2 py-1 bg-[#151b23] border-l border-[#3d444d] text-[#9198a1] font-mono text-[11px]">
-                  4
-                </span>
-              </div>
-
               {/* Star Button */}
-              <div className="flex items-center border border-[#3d444d] rounded-md bg-[#21262d] overflow-hidden text-xs">
+              <div className="flex items-center border border-[#3d444d] rounded-md bg-[#21262d] overflow-hidden text-xs shadow-xs">
                 <button
                   type="button"
                   onClick={toggleStar}
-                  className={`px-2.5 py-1 hover:bg-[#30363d] font-semibold flex items-center gap-1 transition-colors ${
+                  className={`px-3 py-1.5 hover:bg-[#30363d] font-semibold flex items-center gap-1.5 transition-colors ${
                     isStarred ? 'text-[#ff7b72]' : 'text-[#f0f6fc]'
                   }`}
                 >
@@ -278,61 +254,70 @@ export default function ProjectDetailPage({
                   )}
                   <span>{isStarred ? 'Starred' : 'Star'}</span>
                 </button>
-                <span className="px-2 py-1 bg-[#151b23] border-l border-[#3d444d] text-[#9198a1] font-mono text-[11px]">
+                <span className="px-2.5 py-1.5 bg-[#151b23] border-l border-[#3d444d] text-[#9198a1] font-mono text-[11px]">
                   {starCount}
                 </span>
               </div>
+
+              {/* External GitHub Repo Button */}
+              {project.githubUrl && (
+                <a
+                  href={project.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] text-[#f0f6fc] border border-[#3d444d] rounded-md font-semibold flex items-center gap-1.5 transition-colors shadow-xs"
+                  title="Open GitHub Codebase"
+                >
+                  <OctocatIcon className="w-3.5 h-3.5 fill-current text-[#9198a1]" />
+                  <span className="hidden sm:inline">GitHub</span>
+                  <span className="text-[#9198a1]">↗</span>
+                </a>
+              )}
+
+              {/* Live Demo Button */}
+              {project.liveUrl && (
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3 py-1.5 bg-[#1f6feb] hover:bg-[#2a7aef] text-white rounded-md font-semibold flex items-center gap-1.5 shadow-xs transition-colors"
+                  title="Open Live Deployment"
+                >
+                  <GlobeIcon className="w-3.5 h-3.5 fill-current text-white" />
+                  <span>Live App</span>
+                  <span>↗</span>
+                </a>
+              )}
 
             </div>
           </div>
 
           {/* =============================================================== */}
-          {/* 2. GITHUB REPOSITORY SUBNAV TABS                                */}
+          {/* 2. SUBNAV TABS (GitHub Primer Design Language)                   */}
           {/* =============================================================== */}
           <div className="flex items-center gap-1 overflow-x-auto border-t border-[#3d444d]/50">
             
             <button
               type="button"
-              onClick={() => setActiveTab('code')}
-              className={tabItemClass('code')}
-            >
-              <CodeIcon className="w-4 h-4 fill-current" />
-              <span>Code</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab('gaps')}
-              className={tabItemClass('gaps')}
+              onClick={() => setActiveTab('overview')}
+              className={tabItemClass('overview')}
             >
               <ZapIcon className="w-4 h-4 fill-current text-[#ff7b72]" />
-              <span>Skill Gaps</span>
-              <span className="bg-[#30363d] text-[#f0f6fc] rounded-full px-1.5 py-0.2 text-[10px] font-mono">
-                {allGapSkills.length}
-              </span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab('issues')}
-              className={tabItemClass('issues')}
-            >
-              <IssueOpenedIcon className="w-4 h-4 fill-current" />
-              <span>Issues</span>
-              <span className="bg-[#30363d] text-[#f0f6fc] rounded-full px-1.5 py-0.2 text-[10px] font-mono">
-                {project.contributeIssues?.length || 0}
-              </span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab('pulls')}
-              className={tabItemClass('pulls')}
-            >
-              <GitPullRequestIcon className="w-4 h-4 fill-current" />
-              <span>Pull requests (Roles)</span>
-              <span className="bg-[#30363d] text-[#f0f6fc] rounded-full px-1.5 py-0.2 text-[10px] font-mono">
+              <span>Overview & Open Roles</span>
+              <span className="bg-[#30363d] text-[#f0f6fc] rounded-full px-2 py-0.2 text-[10px] font-mono">
                 {activeOpenRoles.length}
+              </span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveTab('tasks')}
+              className={tabItemClass('tasks')}
+            >
+              <IssueOpenedIcon className="w-4 h-4 fill-current text-[#79c0ff]" />
+              <span>Starter Tasks</span>
+              <span className="bg-[#30363d] text-[#f0f6fc] rounded-full px-2 py-0.2 text-[10px] font-mono">
+                {project.contributeIssues?.length || 0}
               </span>
             </button>
 
@@ -341,20 +326,25 @@ export default function ProjectDetailPage({
               onClick={() => setActiveTab('discussions')}
               className={tabItemClass('discussions')}
             >
-              <CommentDiscussionIcon className="w-4 h-4 fill-current" />
-              <span>Discussions</span>
-              <span className="bg-[#30363d] text-[#f0f6fc] rounded-full px-1.5 py-0.2 text-[10px] font-mono">
+              <CommentDiscussionIcon className="w-4 h-4 fill-current text-[#9198a1]" />
+              <span>Discussions & Guidance</span>
+              <span className="bg-[#30363d] text-[#f0f6fc] rounded-full px-2 py-0.2 text-[10px] font-mono">
                 {project.guidanceTopics?.length || 0}
               </span>
             </button>
 
             <button
               type="button"
-              onClick={() => setActiveTab('sponsor')}
-              className={tabItemClass('sponsor')}
+              onClick={() => setActiveTab('milestones')}
+              className={tabItemClass('milestones')}
             >
               <HeartIcon className="w-4 h-4 fill-current text-[#ff7b72]" />
-              <span>Milestones</span>
+              <span>Milestones & Funding</span>
+              {project.fundingGoal && (
+                <span className="bg-[#30363d] text-[#79c0ff] rounded-full px-2 py-0.2 text-[10px] font-mono">
+                  ${project.fundingRaised || 0} / ${project.fundingGoal}
+                </span>
+              )}
             </button>
 
           </div>
@@ -363,384 +353,378 @@ export default function ProjectDetailPage({
       </div>
 
       {/* =================================================================== */}
-      {/* 3. REPOSITORY BODY CONTENT                                          */}
+      {/* 3. SHOWCASE BODY CONTENT                                            */}
       {/* =================================================================== */}
-      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 py-6">
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 py-6 space-y-6">
         
-        {/* TAB 1: CODE & REPOSITORY OVERVIEW */}
-        {activeTab === 'code' && (
+        {/* ================================================================= */}
+        {/* SIGNATURE DEVSNAPZ FEATURE: SKILL-GAP DETECTION MATRIX            */}
+        {/* ================================================================= */}
+        <div className="bg-[#151b23] border border-[#3d444d] rounded-md p-4 sm:p-5 space-y-3.5 shadow-xs">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-[#3d444d]">
+            <div className="flex items-center gap-2">
+              <ZapIcon className="w-4 h-4 fill-current text-[#ff7b72]" />
+              <h3 className="font-bold text-sm text-[#f0f6fc]">
+                DevSnapz Skill-Gap Detection Matrix
+              </h3>
+            </div>
+            <span className="text-xs font-mono font-semibold px-2.5 py-0.5 rounded-full bg-[rgba(248,81,73,0.15)] text-[#ff7b72] border border-[rgba(248,81,73,0.4)] self-start sm:self-auto">
+              {allGapSkills.length} Critical Skill {allGapSkills.length === 1 ? 'Gap' : 'Gaps'} Flagged
+            </span>
+          </div>
+
+          <p className="text-xs text-[#9198a1] leading-relaxed">
+            Automated architectural breakdown comparing project requirements against current maintainer competencies:
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+            {/* Team Known Competencies (Dark Tritanopia Cyan) */}
+            <div className="p-3.5 bg-[#010409] border border-[#3d444d] rounded-md space-y-2">
+              <div className="text-xs font-bold text-[#79c0ff] flex items-center gap-1.5">
+                <CheckIcon className="w-3.5 h-3.5 fill-current text-[#79c0ff]" />
+                <span>Team Known Competencies ({knownSkills.length > 0 ? knownSkills.length : project.techStack.length})</span>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {(knownSkills.length > 0 ? knownSkills : project.techStack).map((s) => (
+                  <span key={s} className="text-xs font-mono px-2 py-0.5 rounded bg-[rgba(56,139,253,0.15)] text-[#79c0ff] border border-[rgba(56,139,253,0.3)] flex items-center gap-1">
+                    <CheckIcon className="w-3 h-3 fill-current" />
+                    <span>{s}</span>
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Identified Skill Gaps (Dark Tritanopia Coral) */}
+            <div className="p-3.5 bg-[#010409] border border-[rgba(248,81,73,0.4)] rounded-md space-y-2">
+              <div className="text-xs font-bold text-[#ff7b72] flex items-center gap-1.5">
+                <ZapIcon className="w-3.5 h-3.5 fill-current text-[#ff7b72]" />
+                <span>Identified Skill Gaps ({allGapSkills.length})</span>
+              </div>
+              {allGapSkills.length === 0 ? (
+                <span className="text-xs text-[#9198a1]">No open skill gaps currently flagged.</span>
+              ) : (
+                <div className="flex flex-wrap gap-1.5">
+                  {allGapSkills.map((gap) => (
+                    <span key={gap} className="text-xs font-mono px-2 py-0.5 rounded bg-[rgba(248,81,73,0.15)] text-[#ff7b72] border border-[rgba(248,81,73,0.4)] flex items-center gap-1">
+                      <ZapIcon className="w-3 h-3 fill-current" />
+                      <span>Need: {gap}</span>
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Skill Coverage Ratio Bar */}
+          <div className="pt-1 space-y-1">
+            <div className="flex justify-between text-[11px] font-mono text-[#9198a1]">
+              <span className="text-[#79c0ff]">Verified Stack: {knownPercent}%</span>
+              <span className="text-[#ff7b72]">Gaps to Ship: {100 - knownPercent}%</span>
+            </div>
+            <div className="w-full bg-[#010409] h-2 rounded-full overflow-hidden flex border border-[#3d444d]">
+              <div className="bg-[#79c0ff] h-full transition-all" style={{ width: `${knownPercent}%` }} />
+              <div className="bg-[#ff7b72] h-full transition-all" style={{ width: `${100 - knownPercent}%` }} />
+            </div>
+          </div>
+        </div>
+
+        {/* ================================================================= */}
+        {/* TAB 1: OVERVIEW & OPEN ROLES                                      */}
+        {/* ================================================================= */}
+        {activeTab === 'overview' && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             
-            {/* Left Column: Repository Files, Commit Bar & README (8 of 12 cols) */}
-            <div className="lg:col-span-8 space-y-4">
+            {/* Left 8 Cols: Project Pitch, About, Architecture & Roles */}
+            <div className="lg:col-span-8 space-y-6">
               
-              {/* Branch Selector + Code Clone Button Bar */}
-              <div className="flex items-center justify-between gap-3 text-xs flex-wrap">
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] border border-[#3d444d] rounded-md font-semibold text-[#f0f6fc] shadow-xs"
-                  >
-                    <GitBranchIcon className="w-3.5 h-3.5 fill-current text-[#9198a1]" />
-                    <span>main</span>
-                    <span className="text-[10px] text-[#9198a1]">▾</span>
-                  </button>
-                  <span className="text-[#9198a1] text-xs font-mono hidden sm:inline">1 Branch · 0 Tags</span>
+              {/* About & Technical Architecture Box */}
+              <div className="border border-[#3d444d] rounded-md bg-[#151b23] p-5 sm:p-6 space-y-5 shadow-xs">
+                <div>
+                  <h2 className="text-base font-bold text-[#f0f6fc] pb-2 border-b border-[#3d444d]">
+                    About this Project
+                  </h2>
+                  <p className="text-xs text-[#9198a1] mt-3 leading-relaxed">
+                    {project.description}
+                  </p>
                 </div>
 
-                <div className="flex items-center gap-2 relative">
+                <div>
+                  <h3 className="text-xs font-mono font-bold text-[#79c0ff] uppercase tracking-wider mb-2">
+                    Technical Stack & Ecosystem
+                  </h3>
+                  <div className="flex flex-wrap gap-1.5">
+                    {project.techStack.map((tech) => (
+                      <span
+                        key={tech}
+                        className="px-2.5 py-1 bg-[#21262d] border border-[#3d444d] rounded-md font-mono text-xs text-[#58a6ff]"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Collaborative Application Drawer (if a role is selected) */}
+              {selectedRole && (
+                <div className="border border-[#1f6feb] rounded-md bg-[#151b23] p-6 shadow-xl animate-fade-in">
+                  <div className="flex items-center justify-between pb-3 border-b border-[#3d444d] mb-4">
+                    <div>
+                      <h3 className="font-bold text-base text-[#f0f6fc] flex items-center gap-2">
+                        <GitPullRequestIcon className="w-4 h-4 fill-current text-[#79c0ff]" />
+                        <span>Apply for Role: <span className="text-[#58a6ff]">{selectedRole.roleName}</span></span>
+                      </h3>
+                      <p className="text-xs text-[#9198a1] mt-0.5">Pitch your competencies to join the repository team.</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedRole(null)}
+                      className="text-[#9198a1] hover:text-[#f0f6fc] text-lg font-bold"
+                    >
+                      ✕
+                    </button>
+                  </div>
+
+                  {applicationSuccess ? (
+                    <div className="p-4 bg-[rgba(56,139,253,0.15)] border border-[rgba(56,139,253,0.4)] rounded-md text-center text-xs text-[#79c0ff] font-semibold flex items-center justify-center gap-2">
+                      <CheckIcon className="w-4 h-4 fill-current text-[#79c0ff]" />
+                      <span>Collaboration request submitted! The project maintainer has been notified.</span>
+                    </div>
+                  ) : (
+                    <form onSubmit={handleApplicationSubmit} className="space-y-4 text-xs">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-[#9198a1] uppercase font-mono text-[11px] mb-1">Your Name</label>
+                          <input
+                            type="text"
+                            required
+                            value={applicantName}
+                            onChange={(e) => setApplicantName(e.target.value)}
+                            placeholder="e.g. Maya Patel"
+                            className="w-full px-3 py-2 bg-[#010409] border border-[#3d444d] rounded-md text-[#f0f6fc] focus:outline-none focus:border-[#58a6ff]"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[#9198a1] uppercase font-mono text-[11px] mb-1">GitHub / Contact Handle</label>
+                          <input
+                            type="text"
+                            required
+                            value={applicantEmail}
+                            onChange={(e) => setApplicantEmail(e.target.value)}
+                            placeholder="@maya-dev or maya@student.edu"
+                            className="w-full px-3 py-2 bg-[#010409] border border-[#3d444d] rounded-md text-[#f0f6fc] focus:outline-none focus:border-[#58a6ff]"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-[#9198a1] uppercase font-mono text-[11px] mb-1">Matching Competencies</label>
+                        <input
+                          type="text"
+                          required
+                          value={applicantSkills}
+                          onChange={(e) => setApplicantSkills(e.target.value)}
+                          className="w-full px-3 py-2 bg-[#010409] border border-[#3d444d] rounded-md text-[#f0f6fc] focus:outline-none focus:border-[#58a6ff]"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[#9198a1] uppercase font-mono text-[11px] mb-1">Collaboration Pitch / Cover Note</label>
+                        <textarea
+                          rows={3}
+                          required
+                          value={applicantMessage}
+                          onChange={(e) => setApplicantMessage(e.target.value)}
+                          placeholder="Why do you want to collaborate on this repository? What architectural components can you ship?"
+                          className="w-full px-3 py-2 bg-[#010409] border border-[#3d444d] rounded-md text-[#f0f6fc] focus:outline-none focus:border-[#58a6ff] resize-none"
+                        />
+                      </div>
+
+                      <div className="flex justify-end gap-2 pt-2">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedRole(null)}
+                          className="px-3 py-1.5 border border-[#3d444d] rounded-md text-[#9198a1] hover:text-[#f0f6fc]"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="submit"
+                          className="px-4 py-1.5 bg-[#1f6feb] hover:bg-[#2a7aef] text-white font-semibold rounded-md shadow-xs"
+                        >
+                          Submit Collaboration Request ➔
+                        </button>
+                      </div>
+                    </form>
+                  )}
+                </div>
+              )}
+
+              {/* Open Collaboration Roles Section */}
+              <div className="border border-[#3d444d] rounded-md bg-[#151b23] overflow-hidden shadow-xs">
+                <div className="bg-[#151b23] border-b border-[#3d444d] px-4 py-3 flex items-center justify-between text-xs">
+                  <div className="flex items-center gap-2">
+                    <ZapIcon className="w-4 h-4 fill-current text-[#ff7b72]" />
+                    <span className="font-bold text-[#f0f6fc]">
+                      Open Collaboration Roles ({openRolesList.length})
+                    </span>
+                  </div>
+                  <span className="text-[11px] font-mono text-[#9198a1]">
+                    Apply to join the maintainer team
+                  </span>
+                </div>
+
+                {openRolesList.length === 0 ? (
+                  <div className="p-8 text-center text-xs text-[#9198a1]">
+                    No open roles currently listed for this project.
+                  </div>
+                ) : (
+                  <div className="divide-y divide-[#3d444d]">
+                    {openRolesList.map((role) => (
+                      <div
+                        key={role.id}
+                        className="p-4 hover:bg-[#21262d]/40 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
+                      >
+                        <div className="space-y-1">
+                          <div className="font-bold text-sm text-[#f0f6fc] flex items-center gap-2">
+                            <span>{role.roleName}</span>
+                            <span className="text-[10px] font-mono px-2 py-0.2 rounded-full bg-[rgba(56,139,253,0.15)] text-[#79c0ff] border border-[rgba(56,139,253,0.3)]">
+                              {role.status}
+                            </span>
+                          </div>
+                          <p className="text-xs text-[#9198a1] leading-relaxed max-w-xl">
+                            {role.description}
+                          </p>
+                          <div className="flex flex-wrap gap-1.5 pt-1">
+                            {role.skillsNeeded.map((s) => (
+                              <span
+                                key={s}
+                                className="text-xs font-mono px-2 py-0.5 rounded bg-[#21262d] text-[#ff7b72] border border-[#3d444d] flex items-center gap-1"
+                              >
+                                <ZapIcon className="w-3 h-3 fill-current text-[#ff7b72]" />
+                                <span>{s}</span>
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+
+                        {role.status === 'open' && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setSelectedRole(role);
+                              setApplicantSkills(role.skillsNeeded.join(', '));
+                            }}
+                            className="px-4 py-1.5 bg-[#1f6feb] hover:bg-[#2a7aef] text-white font-semibold rounded-md text-xs shadow-xs whitespace-nowrap self-start sm:self-auto"
+                          >
+                            Apply for Role ➔
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+            </div>
+
+            {/* Right 4 Cols: Project Sidebar (Project Lead, Links, Metrics) */}
+            <div className="lg:col-span-4 space-y-5 text-xs text-[#f0f6fc]">
+              
+              {/* Project Lead Profile Card */}
+              <div className="border border-[#3d444d] rounded-md bg-[#151b23] p-4 space-y-3 shadow-xs">
+                <h3 className="font-bold text-xs uppercase tracking-wider text-[#9198a1] font-mono">
+                  Project Lead
+                </h3>
+                <div className="flex items-center gap-3">
+                  <img
+                    src={project.creatorAvatar}
+                    alt={project.creatorName}
+                    className="w-10 h-10 rounded-full object-cover ring-1 ring-[#3d444d]"
+                  />
+                  <div>
+                    <div className="font-bold text-sm text-[#f0f6fc]">{project.creatorName}</div>
+                    <div className="text-[11px] font-mono text-[#58a6ff]">
+                      @{project.creatorGithub || project.creatorName.toLowerCase().replace(/\s+/g, '-')}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Direct Codebase & Deployment Links */}
+              <div className="border border-[#3d444d] rounded-md bg-[#151b23] p-4 space-y-2.5 shadow-xs">
+                <h3 className="font-bold text-xs uppercase tracking-wider text-[#9198a1] font-mono">
+                  Codebase & Links
+                </h3>
+                <div className="space-y-2 pt-1">
+                  {project.githubUrl && (
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full flex items-center justify-between p-2.5 rounded-md bg-[#010409] hover:bg-[#21262d] border border-[#3d444d] font-semibold text-[#58a6ff] hover:underline"
+                    >
+                      <span className="flex items-center gap-2">
+                        <OctocatIcon className="w-4 h-4 fill-current text-[#9198a1]" />
+                        <span>GitHub Repository</span>
+                      </span>
+                      <span>↗</span>
+                    </a>
+                  )}
                   {project.liveUrl && (
                     <a
                       href={project.liveUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] border border-[#3d444d] rounded-md text-[#f0f6fc] font-semibold flex items-center gap-1.5"
+                      className="w-full flex items-center justify-between p-2.5 rounded-md bg-[#010409] hover:bg-[#21262d] border border-[#3d444d] font-semibold text-[#79c0ff] hover:underline"
                     >
-                      <GlobeIcon className="w-3.5 h-3.5 fill-current text-[#9198a1]" />
-                      <span>Live Demo</span>
+                      <span className="flex items-center gap-2">
+                        <GlobeIcon className="w-4 h-4 fill-current text-[#79c0ff]" />
+                        <span>Live Deployment</span>
+                      </span>
                       <span>↗</span>
                     </a>
                   )}
-
-                  <button
-                    type="button"
-                    onClick={() => setCodeDropdownOpen(!codeDropdownOpen)}
-                    className="px-3.5 py-1.5 bg-[#1f6feb] hover:bg-[#2a7aef] text-white font-semibold rounded-md shadow-xs flex items-center gap-1.5"
-                  >
-                    <CodeIcon className="w-3.5 h-3.5 fill-current text-white" />
-                    <span>Code</span>
-                    <span className="text-[10px]">▾</span>
-                  </button>
-
-                  {codeDropdownOpen && (
-                    <div
-                      className="absolute right-0 top-full mt-1.5 w-72 bg-[#151b23] border border-[#3d444d] rounded-md shadow-xl p-3 z-50 text-xs"
-                      onMouseLeave={() => setCodeDropdownOpen(false)}
-                    >
-                      <div className="font-bold text-[#f0f6fc] mb-2">Clone Repository</div>
-                      <div className="flex items-center bg-[#010409] border border-[#3d444d] rounded px-2 py-1 text-[11px] font-mono text-[#9198a1] select-all">
-                        git clone {project.githubUrl || 'https://github.com/DevSnapz/' + project.id}.git
-                      </div>
-                      <div className="mt-3 pt-2 border-t border-[#3d444d] flex flex-col gap-1 text-[11px]">
-                        <a
-                          href={project.githubUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-[#58a6ff] hover:underline"
-                        >
-                          Open in GitHub.com ↗
-                        </a>
-                      </div>
-                    </div>
-                  )}
                 </div>
               </div>
 
-              {/* Latest Commit Bar */}
-              <div className="bg-[#151b23] border border-[#3d444d] rounded-md p-3 flex items-center justify-between text-xs">
-                <div className="flex items-center gap-2 truncate">
-                  <img
-                    src={project.creatorAvatar}
-                    alt={project.creatorName}
-                    className="w-5 h-5 rounded-full object-cover"
-                  />
-                  <span className="font-semibold text-[#f0f6fc] truncate">
-                    {project.creatorGithub || project.creatorName}
-                  </span>
-                  <span className="text-[#9198a1] truncate">
-                    feat: initial release with skill-gap specifications
-                  </span>
-                </div>
-                <div className="flex items-center gap-3 text-xs font-mono text-[#9198a1] whitespace-nowrap pl-2">
-                  <span className="text-[#58a6ff] hover:underline">{project.id.slice(0, 7)}</span>
-                  <span>3 hours ago</span>
-                  <span className="hidden sm:inline">4 commits</span>
-                </div>
-              </div>
-
-              {/* GitHub-style Security / Skill-Gap Detection Notice Banner */}
-              <div className="bg-[#151b23] border border-[#3d444d] rounded-md p-4 space-y-3">
-                <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2">
-                    <ZapIcon className="w-4 h-4 fill-current text-[#ff7b72]" />
-                    <h3 className="font-bold text-sm text-[#f0f6fc]">
-                      DevSnapz Skill-Gap Detection Matrix
-                    </h3>
+              {/* Project Stats Summary */}
+              <div className="border border-[#3d444d] rounded-md bg-[#151b23] p-4 space-y-2.5 shadow-xs">
+                <h3 className="font-bold text-xs uppercase tracking-wider text-[#9198a1] font-mono">
+                  Showcase Metrics
+                </h3>
+                <div className="grid grid-cols-2 gap-2 pt-1">
+                  <div className="p-2.5 bg-[#010409] border border-[#3d444d] rounded">
+                    <div className="text-lg font-bold text-[#79c0ff]">{knownSkills.length}</div>
+                    <div className="text-[10px] font-mono text-[#9198a1] uppercase">Known Skills</div>
                   </div>
-                  <span className="text-xs font-mono font-semibold px-2 py-0.5 rounded-full bg-[rgba(248,81,73,0.15)] text-[#ff7b72] border border-[rgba(248,81,73,0.4)]">
-                    {activeOpenRoles.length} Open Gaps Flagged
-                  </span>
+                  <div className="p-2.5 bg-[#010409] border border-[rgba(248,81,73,0.4)] rounded">
+                    <div className="text-lg font-bold text-[#ff7b72]">{allGapSkills.length}</div>
+                    <div className="text-[10px] font-mono text-[#ff7b72] uppercase">Open Gaps</div>
+                  </div>
+                  <div className="p-2.5 bg-[#010409] border border-[#3d444d] rounded">
+                    <div className="text-lg font-bold text-[#f0f6fc]">{project.contributeIssues?.length || 0}</div>
+                    <div className="text-[10px] font-mono text-[#9198a1] uppercase">Starter Tasks</div>
+                  </div>
+                  <div className="p-2.5 bg-[#010409] border border-[#3d444d] rounded">
+                    <div className="text-lg font-bold text-[#f0f6fc]">{project.guidanceTopics?.length || 0}</div>
+                    <div className="text-[10px] font-mono text-[#9198a1] uppercase">Discussions</div>
+                  </div>
                 </div>
+              </div>
 
+              {/* Student Project Builder CTA */}
+              <div className="border border-[#3d444d] rounded-md bg-[#151b23] p-4 text-center space-y-2 shadow-xs">
+                <h4 className="font-bold text-sm text-[#f0f6fc]">Building a Project?</h4>
                 <p className="text-xs text-[#9198a1] leading-relaxed">
-                  Automated architectural analysis of repository dependencies vs. required engineering competencies:
+                  List your repository on DevSnapz to analyze missing engineering competencies and discover student collaborators.
                 </p>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                  {/* Known competencies */}
-                  <div className="p-3 bg-[#010409] border border-[#3d444d] rounded-md">
-                    <div className="text-xs font-bold text-[#79c0ff] flex items-center gap-1.5 mb-2">
-                      <CheckIcon className="w-3.5 h-3.5 fill-current text-[#79c0ff]" />
-                      <span>Team Known Competencies ({knownSkills.length > 0 ? knownSkills.length : project.techStack.length})</span>
-                    </div>
-                    <div className="flex flex-wrap gap-1">
-                      {(knownSkills.length > 0 ? knownSkills : project.techStack).map((s) => (
-                        <span key={s} className="text-xs font-mono px-2 py-0.5 rounded bg-[rgba(56,139,253,0.15)] text-[#79c0ff] border border-[rgba(56,139,253,0.3)] flex items-center gap-1">
-                          <CheckIcon className="w-3 h-3 fill-current" />
-                          <span>{s}</span>
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Missing skill gaps */}
-                  <div className="p-3 bg-[#010409] border border-[rgba(248,81,73,0.4)] rounded-md">
-                    <div className="text-xs font-bold text-[#ff7b72] flex items-center gap-1.5 mb-2">
-                      <ZapIcon className="w-3.5 h-3.5 fill-current text-[#ff7b72]" />
-                      <span>Identified Skill Gaps ({allGapSkills.length})</span>
-                    </div>
-                    {allGapSkills.length === 0 ? (
-                      <span className="text-xs text-[#9198a1]">No open gaps</span>
-                    ) : (
-                      <div className="flex flex-wrap gap-1">
-                        {allGapSkills.map((gap) => (
-                          <span key={gap} className="text-xs font-mono px-2 py-0.5 rounded bg-[rgba(248,81,73,0.15)] text-[#ff7b72] border border-[rgba(248,81,73,0.4)] flex items-center gap-1">
-                            <ZapIcon className="w-3 h-3 fill-current" />
-                            <span>Need: {gap}</span>
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <div className="pt-2 flex justify-end">
-                  <button
-                    type="button"
-                    onClick={() => setActiveTab('pulls')}
-                    className="text-xs font-semibold text-[#58a6ff] hover:underline flex items-center gap-1"
-                  >
-                    <span>View all collaboration roles and apply</span>
-                    <span>➔</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* ============================================================= */}
-              {/* README.MD BOX (GitHub-style Markdown View)                   */}
-              {/* ============================================================= */}
-              <div className="border border-[#3d444d] rounded-md bg-[#151b23] overflow-hidden">
-                {/* Header */}
-                <div className="bg-[#151b23] border-b border-[#3d444d] px-4 py-2.5 flex items-center justify-between text-xs">
-                  <div className="flex items-center gap-2 font-mono font-semibold text-[#f0f6fc]">
-                    <BookIcon className="w-4 h-4 fill-current text-[#9198a1]" />
-                    <span>README.md</span>
-                  </div>
-                  <div className="text-[11px] font-mono text-[#9198a1]">
-                    <span>3.2 KB</span>
-                  </div>
-                </div>
-
-                {/* Rendered README Body */}
-                <div className="p-6 sm:p-8 space-y-6 text-sm text-[#f0f6fc] leading-relaxed">
-                  
-                  {/* Repo Heading */}
-                  <div className="border-b border-[#3d444d] pb-4">
-                    <h1 className="text-2xl sm:text-3xl font-extrabold flex items-center gap-3">
-                      <RepoIcon className="w-8 h-8 fill-current text-[#79c0ff]" />
-                      <span>{project.title}</span>
-                    </h1>
-                    <p className="text-base text-[#9198a1] mt-2 italic">
-                      "{project.pitch}"
-                    </p>
-                  </div>
-
-                  {/* Section 1: Overview */}
-                  <div>
-                    <h2 className="text-lg font-bold border-b border-[#3d444d] pb-2 mb-3">
-                      About the Project
-                    </h2>
-                    <p className="text-sm text-[#9198a1] leading-relaxed">
-                      {project.description}
-                    </p>
-                  </div>
-
-                  {/* Section 2: Technical Architecture */}
-                  <div>
-                    <h2 className="text-lg font-bold border-b border-[#3d444d] pb-2 mb-3">
-                      Tech Stack & Ecosystem
-                    </h2>
-                    <div className="flex flex-wrap gap-2 pt-1">
-                      {project.techStack.map((t) => (
-                        <span key={t} className="px-2.5 py-1 bg-[#21262d] border border-[#3d444d] rounded-md font-mono text-xs text-[#58a6ff]">
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Section 3: Open Collaboration Roles */}
-                  <div>
-                    <h2 className="text-lg font-bold border-b border-[#3d444d] pb-2 mb-3">
-                      Open Roles & Team Growth
-                    </h2>
-                    {openRolesList.length === 0 ? (
-                      <p className="text-xs text-[#9198a1]">No open roles currently listed.</p>
-                    ) : (
-                      <div className="space-y-3">
-                        {openRolesList.map((role) => (
-                          <div
-                            key={role.id}
-                            className="p-4 bg-[#010409] border border-[#3d444d] rounded-md flex flex-col sm:flex-row sm:items-center justify-between gap-3"
-                          >
-                            <div>
-                              <div className="font-bold text-sm text-[#f0f6fc] flex items-center gap-2">
-                                <span>{role.roleName}</span>
-                                <span className="text-[10px] font-mono px-2 py-0.2 rounded-full bg-[rgba(56,139,253,0.15)] text-[#79c0ff] border border-[rgba(56,139,253,0.3)]">
-                                  {role.status}
-                                </span>
-                              </div>
-                              <p className="text-xs text-[#9198a1] mt-1">{role.description}</p>
-                              <div className="flex flex-wrap gap-1 mt-2">
-                                {role.skillsNeeded.map((s) => (
-                                  <span key={s} className="text-xs font-mono px-2 py-0.5 rounded bg-[#21262d] text-[#ff7b72] border border-[#3d444d] flex items-center gap-1">
-                                    <ZapIcon className="w-3 h-3 fill-current text-[#ff7b72]" />
-                                    <span>{s}</span>
-                                  </span>
-                                ))}
-                              </div>
-                            </div>
-
-                            {role.status === 'open' && (
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  setSelectedRole(role);
-                                  setApplicantSkills(role.skillsNeeded.join(', '));
-                                  setActiveTab('pulls');
-                                }}
-                                className="px-3.5 py-1.5 bg-[#1f6feb] hover:bg-[#2a7aef] text-white font-semibold rounded-md text-xs shadow-xs whitespace-nowrap self-start sm:self-auto"
-                              >
-                                Apply ➔
-                              </button>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                </div>
-              </div>
-
-            </div>
-
-            {/* Right Column: GitHub Repository Sidebar "About" (4 of 12 cols) */}
-            <div className="lg:col-span-4 space-y-6 text-xs text-[#f0f6fc]">
-              
-              {/* About Block */}
-              <div className="space-y-3 pb-5 border-b border-[#3d444d]">
-                <h3 className="font-bold text-sm text-[#f0f6fc]">About</h3>
-                <p className="text-[#9198a1] leading-relaxed">
-                  {project.pitch}
-                </p>
-
-                {project.liveUrl && (
-                  <div className="flex items-center gap-2 text-[#58a6ff]">
-                    <LinkIcon className="w-3.5 h-3.5 fill-current text-[#9198a1]" />
-                    <a
-                      href={project.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-semibold hover:underline truncate"
-                    >
-                      {project.liveUrl}
-                    </a>
-                  </div>
-                )}
-
-                {/* Topics pills */}
-                <div className="flex flex-wrap gap-1.5 pt-2">
-                  {project.techStack.map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-2.5 py-0.5 rounded-full bg-[rgba(56,139,253,0.15)] text-[#58a6ff] hover:bg-[#1f6feb] hover:text-white transition-colors cursor-pointer text-[11px] font-semibold"
-                    >
-                      {tech.toLowerCase().replace(/[^a-z0-9]/g, '-')}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="flex items-center gap-2 text-[#9198a1] pt-2">
-                  <BookIcon className="w-3.5 h-3.5 fill-current text-[#9198a1]" />
-                  <span>Readme</span>
-                </div>
-                <div className="flex items-center gap-2 text-[#9198a1]">
-                  <StarIcon className="w-3.5 h-3.5 fill-current text-[#9198a1]" />
-                  <span>{starCount} stars</span>
-                </div>
-                <div className="flex items-center gap-2 text-[#9198a1]">
-                  <EyeIcon className="w-3.5 h-3.5 fill-current text-[#9198a1]" />
-                  <span>6 watching</span>
-                </div>
-                <div className="flex items-center gap-2 text-[#9198a1]">
-                  <ForkIcon className="w-3.5 h-3.5 fill-current text-[#9198a1]" />
-                  <span>4 forks</span>
-                </div>
-              </div>
-
-              {/* Releases */}
-              <div className="space-y-2 pb-5 border-b border-[#3d444d]">
-                <h3 className="font-bold text-sm text-[#f0f6fc]">Releases</h3>
-                <div className="flex items-center gap-2 text-[#79c0ff]">
-                  <span className="font-mono text-xs font-semibold">v1.0.0</span>
-                  <span className="px-1.5 py-0.2 rounded-full bg-[rgba(56,139,253,0.15)] text-[10px] font-bold">Latest</span>
-                </div>
-                <p className="text-[#9198a1] text-[11px]">Published initial student build</p>
-              </div>
-
-              {/* Contributors */}
-              <div className="space-y-3 pb-5 border-b border-[#3d444d]">
-                <h3 className="font-bold text-sm text-[#f0f6fc]">Contributors</h3>
-                <div className="flex items-center gap-2">
-                  <img
-                    src={project.creatorAvatar}
-                    alt={project.creatorName}
-                    className="w-8 h-8 rounded-full object-cover ring-1 ring-[#3d444d]"
-                    title={project.creatorName}
-                  />
-                  <div>
-                    <div className="font-bold text-xs">{project.creatorName}</div>
-                    <div className="text-[11px] font-mono text-[#9198a1]">Project Lead</div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Languages Bar */}
-              <div className="space-y-2.5">
-                <h3 className="font-bold text-sm text-[#f0f6fc]">Languages</h3>
-                
-                {/* Languages Colored Bar */}
-                <div className="w-full h-2 rounded-full overflow-hidden flex bg-[#21262d]">
-                  <div className="bg-[#3178c6] h-full" style={{ width: '65%' }} title="TypeScript 65%" />
-                  <div className="bg-[#ff7b72] h-full" style={{ width: '25%' }} title="HTML/CSS 25%" />
-                  <div className="bg-[#79c0ff] h-full" style={{ width: '10%' }} title="Other 10%" />
-                </div>
-
-                <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-[#9198a1]">
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-[#3178c6]" />
-                    <strong className="text-[#f0f6fc]">TypeScript</strong> 65.0%
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-[#ff7b72]" />
-                    <strong className="text-[#f0f6fc]">HTML/CSS</strong> 25.0%
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-[#79c0ff]" />
-                    <strong className="text-[#f0f6fc]">Shell</strong> 10.0%
-                  </span>
-                </div>
+                <Link
+                  to="/profile"
+                  className="w-full inline-block mt-2 py-1.5 px-3 bg-[#21262d] hover:bg-[#30363d] border border-[#3d444d] text-xs font-semibold rounded-md text-[#58a6ff] hover:underline"
+                >
+                  Go to Your Profile ➔
+                </Link>
               </div>
 
             </div>
@@ -748,89 +732,25 @@ export default function ProjectDetailPage({
           </div>
         )}
 
-        {/* TAB 2: SKILL GAPS & ROLE APPLICATION */}
-        {activeTab === 'gaps' && (
-          <div className="max-w-4xl mx-auto space-y-6">
-            <div className="border border-[#3d444d] rounded-md bg-[#151b23] p-6 space-y-4">
-              <div className="flex items-center justify-between pb-3 border-b border-[#3d444d]">
-                <div>
-                  <h2 className="font-bold text-base text-[#f0f6fc]">Skill Gaps & Engineering Roles</h2>
-                  <p className="text-xs text-[#9198a1] mt-0.5">Explore open requirements and join the core developer team.</p>
-                </div>
-                <span className="font-mono text-xs font-semibold px-2.5 py-1 bg-[rgba(248,81,73,0.15)] text-[#ff7b72] border border-[rgba(248,81,73,0.4)] rounded-md">
-                  {activeOpenRoles.length} Open Roles
-                </span>
-              </div>
-
-              <div className="space-y-4">
-                {openRolesList.map((role) => (
-                  <div key={role.id} className="p-4 bg-[#010409] border border-[#3d444d] rounded-md flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-bold text-sm text-[#f0f6fc]">{role.roleName}</span>
-                        <span className="text-[10px] font-mono px-2 py-0.2 rounded-full bg-[rgba(56,139,253,0.15)] text-[#79c0ff] border border-[rgba(56,139,253,0.3)]">
-                          {role.status}
-                        </span>
-                      </div>
-                      <p className="text-xs text-[#9198a1] mt-1">{role.description}</p>
-                      <div className="flex flex-wrap gap-1.5 mt-2">
-                        {role.skillsNeeded.map((s) => (
-                          <span key={s} className="text-xs font-mono px-2 py-0.5 rounded bg-[rgba(248,81,73,0.15)] text-[#ff7b72] border border-[rgba(248,81,73,0.4)] flex items-center gap-1">
-                            <ZapIcon className="w-3 h-3 fill-current text-[#ff7b72]" />
-                            <span>{s}</span>
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    {role.status === 'open' && (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setSelectedRole(role);
-                          setApplicantSkills(role.skillsNeeded.join(', '));
-                          setActiveTab('pulls');
-                        }}
-                        className="px-4 py-1.5 bg-[#1f6feb] hover:bg-[#2a7aef] text-white font-semibold rounded-md text-xs shadow-xs"
-                      >
-                        Apply for Role ➔
-                      </button>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* TAB 3: ISSUES (Claimable starter engineering tasks) */}
-        {activeTab === 'issues' && (
+        {/* ================================================================= */}
+        {/* TAB 2: STARTER TASKS (Good First Issues)                          */}
+        {/* ================================================================= */}
+        {activeTab === 'tasks' && (
           <div className="space-y-4">
             
-            {/* GitHub Issues Controls Header */}
-            <div className="flex items-center justify-between gap-3 flex-wrap">
-              <div className="flex items-center gap-2 flex-grow max-w-md">
-                <div className="relative w-full">
-                  <input
-                    type="text"
-                    placeholder="is:issue is:open "
-                    className="w-full bg-[#151b23] border border-[#3d444d] rounded-md px-3 py-1.5 text-xs text-[#f0f6fc] focus:outline-none focus:border-[#58a6ff]"
-                    readOnly
-                  />
-                </div>
-              </div>
-              <span className="text-xs text-[#9198a1]">
-                {project.contributeIssues?.length || 0} Open Starter Tasks
-              </span>
+            {/* Header / Filter Notice */}
+            <div className="flex items-center justify-between text-xs text-[#9198a1]">
+              <span>Claim beginner-friendly tasks to start contributing to this repository.</span>
+              <span className="font-mono">{project.contributeIssues?.length || 0} Open Starter Tasks</span>
             </div>
 
-            {/* GitHub Issues Table Box */}
-            <div className="border border-[#3d444d] rounded-md bg-[#151b23] overflow-hidden">
+            {/* GitHub Issues Style Table */}
+            <div className="border border-[#3d444d] rounded-md bg-[#151b23] overflow-hidden shadow-xs">
               <div className="bg-[#151b23] border-b border-[#3d444d] px-4 py-3 flex items-center justify-between text-xs">
                 <div className="flex items-center gap-3 font-semibold text-[#f0f6fc]">
                   <span className="flex items-center gap-1.5 text-[#79c0ff]">
                     <IssueOpenedIcon className="w-3.5 h-3.5 fill-current text-[#79c0ff]" />
-                    <span>{project.contributeIssues?.length || 0} Open</span>
+                    <span>{project.contributeIssues?.length || 0} Open Tasks</span>
                   </span>
                   <span className="flex items-center gap-1.5 text-[#9198a1]">
                     <IssueClosedIcon className="w-3.5 h-3.5 fill-current text-[#9198a1]" />
@@ -851,9 +771,9 @@ export default function ProjectDetailPage({
                   {project.contributeIssues?.map((issue, idx) => (
                     <div
                       key={issue.id}
-                      className="p-3.5 hover:bg-[#21262d]/50 transition-colors flex items-center justify-between gap-4 text-xs"
+                      className="p-4 hover:bg-[#21262d]/50 transition-colors flex items-center justify-between gap-4 text-xs"
                     >
-                      <div className="flex items-start gap-2.5">
+                      <div className="flex items-start gap-3">
                         <IssueOpenedIcon className="w-3.5 h-3.5 fill-current text-[#79c0ff] mt-0.5 shrink-0" />
                         <div>
                           <div className="flex items-center gap-2 flex-wrap">
@@ -867,8 +787,8 @@ export default function ProjectDetailPage({
                               good first issue
                             </span>
                           </div>
-                          <div className="text-[11px] text-[#9198a1] mt-1">
-                            #{idx + 1} opened 2 days ago by @{project.creatorGithub || project.creatorName}
+                          <div className="text-[11px] text-[#9198a1] mt-1 font-mono">
+                            #{idx + 1} opened for students by @{project.creatorGithub || project.creatorName}
                           </div>
                         </div>
                       </div>
@@ -878,19 +798,15 @@ export default function ProjectDetailPage({
                           <button
                             type="button"
                             onClick={() => onClaimIssue(project.id, issue.id)}
-                            className="px-3 py-1 bg-[#1f6feb] hover:bg-[#2a7aef] text-white font-semibold rounded-md shadow-xs text-xs whitespace-nowrap"
+                            className="px-3.5 py-1.5 bg-[#1f6feb] hover:bg-[#2a7aef] text-white font-semibold rounded-md shadow-xs text-xs whitespace-nowrap"
                           >
                             Claim Task
                           </button>
                         )}
                         {issue.status === 'claimed' && (
-                          <span className="px-2.5 py-1 rounded bg-[#21262d] border border-[#3d444d] text-[#ff7b72] font-semibold text-xs">
-                            Claimed
-                          </span>
-                        )}
-                        {issue.status === 'merged' && (
-                          <span className="px-2.5 py-1 rounded bg-[#21262d] border border-[#3d444d] text-[#79c0ff] font-semibold text-xs">
-                            Resolved
+                          <span className="px-2.5 py-1 rounded bg-[#21262d] border border-[#3d444d] text-[#ff7b72] font-semibold text-xs flex items-center gap-1">
+                            <CheckIcon className="w-3 h-3 fill-current" />
+                            <span>Claimed</span>
                           </span>
                         )}
                       </div>
@@ -903,164 +819,17 @@ export default function ProjectDetailPage({
           </div>
         )}
 
-        {/* TAB 4: PULL REQUESTS & COLLABORATOR APPLICATIONS */}
-        {activeTab === 'pulls' && (
-          <div className="space-y-6">
-            
-            {/* Embedded Application Modal if a role is selected */}
-            {selectedRole && (
-              <div className="border border-[#1f6feb] rounded-md bg-[#151b23] p-6 shadow-xl animate-fade-in mb-6">
-                <div className="flex items-center justify-between pb-3 border-b border-[#3d444d] mb-4">
-                  <div>
-                    <h3 className="font-bold text-base text-[#f0f6fc]">
-                      Submit Pull Request for: <span className="text-[#58a6ff]">{selectedRole.roleName}</span>
-                    </h3>
-                    <p className="text-xs text-[#9198a1] mt-0.5">Pitch your competencies to merge into the repository team.</p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedRole(null)}
-                    className="text-[#9198a1] hover:text-[#f0f6fc] text-lg font-bold"
-                  >
-                    ×
-                  </button>
-                </div>
-
-                {applicationSuccess ? (
-                  <div className="p-4 bg-[rgba(56,139,253,0.15)] border border-[rgba(56,139,253,0.4)] rounded-md text-center text-xs text-[#79c0ff] font-semibold flex items-center justify-center gap-2">
-                    <CheckIcon className="w-4 h-4 fill-current text-[#79c0ff]" />
-                    <span>Collaboration request submitted! The repository maintainer has been notified.</span>
-                  </div>
-                ) : (
-                  <form onSubmit={handleApplicationSubmit} className="space-y-4 text-xs">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-[#9198a1] uppercase font-mono text-[11px] mb-1">Your Name</label>
-                        <input
-                          type="text"
-                          required
-                          value={applicantName}
-                          onChange={(e) => setApplicantName(e.target.value)}
-                          placeholder="e.g. Maya Patel"
-                          className="w-full px-3 py-2 bg-[#010409] border border-[#3d444d] rounded-md text-[#f0f6fc] focus:outline-none focus:border-[#58a6ff]"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-[#9198a1] uppercase font-mono text-[11px] mb-1">GitHub / Discord / Email</label>
-                        <input
-                          type="text"
-                          required
-                          value={applicantEmail}
-                          onChange={(e) => setApplicantEmail(e.target.value)}
-                          placeholder="@maya-dev or maya@student.edu"
-                          className="w-full px-3 py-2 bg-[#010409] border border-[#3d444d] rounded-md text-[#f0f6fc] focus:outline-none focus:border-[#58a6ff]"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-[#9198a1] uppercase font-mono text-[11px] mb-1">Matching Skills</label>
-                      <input
-                        type="text"
-                        required
-                        value={applicantSkills}
-                        onChange={(e) => setApplicantSkills(e.target.value)}
-                        className="w-full px-3 py-2 bg-[#010409] border border-[#3d444d] rounded-md text-[#f0f6fc] focus:outline-none focus:border-[#58a6ff]"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-[#9198a1] uppercase font-mono text-[11px] mb-1">Cover Note / Pitch</label>
-                      <textarea
-                        rows={3}
-                        required
-                        value={applicantMessage}
-                        onChange={(e) => setApplicantMessage(e.target.value)}
-                        placeholder="Why do you want to collaborate on this repository? What PRs can you ship?"
-                        className="w-full px-3 py-2 bg-[#010409] border border-[#3d444d] rounded-md text-[#f0f6fc] focus:outline-none focus:border-[#58a6ff] resize-none"
-                      />
-                    </div>
-
-                    <div className="flex justify-end gap-2 pt-2">
-                      <button
-                        type="button"
-                        onClick={() => setSelectedRole(null)}
-                        className="px-3 py-1.5 border border-[#3d444d] rounded-md text-[#9198a1] hover:text-[#f0f6fc]"
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        type="submit"
-                        className="px-4 py-1.5 bg-[#1f6feb] hover:bg-[#2a7aef] text-white font-semibold rounded-md shadow-xs"
-                      >
-                        Create Pull Request ➔
-                      </button>
-                    </div>
-                  </form>
-                )}
-              </div>
-            )}
-
-            {/* List of Open Roles as Pull Request Slots */}
-            <div className="border border-[#3d444d] rounded-md bg-[#151b23] overflow-hidden">
-              <div className="bg-[#151b23] border-b border-[#3d444d] px-4 py-3 flex items-center justify-between text-xs">
-                <span className="font-semibold text-[#f0f6fc] flex items-center gap-1.5">
-                  <GitPullRequestIcon className="w-3.5 h-3.5 fill-current text-[#79c0ff]" />
-                  <span>{activeOpenRoles.length} Open Roles Ready for Contributors</span>
-                </span>
-              </div>
-
-              <div className="divide-y divide-[#3d444d]">
-                {openRolesList.map((role) => (
-                  <div key={role.id} className="p-4 hover:bg-[#21262d]/50 flex items-center justify-between gap-4 text-xs">
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <GitPullRequestIcon className="w-3.5 h-3.5 fill-current text-[#79c0ff] shrink-0" />
-                        <span className="font-bold text-sm text-[#f0f6fc]">{role.roleName}</span>
-                        <span className="px-2 py-0.2 rounded-full bg-[rgba(56,139,253,0.15)] text-[#79c0ff] border border-[rgba(56,139,253,0.3)] text-[10px] font-mono">
-                          {role.status}
-                        </span>
-                      </div>
-                      <p className="text-xs text-[#9198a1] mt-1">{role.description}</p>
-                      <div className="flex flex-wrap gap-1 mt-2">
-                        {role.skillsNeeded.map((s) => (
-                          <span key={s} className="text-xs font-mono px-2 py-0.5 rounded bg-[rgba(248,81,73,0.15)] text-[#ff7b72] border border-[rgba(248,81,73,0.4)] flex items-center gap-1">
-                            <ZapIcon className="w-3 h-3 fill-current text-[#ff7b72]" />
-                            <span>{s}</span>
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    {role.status === 'open' && (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setSelectedRole(role);
-                          setApplicantSkills(role.skillsNeeded.join(', '));
-                        }}
-                        className="px-3.5 py-1.5 bg-[#1f6feb] hover:bg-[#2a7aef] text-white font-semibold rounded-md shadow-xs whitespace-nowrap"
-                      >
-                        Apply to Role ➔
-                      </button>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-          </div>
-        )}
-
-        {/* TAB 5: DISCUSSIONS (Architecture Q&A) */}
+        {/* ================================================================= */}
+        {/* TAB 3: DISCUSSIONS (Architecture Guidance & Q&A)                  */}
+        {/* ================================================================= */}
         {activeTab === 'discussions' && (
           <div className="space-y-6">
             
             {/* Ask Question Box */}
-            <form onSubmit={handleAddQuestionSubmit} className="border border-[#3d444d] rounded-md bg-[#151b23] p-4 flex gap-3 text-xs">
+            <form onSubmit={handleAddQuestionSubmit} className="border border-[#3d444d] rounded-md bg-[#151b23] p-4 flex gap-3 text-xs shadow-xs">
               <input
                 type="text"
-                placeholder="Ask a technical architecture or system design question..."
+                placeholder="Ask an engineering, system design, or architecture question..."
                 value={newQuestion}
                 onChange={(e) => setNewQuestion(e.target.value)}
                 className="flex-grow bg-[#010409] border border-[#3d444d] rounded-md px-3 py-2 text-[#f0f6fc] focus:outline-none focus:border-[#58a6ff]"
@@ -1069,7 +838,7 @@ export default function ProjectDetailPage({
                 type="submit"
                 className="px-4 py-2 bg-[#1f6feb] hover:bg-[#2a7aef] text-white font-semibold rounded-md shadow-xs whitespace-nowrap"
               >
-                Start Discussion
+                Ask Guidance
               </button>
             </form>
 
@@ -1077,11 +846,11 @@ export default function ProjectDetailPage({
             <div className="space-y-4">
               {(project.guidanceTopics || []).length === 0 ? (
                 <div className="border border-[#3d444d] rounded-md bg-[#151b23] p-8 text-center text-xs text-[#9198a1]">
-                  No discussions started yet. Ask the first engineering question!
+                  No architectural discussions started yet. Ask the first engineering question!
                 </div>
               ) : (
                 project.guidanceTopics?.map((topic) => (
-                  <div key={topic.id} className="border border-[#3d444d] rounded-md bg-[#151b23] p-5 space-y-4 text-xs">
+                  <div key={topic.id} className="border border-[#3d444d] rounded-md bg-[#151b23] p-5 space-y-4 text-xs shadow-xs">
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-center gap-2">
                         <CommentDiscussionIcon className="w-4 h-4 fill-current text-[#58a6ff] shrink-0" />
@@ -1100,7 +869,7 @@ export default function ProjectDetailPage({
                               @{reply.repliedBy.toLowerCase()}
                               {reply.isCreator && (
                                 <span className="px-1.5 py-0.2 rounded bg-[rgba(56,139,253,0.15)] text-[#79c0ff] border border-[rgba(56,139,253,0.3)] text-[10px]">
-                                  Author
+                                  Maintainer
                                 </span>
                               )}
                             </span>
@@ -1140,20 +909,22 @@ export default function ProjectDetailPage({
           </div>
         )}
 
-        {/* TAB 6: SPONSOR & MILESTONES */}
-        {activeTab === 'sponsor' && (
+        {/* ================================================================= */}
+        {/* TAB 4: MILESTONES & FUNDING                                       */}
+        {/* ================================================================= */}
+        {activeTab === 'milestones' && (
           <div className="max-w-2xl mx-auto space-y-6 text-xs">
             
-            {/* Funding Goal Bar */}
+            {/* Infrastructure Goal Progress */}
             {project.fundingGoal && (
-              <div className="border border-[#3d444d] rounded-md bg-[#151b23] p-5 space-y-3">
+              <div className="border border-[#3d444d] rounded-md bg-[#151b23] p-5 space-y-3 shadow-xs">
                 <div className="flex justify-between items-center text-xs">
                   <span className="font-bold text-[#f0f6fc]">
-                    Infrastructure Funding: ${project.fundingRaised || 0} raised
+                    Infrastructure & API Funding: ${project.fundingRaised || 0} raised
                   </span>
                   <span className="text-[#9198a1]">Target: ${project.fundingGoal}</span>
                 </div>
-                <div className="w-full bg-[#010409] h-2 rounded-full overflow-hidden border border-[#3d444d]">
+                <div className="w-full bg-[#010409] h-2.5 rounded-full overflow-hidden border border-[#3d444d]">
                   <div
                     className="bg-[#1f6feb] h-full"
                     style={{
@@ -1170,7 +941,7 @@ export default function ProjectDetailPage({
                 <div
                   key={tier.id}
                   onClick={() => setSelectedTier(tier)}
-                  className={`p-4 rounded-md border cursor-pointer transition-colors ${
+                  className={`p-4 rounded-md border cursor-pointer transition-colors shadow-xs ${
                     selectedTier?.id === tier.id
                       ? 'border-[#ff7b72] bg-[rgba(248,81,73,0.15)] ring-1 ring-[#ff7b72]'
                       : 'border-[#3d444d] bg-[#151b23] hover:border-[#656c76]'
@@ -1178,17 +949,21 @@ export default function ProjectDetailPage({
                 >
                   <div className="font-bold text-sm text-[#f0f6fc]">{tier.name}</div>
                   <div className="text-xl font-extrabold text-[#ff7b72] mt-1">${tier.amount}</div>
-                  <p className="text-[#9198a1] mt-2">{tier.benefits}</p>
+                  <p className="text-[#9198a1] mt-2 leading-relaxed">{tier.benefits}</p>
                 </div>
               ))}
             </div>
 
-            {/* Sponsor form */}
-            <form onSubmit={handleSponsorSubmit} className="border border-[#3d444d] rounded-md bg-[#151b23] p-5 space-y-4">
-              <h4 className="font-bold text-sm text-[#f0f6fc]">Sponsor this Project</h4>
+            {/* Sponsor Contribution Form */}
+            <form onSubmit={handleSponsorSubmit} className="border border-[#3d444d] rounded-md bg-[#151b23] p-5 space-y-4 shadow-xs">
+              <h4 className="font-bold text-sm text-[#f0f6fc] flex items-center gap-1.5">
+                <HeartIcon className="w-4 h-4 fill-current text-[#ff7b72]" />
+                <span>Sponsor this Student Project</span>
+              </h4>
               {sponsorSuccess ? (
-                <div className="p-3 bg-[rgba(56,139,253,0.15)] text-[#79c0ff] rounded-md font-semibold text-center">
-                  Thank you! Your sponsorship has been recorded.
+                <div className="p-3 bg-[rgba(56,139,253,0.15)] text-[#79c0ff] rounded-md font-semibold text-center flex items-center justify-center gap-2">
+                  <CheckIcon className="w-4 h-4 fill-current" />
+                  <span>Thank you! Your sponsorship has been recorded.</span>
                 </div>
               ) : (
                 <>
@@ -1231,7 +1006,7 @@ export default function ProjectDetailPage({
                   </div>
                   <button
                     type="submit"
-                    className="w-full py-2 bg-[#1f6feb] hover:bg-[#2a7aef] text-white font-semibold rounded-md shadow-xs"
+                    className="w-full py-2 bg-[#1f6feb] hover:bg-[#2a7aef] text-white font-semibold rounded-md shadow-xs transition-colors"
                   >
                     Confirm Sponsorship ➔
                   </button>
