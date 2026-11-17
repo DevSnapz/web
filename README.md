@@ -1,97 +1,65 @@
-# DevSnapz — Student Innovation Hub
+# DevSnapz — Project Collaboration Platform
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Build: Vite](https://img.shields.io/badge/Built%20with-Vite-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Stack: React + TypeScript](https://img.shields.io/badge/Stack-React%20%7C%20TypeScript-blue?logo=react&logoColor=white)](https://reactjs.org/)
 [![Styling: Tailwind CSS](https://img.shields.io/badge/CSS-Tailwind%20CSS-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 
-> An open-source platform that replaces scattered searching with an intelligent, explainable matching ecosystem for student creators, innovators, and collaborators.
+> Discover projects, find collaborators, and connect the skills and resources needed to bring ideas to life.
 
 ---
 
-## 🌟 The Vision
+## About DevSnapz
 
-### Problem Statement ID: 26202
-- **Title:** Student Innovation-Ideas focused on the intelligent use of resources for transforming and advancements of technology with combining artificial intelligence to explore more various sources and get valuable insights.
-- **Theme:** Smart Automation
-- **Category:** Software
+DevSnapz is a platform for people building technical projects. It brings project discovery, collaboration, and learning resources together in one place, helping project owners find contributors and helping developers find projects that match their interests and skills.
 
-### Why DevSnapz?
-Students building technical projects face a fragmented ecosystem:
-- **Scattered Discovery:** Searching across disconnected platforms (job boards, Discord servers, WhatsApp groups, and campus forums) to recruit teammates.
-- **Hidden Skill Gaps:** Creators struggle to analyze which competencies are actually missing from their technical stack.
-- **Trial & Error Outreach:** Random messaging with no structured context or mutual compatibility.
-- **Disconnected Learning:** Learning materials and tutorials are buried across the internet without connection to project goals.
-
-**DevSnapz provides a unified, intelligent layer** that extracts project requirements, detects missing technical skills, and matches students with compatible collaborators and learning guides — with transparent, explainable reasoning.
+Projects often rely on scattered posts, chat groups, and forums to find help. DevSnapz provides a shared space to showcase work, describe what support is needed, and make it easier for people to connect around meaningful projects.
 
 ---
 
-## 🚀 Key Features
+## Features
 
-1. **Project Showcase Gallery:**  
-   Discover active student creations, filter by technology tags, and search by help needed (*Sponsors*, *Collaborators*, *Mentoring*, *Contributors*).
-2. **AI-Assisted Skill-Gap Analysis:**  
-   AI analyzes project descriptions to extract required competencies and highlights gaps between what the creator knows and what the project needs.
-3. **Explainable Collaborator Matchmaking:**  
-   Surfaces compatible student developers with clear explanations for *why* they match (e.g. *"Matches your gap in Database & UI/UX"*).
-4. **Interactive Project Hub & Role Applications:**  
-   Detailed modal view for projects featuring open roles, mentorship Q&A threads, milestone sponsorship tiers, and beginner-friendly issues.
-5. **Creator Management Dashboard:**  
-   A unified workspace for project owners to review incoming collaborator applications (*Approve* / *Decline*), answer technical guidance questions, and track project status.
-6. **Dark & Light Mode:**  
-   Theme-aware user interface powered by CSS variables and Tailwind CSS.
+1. **Project Showcase Gallery:** Discover projects, filter by technology tags, and search by the kind of help needed (*Sponsors*, *Collaborators*, *Mentoring*, *Contributors*).
+2. **AI-Assisted Skill-Gap Analysis:** Analyze project descriptions to identify required competencies and highlight skills that may be missing from a project team.
+3. **Explainable Collaborator Matching:** Find developers whose skills and interests fit a project, with clear explanations of why they may be a good match.
+4. **Interactive Project Hub & Role Applications:** Explore project details, open roles, mentorship Q&A threads, sponsorship tiers, and beginner-friendly issues.
+5. **Project Management Dashboard:** Give project owners a workspace to review collaborator applications, answer questions, and track project status.
+6. **Dark & Light Mode:** Switch between themes with a theme-aware interface built with CSS variables and Tailwind CSS.
 
 ---
 
-## 🏗️ Technology Architecture
+## Technology
 
-DevSnapz is engineered with a modern, high-performance, and lightweight architecture:
-
-| Component | Selected Technology | Technical Highlights |
+| Component | Technology | Notes |
 | :--- | :--- | :--- |
-| **Frontend Framework** | React 18 + TypeScript + Vite | Component-driven SPA with sub-second hot reload |
-| **Styling & Design** | Tailwind CSS 3.4 + CSS Variables | Theme-aware responsive UI with zero runtime overhead |
-| **Deployment / Hosting** | Cloudflare Pages / Netlify | Edge-optimized global CDN with automatic git CI/CD |
-| **Backend & Database** | Supabase (PostgreSQL) | Scalable relational database with Row Level Security (RLS) |
-| **Vector Similarity** | Supabase `pgvector` | Native cosine similarity search inside PostgreSQL |
-| **AI Requirement Inference** | Groq Cloud API (`llama-3.1-8b`) | Ultra-fast inference for automated skill extraction |
-| **Offline Fallback** | PostgreSQL Full-Text Search (`tsvector`) | Robust SQL-based tag and keyword matching |
-| **CI / CD & Testing** | GitHub Actions & Vitest | Automated testing, linting, and regression verification |
+| **Frontend** | React 18, TypeScript, Vite | Component-driven single-page application |
+| **Styling** | Tailwind CSS 3.4, CSS Variables | Responsive, theme-aware interface |
+| **Hosting** | Cloudflare Pages or Netlify | Deployment options |
+| **Backend & Database** | Supabase, PostgreSQL | Database and backend services |
+| **Vector Similarity** | Supabase `pgvector` | Similarity search in PostgreSQL |
+| **AI Requirement Inference** | Groq Cloud API (`llama-3.1-8b`) | Automated skill extraction |
+| **Search Fallback** | PostgreSQL Full-Text Search (`tsvector`) | Tag and keyword matching |
+| **Testing** | Vitest | Test framework |
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 web/
-├── docs/                     # Architectural documentation & phase reports
-│   └── phases/
-│       └── phase-00-audit-and-requirements.md
-├── public/                   # Static public assets (logo, icons)
+├── docs/                     # Project documentation
+├── public/                   # Static public assets
 ├── src/
-│   ├── components/           # UI components & platform modules
-│   │   ├── Capabilities.tsx  # Landing: Core capabilities
-│   │   ├── Community.tsx     # Landing: Community links
-│   │   ├── CreateProjectWizard.tsx # Multi-step project creation wizard
-│   │   ├── CreatorDashboard.tsx    # Multi-project creator management hub
-│   │   ├── Ecosystem.tsx     # Landing: Featured ecosystem project
-│   │   ├── Footer.tsx        # Brand footer
-│   │   ├── Hero.tsx          # Landing: Terminal hero banner
-│   │   ├── Nav.tsx           # Sticky navigation with theme toggle
-│   │   ├── ProjectDetailModal.tsx  # Project modal with 5 sub-tabs
-│   │   ├── ShowcaseFeed.tsx  # Showcase gallery with search & filters
-│   │   ├── Stack.tsx         # Landing: Architecture stack display
-│   │   └── ThemeToggle.tsx   # Light/dark theme toggle
+│   ├── components/           # UI components and platform modules
 │   ├── data/                 # Seed data and mock fixtures
 │   ├── hooks/                # Custom React hooks
 │   ├── types/                # TypeScript domain models and interfaces
 │   ├── App.tsx               # Root application coordinator
-│   ├── index.css             # Theme variables & base Tailwind styles
+│   ├── index.css             # Theme variables and base Tailwind styles
 │   └── main.tsx              # React DOM entry point
-├── CONTRIBUTING.md           # Guide for student contributors
+├── CONTRIBUTING.md           # Contribution guide
 ├── LICENSE                   # MIT License
-├── package.json              # Project dependencies and npm scripts
+├── package.json              # Dependencies and npm scripts
 ├── tailwind.config.cjs       # Tailwind CSS configuration
 ├── tsconfig.json             # TypeScript compiler settings
 └── vite.config.ts            # Vite bundler configuration
@@ -99,52 +67,61 @@ web/
 
 ---
 
-## ⚡ Quick Start
+## Getting Started
 
-### 1. Clone the Repository
+### Prerequisites
+
+- Node.js and npm
+- Git
+
+### 1. Clone the repository
+
 ```bash
 git clone https://github.com/DevSnapz/web.git
 cd web
 ```
 
-### 2. Install Dependencies
+### 2. Install dependencies
+
 ```bash
 npm install
 ```
 
-### 3. Run Development Server
+### 3. Start the development server
+
 ```bash
 npm run dev
 ```
-Open your browser at `http://localhost:5173`.
 
-### 4. Build for Production
+Open the local URL printed by Vite (typically `http://localhost:5173`).
+
+### 4. Build for production
+
 ```bash
 npm run build
 ```
-Build output is saved to the `dist/` directory.
+
+The production build is saved to the `dist/` directory.
 
 ---
 
-## 🗺️ Roadmap & Milestones
+## Development Roadmap
 
-- [x] **Phase 0 — Project Audit & Requirement Analysis** ([Report](docs/phases/phase-00-audit-and-requirements.md))
-- [x] **Phase 1 — Architecture & Open-Source Setup** (Repository organization, community guides, licensing)
-- [ ] **Phase 2 — Landing Page Alignment** (Refining copy and student value proposition)
-- [ ] **Phase 3 — Product UI/UX & Routing** (Client-side routing with deep-linkable URLs)
-- [ ] **Phase 4 — Core Platform Backend** (Supabase Auth, PostgreSQL schema, Row Level Security)
-- [ ] **Phase 5 — AI & Matching Engine** (Groq skill extraction, skill-gap analysis, explainability)
-- [ ] **Phase 6 — Security, Accessibility & Testing** (Vitest test suite, RLS policies, WCAG audit)
-- [ ] **Phase 7 — Production Launch & Pilot** (Cloudflare Pages deployment, campus onboarding)
+- [ ] Refine the project discovery experience and project details
+- [ ] Add client-side routing and shareable project links
+- [ ] Implement authentication and persistent project data
+- [ ] Build and integrate collaborator matching and skill analysis
+- [ ] Expand automated tests and accessibility coverage
+- [ ] Prepare production deployment and onboarding
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
-We welcome contributions from students and developers of all skill levels! Please see our [CONTRIBUTING.md](CONTRIBUTING.md) for details on setting up your environment, code standards, and submitting pull requests.
+Contributions are welcome from developers of all experience levels. Please see [CONTRIBUTING.md](CONTRIBUTING.md) for information about setting up the project, coding standards, and submitting changes.
 
 ---
 
-## 📜 License
+## License
 
 This project is licensed under the [MIT License](LICENSE) — free to use, modify, and distribute.
